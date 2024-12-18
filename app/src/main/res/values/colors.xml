@@ -2,4 +2,20 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="custom_hint_color">#FF5722</color>
+    <!-- Primary Color (כחול) -->
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color> <!-- לשורת הסטטוס -->
+    <color name="colorAccent">#FFC107</color> <!-- כפתורים ופעולות חשובות -->
+
+    <!-- Secondary Color (ירוק) -->
+    <color name="colorSecondary">#4CAF50</color>
+
+    <!-- Text Colors -->
+    <color name="textPrimary">#333333</color>
+    <color name="textSecondary">#757575</color>
+
+    <!-- Background Colors -->
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="cardBackgroundColor">#F5F5F5</color>
 </resources>
