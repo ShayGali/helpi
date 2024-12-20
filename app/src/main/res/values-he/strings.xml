@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">helpi</string>
+    <string name="welcome_message">ברוך הבא ל- helpi!</string>
+    <string name="login_button">התחברות</string>
+    <string name="register_button">הרשמה</string>
+    <string name="home">בית</string>
+</resources>

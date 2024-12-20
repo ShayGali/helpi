@@ -22,7 +22,7 @@
             android:gravity="center"
             android:scaleType="centerCrop"
 
-            android:src="@drawable/helpi_without_text" />
+            android:src="@drawable/logo_helpi" />
 
         <ImageView
             android:layout_width="180dp"
@@ -88,21 +88,21 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/facebook" />
+                android:src="@drawable/ic_facebook" />
 
             <ImageView
                 android:id="@+id/x_button"
                 android:layout_width="64dp"
                 android:layout_height="120dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/x_icon" />
+                android:src="@drawable/ic_x" />
 
             <ImageView
                 android:id="@+id/google_button"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_margin="16dp"
-                android:src="@drawable/google" />
+                android:src="@drawable/ic_google" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
