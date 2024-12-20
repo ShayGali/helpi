@@ -45,7 +45,7 @@
                         android:layout_marginTop="32dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/user_1" />
+                        app:srcCompat="@drawable/pic_user_1" />
 
                     <TextView
                         android:id="@+id/textView2"
@@ -69,7 +69,7 @@
                         android:layout_marginEnd="32dp"
                         app:layout_constraintBottom_toBottomOf="@+id/imageView7"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:srcCompat="@drawable/notification" />
+                        app:srcCompat="@drawable/ic_notification" />
 
                     <TextView
                         android:id="@+id/textView7"
@@ -85,7 +85,7 @@
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintStart_toTopOf="@+id/editTextText"
+                        app:layout_constraintTop_toBottomOf="@+id/editTextText"
                         tools:layout_editor_absoluteY="100dp" />
 
                     <EditText
@@ -98,8 +98,8 @@
                         android:layout_marginEnd="32dp"
                         android:layout_marginBottom="10dp"
                         android:background="@drawable/edittext_background"
-                        android:drawableStart="@drawable/search"
-                        android:drawableEnd="@drawable/microphone"
+                        android:drawableStart="@drawable/ic_search"
+                        android:drawableEnd="@drawable/ic_microphone"
                         android:drawablePadding="16dp"
                         android:ems="10"
                         android:hint="Search..."
@@ -160,7 +160,7 @@
             android:backgroundTint="#63B8E4"
             android:padding="10dp"
             android:text="search product "
-        android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF" />
 
         <Button
             android:layout_width="0dp"
@@ -176,13 +176,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Home"
-            android:icon="@drawable/home_icon4"
-            android:iconGravity="top"
-            android:iconPadding="8dp"
+            app:icon="@drawable/home_icon4"
+            app:iconGravity="top"
+            app:iconPadding="8dp"
             android:padding="16dp"
             android:gravity="center"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#63B8E4" />
+            app:backgroundTint="#63B8E4" />
 
         <Button
             android:layout_width="0dp"

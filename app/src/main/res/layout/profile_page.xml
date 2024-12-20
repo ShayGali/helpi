@@ -90,7 +90,7 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layoutDirection="ltr"
-                        app:srcCompat="@drawable/btn_1" />
+                        app:srcCompat="@drawable/ic_round_speaker" />
 
 
                     <ImageView
@@ -101,7 +101,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/arrow" />
+                        app:srcCompat="@drawable/ic_small_right_arrow" />
 
                     <TextView
                         android:id="@+id/textViewnotification"
@@ -132,7 +132,7 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layoutDirection="ltr"
-                        app:srcCompat="@drawable/btn_2" />
+                        app:srcCompat="@drawable/ic_round_calendar" />
 
                     <ImageView
                         android:id="@+id/arrow2"
@@ -142,7 +142,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/arrow" />
+                        app:srcCompat="@drawable/ic_small_right_arrow" />
 
                     <TextView
                         android:id="@+id/textViewCalander"
@@ -173,7 +173,7 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layoutDirection="ltr"
-                        app:srcCompat="@drawable/btn_3" />
+                        app:srcCompat="@drawable/ic_round_camera" />
 
                     <ImageView
                         android:id="@+id/arrow3"
@@ -183,7 +183,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/arrow" />
+                        app:srcCompat="@drawable/ic_small_right_arrow" />
 
                     <TextView
                         android:id="@+id/textViewGallery"
@@ -214,7 +214,7 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layoutDirection="ltr"
-                        app:srcCompat="@drawable/btn_5" />
+                        app:srcCompat="@drawable/ic_round_share" />
 
                     <ImageView
                         android:id="@+id/arrow4"
@@ -224,7 +224,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/arrow" />
+                        app:srcCompat="@drawable/ic_small_right_arrow" />
 
                     <TextView
                         android:id="@+id/textView4"
@@ -259,7 +259,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/btn_6" />
+                        app:srcCompat="@drawable/ic_round_extend_screen" />
 
                     <TextView
                         android:id="@+id/textViewLogout"
@@ -292,7 +292,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/user_2" />
+        app:srcCompat="@drawable/pic_user_2" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="60dp"
@@ -303,7 +303,7 @@
         android:background="@drawable/background_oval"
         android:layoutDirection="ltr"
         app:layout_constraintBottom_toTopOf="@+id/imageView4"
-        app:layout_constraintEnd_toStOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -316,7 +316,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/back" />
+            app:srcCompat="@drawable/ic_white_left_arrow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
