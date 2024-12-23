@@ -25,8 +25,14 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button loginButton = view.findViewById(R.id.login_button);
+
         loginButton.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_login_fragment_to_homeFragment)
+        );
+
+        View facebook_button = view.findViewById(R.id.facebook_button);
+        facebook_button.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_login_fragment_to_testFragment)
         );
     }
 }
