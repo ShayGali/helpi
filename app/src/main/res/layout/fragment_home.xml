@@ -11,50 +11,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layoutDirection="ltr"
-        >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layoutDirection="ltr"
-            >
+            android:orientation="vertical">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible"
                 android:layoutDirection="ltr"
-                >
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="248dp"
-                    android:layoutDirection="ltr"
+                    android:background="#757575"
 
-                    android:background="#757575">
+                    android:layoutDirection="ltr">
 
                     <ImageView
 
-                        android:layoutDirection="ltr"
                         android:id="@+id/imageView7"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="32dp"
+                        android:layoutDirection="ltr"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/pic_user_1" />
 
                     <TextView
                         android:id="@+id/textView2"
-                        android:layoutDirection="ltr"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="32dp"
+                        android:layoutDirection="ltr"
                         android:text="Hi, Alex!"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp"
@@ -66,9 +67,9 @@
                     <ImageView
                         android:id="@+id/imageView8"
                         android:layout_width="60dp"
-                        android:layoutDirection="ltr"
                         android:layout_height="60dp"
                         android:layout_marginEnd="32dp"
+                        android:layoutDirection="ltr"
                         app:layout_constraintBottom_toBottomOf="@+id/imageView7"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:srcCompat="@drawable/ic_notification" />
@@ -94,7 +95,6 @@
                         android:id="@+id/editTextText"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
-                        android:layoutDirection="ltr"
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="32dp"
@@ -106,6 +106,7 @@
                         android:ems="10"
                         android:hint="Search..."
                         android:inputType="text"
+                        android:layoutDirection="ltr"
                         android:padding="16dp"
                         android:textColor="@color/white"
                         android:textColorHint="@color/white"
@@ -144,16 +145,19 @@
         </LinearLayout>
 
     </ScrollView>
+
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_gravity="bottom"
         android:background="@drawable/rectangle_background"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:layout_width="0dp"
@@ -176,15 +180,12 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="Home"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#63B8E4"
             app:icon="@drawable/home_icon4"
             app:iconGravity="top"
-            app:iconPadding="8dp"
-            android:padding="16dp"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="#63B8E4" />
+            app:iconPadding="8dp" />
 
         <Button
             android:layout_width="0dp"
