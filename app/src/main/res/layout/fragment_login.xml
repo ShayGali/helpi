@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="-----------------------Social Login-----------------------"
+        android:text="@string/social_login"
         android:textColor="#A6A6A6"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"

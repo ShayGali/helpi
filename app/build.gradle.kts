@@ -46,7 +46,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.ui.auth)
 
-
     implementation(libs.material)
     implementation (libs.material.v190)
 
