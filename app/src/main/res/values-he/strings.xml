@@ -5,4 +5,9 @@
     <string name="home">בית</string>
     <string name="hello_blank_fragment">שלום פרגמנט ריק</string>
     <string name="social_login">-----------------------התחברות דרך רשת חברתית-----------------------</string>
+    <string name="navigation">ניווט</string>
+    <string name="search_product">חיפוש מוצר</string>
+    <string name="search_service">חיפוש שירות</string>
+    <string name="offer_service">הצע שירות</string>
+    <string name="offer_product">הצע מוצר</string>
 </resources>

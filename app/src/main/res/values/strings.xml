@@ -6,4 +6,9 @@
     <string name="home">Home</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="social_login">-----------------------Social Login-----------------------</string>
+    <string name="navigation">Navigation</string>
+    <string name="search_product">Search Product</string>
+    <string name="search_service">Search Service</string>
+    <string name="offer_service">Offer Service</string>
+    <string name="offer_product">Offer Product</string>
 </resources>

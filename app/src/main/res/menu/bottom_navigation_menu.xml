@@ -1,15 +1,35 @@
-<!-- res/menu/bottom_navigation_menu.xml -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_google"
-        android:title="Home" />
+        android:id="@+id/search_product"
+        android:icon="@drawable/ic_search_24dp"
+        android:title="@string/search_product"
+        android:tooltipText="@string/search_product"
+        app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_google"
-        android:title="Dashboard" />
+        android:id="@+id/search_service"
+        android:icon="@drawable/ic_search_service"
+        android:title="@string/search_service"
+        android:tooltipText="@string/search_service"
+        app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_google"
-        android:title="Notifications" />
+        android:id="@+id/home_menu_item"
+        android:icon="@drawable/ic_home"
+        android:title="@string/search_service"
+        android:tooltipText="@string/search_service"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/offer_service"
+        android:icon="@drawable/ic_offer_service_24"
+        android:title="@string/offer_service"
+        android:tooltipText="@string/offer_service"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="100" />
+    <item
+        android:id="@+id/offer_product"
+        android:icon="@drawable/ic_offer_product"
+        android:title="@string/offer_product"
+        android:tooltipText="@string/offer_product"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="101" />
 </menu>
