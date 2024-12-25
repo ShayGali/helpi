@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:background="@drawable/rounder_corner"
-        android:hint="Username"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:padding="18dp"
         android:textColor="#A6A6A6"
