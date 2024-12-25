@@ -110,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="-----------------------Social Login-----------------------"
+            android:text="-----------------------Social Register-----------------------"
             android:textColor="#A6A6A6"
             android:textSize="18dp" />
 

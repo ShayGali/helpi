@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">helpi</string>
     <string name="welcome_message">Welcome to helpi!</string>
-    <string name="login_button">Login</string>
-    <string name="register_button">Register</string>
+    <string name="login">Login</string>
     <string name="home">Home</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="social_login">-----------------------Social Login-----------------------</string>
@@ -11,4 +10,11 @@
     <string name="search_service">Search Service</string>
     <string name="offer_service">Offer Service</string>
     <string name="offer_product">Offer Product</string>
+    <string name="register">Register</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="choose_profile_picture">Choose Profile Picture</string>
+    <string name="password">Password\n</string>
+    <string name="social_register">-----------------Social Register-----------------</string>
 </resources>

@@ -24,10 +24,18 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //TODO: check if the user in sgin in or not (https://firebase.google.com/docs/auth/android/start?hl=he#java)
+
         Button loginButton = view.findViewById(R.id.login_button);
+        Button goToRegisterButton = view.findViewById(R.id.got_to_reg_button);
+
 
         loginButton.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_login_fragment_to_homeFragment)
+        );
+
+        goToRegisterButton.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_login_fragment_to_registerFragment)
         );
 
         View facebook_button = view.findViewById(R.id.facebook_button);

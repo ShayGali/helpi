@@ -1,7 +1,7 @@
 <resources>
     <string name="welcome_message">ברוך הבא ל- helpi!</string>
-    <string name="login_button">התחברות</string>
-    <string name="register_button">הרשמה</string>
+    <string name="login">התחברות</string>
+    <string name="register">הרשמה</string>
     <string name="home">בית</string>
     <string name="hello_blank_fragment">שלום פרגמנט ריק</string>
     <string name="social_login">-----------------------התחברות דרך רשת חברתית-----------------------</string>

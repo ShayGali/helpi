@@ -23,7 +23,7 @@
         android:id="@+id/login_email_input"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/rounder_corner"
         android:hint="Username"
         android:inputType="textEmailAddress"
@@ -66,18 +66,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_input" />
 
+    <Button
+        android:id="@+id/got_to_reg_button"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#FF5722"
+        android:padding="18dp"
+        android:text="@string/register"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+
     <TextView
         android:id="@+id/TextView1"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="20dp"
         android:text="@string/social_login"
         android:textColor="#A6A6A6"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/got_to_reg_button" />
 
     <ImageView
         android:id="@+id/facebook_button"
