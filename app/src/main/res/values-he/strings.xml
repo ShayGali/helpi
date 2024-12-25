@@ -10,4 +10,12 @@
     <string name="search_service">חיפוש שירות</string>
     <string name="offer_service">הצע שירות</string>
     <string name="offer_product">הצע מוצר</string>
+    <string name="first_name">שם פרטי</string>
+    <string name="last_name">שם משפחה</string>
+    <string name="email">אימייל</string>
+    <string name="choose_profile_picture">בחר תמונת פרופיל</string>
+    <string name="password">סיסמה</string>
+    <string name="social_register">-----------------Social Register-----------------</string>
+    <string name="select_category">בחר קטגוריה</string>
+    <string name="select_sub_category">בחר תת קטגוריה</string>
 </resources>
