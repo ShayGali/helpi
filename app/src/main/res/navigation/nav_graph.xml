@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_login_fragment_to_testFragment"
             app:destination="@id/testFragment" />
+        <action
+            android:id="@+id/action_login_fragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -27,5 +30,10 @@
         android:name="com.sibi.helpi.TestFragment"
         android:label="fragment_test"
         tools:layout="@layout/fragment_test" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.sibi.helpi.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
 
 </navigation>
