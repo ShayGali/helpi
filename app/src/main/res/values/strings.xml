@@ -17,4 +17,6 @@
     <string name="choose_profile_picture">Choose Profile Picture</string>
     <string name="password">Password\n</string>
     <string name="social_register">-----------------Social Register-----------------</string>
+    <string name="select_category">Select Category</string>
+    <string name="select_sub_category">Select SubCategory</string>
 </resources>

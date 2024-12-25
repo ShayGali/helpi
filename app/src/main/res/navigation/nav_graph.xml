@@ -19,12 +19,19 @@
         <action
             android:id="@+id/action_login_fragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_login_fragment_to_advancedSearchFragment"
+            app:destination="@id/advancedSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.sibi.helpi.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_login_fragment"
+            app:destination="@id/login_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/testFragment"
         android:name="com.sibi.helpi.TestFragment"
@@ -35,5 +42,10 @@
         android:name="com.sibi.helpi.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/advancedSearchFragment"
+        android:name="com.sibi.helpi.AdvancedSearchFragment"
+        android:label="fragment_advanced_search"
+        tools:layout="@layout/fragment_advanced_search" />
 
 </navigation>
