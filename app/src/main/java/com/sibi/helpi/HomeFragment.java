@@ -9,16 +9,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeFragment extends Fragment {
     private FirebaseAuth mAuth;
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
 
+        // Configure Google Sign-In
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(),
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail()
+                        .build());
     }
 
     @Override
@@ -30,6 +40,7 @@ public class HomeFragment extends Fragment {
         homeButton.setOnClickListener(v -> {
                     //TODO: remove this:
                     mAuth.signOut();
+                    googleSignInClient.signOut();
                     Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_login_fragment);
                 }
         );
