@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View inflate = inflater.inflate(R.layout.fragment_home, container, false);
-        View homeButton = inflate.findViewById(R.id.home_btn);
+        View homeButton = inflate.findViewById(R.id.imageView8);
         homeButton.setOnClickListener(v -> {
                     //TODO: remove this:
                     mAuth.signOut();

@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/login_fragment">
+    app:startDestination="@id/loginFragment">
 
 
     <fragment
-        android:id="@+id/login_fragment"
+        android:id="@+id/loginFragment"
         android:name="com.sibi.helpi.LoginFragment"
         android:label="LoginFragment" >
         <action
@@ -19,9 +19,6 @@
         <action
             android:id="@+id/action_login_fragment_to_registerFragment"
             app:destination="@id/registerFragment" />
-        <action
-            android:id="@+id/action_login_fragment_to_advancedSearchFragment"
-            app:destination="@id/advancedSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -30,7 +27,10 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_login_fragment"
-            app:destination="@id/login_fragment" />
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_advancedSearchFragment"
+            app:destination="@id/advancedSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/testFragment"
@@ -47,5 +47,25 @@
         android:name="com.sibi.helpi.AdvancedSearchFragment"
         android:label="fragment_advanced_search"
         tools:layout="@layout/fragment_advanced_search" />
+    <fragment
+        android:id="@+id/searchProductFragment"
+        android:name="com.sibi.helpi.SearchProductFragment"
+        android:label="fragment_search_product"
+        tools:layout="@layout/fragment_search_product" />
+    <fragment
+        android:id="@+id/offerProductFragment"
+        android:name="com.sibi.helpi.OfferProductFragment"
+        android:label="fragment_offer_product"
+        tools:layout="@layout/fragment_offer_product" />
+    <fragment
+        android:id="@+id/offerServiceFragment"
+        android:name="com.sibi.helpi.OfferServiceFragment"
+        android:label="fragment_offer_service"
+        tools:layout="@layout/fragment_offer_service" />
+    <fragment
+        android:id="@+id/searchServiceFragment"
+        android:name="com.sibi.helpi.SearchServiceFragment"
+        android:label="fragment_search_service"
+        tools:layout="@layout/fragment_search_service" />
 
 </navigation>
