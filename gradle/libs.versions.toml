@@ -14,6 +14,7 @@ materialVersion = "1.10.0"
 coordinatorlayout = "1.2.0"
 navigationFragmentKtx = "2.8.5"
 navigationUiKtx = "2.8.5"
+playServicesAuth = "20.3.0"
 
 [libraries]
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
@@ -31,6 +32,7 @@ coordinatorlayout = { group = "androidx.coordinatorlayout", name = "coordinatorl
 material-v190 = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
 navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
