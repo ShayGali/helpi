@@ -10,8 +10,6 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 public class AdvancedSearchFragment extends Fragment {
     public AdvancedSearchFragment() {
@@ -34,9 +32,6 @@ public class AdvancedSearchFragment extends Fragment {
         String[] subCategories = {"SubCategory 1", "SubCategory 2", "SubCategory 3", "SubCategory 4"};
         ArrayAdapter<String> subAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, subCategories);
         subCategorySpinner.setAdapter(subAdapter);
-
-
-//        categorySpinner.setOnClickListener(v -> categorySpinner.performClick());
         return view;
 
     }

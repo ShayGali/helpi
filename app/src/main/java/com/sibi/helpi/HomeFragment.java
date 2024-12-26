@@ -3,6 +3,7 @@ package com.sibi.helpi;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -42,7 +43,11 @@ public class HomeFragment extends Fragment {
                     //TODO: remove this:
                     mAuth.signOut();
                     googleSignInClient.signOut();
-                    Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_login_fragment);
+
+            NavOptions navOptions = new NavOptions.Builder()
+                    .setPopUpTo(R.id.homeFragment, true)
+                    .build();
+            Navigation.findNavController(requireView()).navigate(R.id.action_homeFragment_to_login_fragment, null, navOptions);
                 }
         );
         return inflate;

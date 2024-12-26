@@ -14,9 +14,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,7 +38,6 @@ public class LoginFragment extends Fragment {
     private EditText passwordEditText;
     private Button loginButton;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,48 +47,39 @@ public class LoginFragment extends Fragment {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View inflate = inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_login, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         // check if the user is already signed in
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) { // if the user is already signed in
-            // navigate to the home fragment
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_login_fragment_to_homeFragment);
+            navigateToHome();
         }
 
         // initialize the views
-        emailEditText = inflate.findViewById(R.id.login_email_input);
-        passwordEditText = inflate.findViewById(R.id.password_input);
-        loginButton = inflate.findViewById(R.id.login_button);
-        loginButton.setOnClickListener(v -> {
-            signIn();
-        });
+        emailEditText = view.findViewById(R.id.login_email_input);
+        passwordEditText = view.findViewById(R.id.password_input);
+        loginButton = view.findViewById(R.id.login_button);
+        loginButton.setOnClickListener(v -> signIn());
 
-
-        Button goToRegisterButton = inflate.findViewById(R.id.got_to_reg_button);
-
-
+        Button goToRegisterButton = view.findViewById(R.id.got_to_reg_button);
         goToRegisterButton.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_login_fragment_to_registerFragment)
         );
 
-        View facebook_button = inflate.findViewById(R.id.facebook_button);
-        facebook_button.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.action_login_fragment_to_testFragment)
-        );
-
-        View Google_button = inflate.findViewById(R.id.google_button);
-
+        View facebook_button = view.findViewById(R.id.facebook_button);
+        View Google_button = view.findViewById(R.id.google_button);
         Google_button.setOnClickListener(v -> signInWithGoogle());
-        return inflate;
     }
 
     private void signInWithGoogle() {
@@ -120,8 +110,7 @@ public class LoginFragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
-                        // Handle signed-in user
-                        Navigation.findNavController(requireView()).navigate(R.id.action_login_fragment_to_homeFragment);
+                        navigateToHome();
                     } else {
                         // Handle error
                         Log.w(TAG, "register with google:failure", task.getException());
@@ -129,7 +118,6 @@ public class LoginFragment extends Fragment {
                     }
                 });
     }
-
 
     private void signIn() {
         // get the email and password from the views
@@ -148,7 +136,7 @@ public class LoginFragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // navigate to the home fragment
-                        Navigation.findNavController(requireView()).navigate(R.id.action_login_fragment_to_homeFragment);
+                        navigateToHome();
                     } else {
                         // TODO: show an error message
                         Toast.makeText(requireContext(), "Failed to sign in", Toast.LENGTH_SHORT).show();
@@ -156,5 +144,10 @@ public class LoginFragment extends Fragment {
                 });
     }
 
-
+    private void navigateToHome() {
+        NavOptions navOptions = new NavOptions.Builder()
+                .setPopUpTo(R.id.loginFragment, true)
+                .build();
+        Navigation.findNavController(requireView()).navigate(R.id.action_login_fragment_to_homeFragment, null, navOptions);
+    }
 }
