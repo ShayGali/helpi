@@ -28,7 +28,7 @@ public class AdvancedSearchFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, categories);
         categorySpinner.setAdapter(adapter);
 
-        Spinner subCategorySpinner = view.findViewById(R.id.spinnerSubCategories);
+        Spinner subCategorySpinner = view.findViewById(R.id.spinnerSubCategory);
         String[] subCategories = {"SubCategory 1", "SubCategory 2", "SubCategory 3", "SubCategory 4"};
         ArrayAdapter<String> subAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, subCategories);
         subCategorySpinner.setAdapter(subAdapter);

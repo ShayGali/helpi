@@ -18,4 +18,33 @@
     <string name="social_register">-----------------Social Register-----------------</string>
     <string name="select_category">בחר קטגוריה</string>
     <string name="select_sub_category">בחר תת קטגוריה</string>
+
+    <string-array name="categories">
+        <item>אלקטרוניקה</item>
+        <item>ביגוד</item>
+        <item>ספרים</item>
+        <item>רהיטים</item>
+        <item>צעצועים</item>
+        <item>אחר</item>
+    </string-array>
+    <string-array name="electronics_subcategories">
+        <item>טלפונים</item>
+        <item>מחשבים ניידים</item>
+        <item>טאבלטים</item>
+        <item>אוזניות</item>
+        <item>רמקולים</item>
+        <item>אחר</item>
+    </string-array>
+    <string-array name="region">
+        <item>תל-אביב</item>
+        <item>ירושלים</item>
+        <item>חיפה</item>
+        <item>באר-שבע</item>
+        <item>אילת</item>
+        <item>אחר</item>
+    </string-array>
+    <string-array name="product_status">
+        <item>חדש</item>
+        <item>משומש</item>
+    </string-array>
 </resources>
