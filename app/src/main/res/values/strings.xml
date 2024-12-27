@@ -19,4 +19,34 @@
     <string name="social_register">-----------------Social Register-----------------</string>
     <string name="select_category">Select Category</string>
     <string name="select_sub_category">Select SubCategory</string>
+
+
+    <string-array name="categories">
+        <item>Electronics</item>
+        <item>Clothing</item>
+        <item>Books</item>
+        <item>Furniture</item>
+        <item>Toys</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="electronics_subcategories">
+        <item>Phones</item>
+        <item>Laptops</item>
+        <item>Tablets</item>
+        <item>Headphones</item>
+        <item>Speakers</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="region">
+        <item>Tel-Aviv</item>
+        <item>Jerusalem</item>
+        <item>Haifa</item>
+        <item>Beer-Sheva</item>
+        <item>Eilat</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="product_status">
+        <item>New</item>
+        <item>Used</item>
+    </string-array>
 </resources>
