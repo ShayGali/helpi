@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#FF9E9E9E</color>
     <color name="custom_hint_color">#FF5722</color>
     <!-- Primary Color (כחול) -->
     <color name="colorPrimary">#2196F3</color>
@@ -16,8 +17,6 @@
     <color name="textPrimary">#333333</color>
     <color name="textSecondary">#757575</color>
 
-    <!-- Background Colors -->
-    <color name="backgroundColor">#FFFFFF</color>
-    <color name="cardBackgroundColor">#F5F5F5</color>
     <color name="bg_color">#F5F5F5</color>
+    <color name="spinner_background">#AB45F1</color>
 </resources>

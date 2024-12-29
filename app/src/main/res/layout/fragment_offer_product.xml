@@ -12,10 +12,12 @@
 
         <Spinner
             android:id="@+id/spinnerCategories"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:padding="12dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,10 +25,12 @@
 
         <Spinner
             android:id="@+id/spinnerSubCategory"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:padding="12dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,10 +38,12 @@
 
         <Spinner
             android:id="@+id/spinnerRegion"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:padding="12dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,10 +51,12 @@
 
         <Spinner
             android:id="@+id/spinnerProductSituation"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:padding="12dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

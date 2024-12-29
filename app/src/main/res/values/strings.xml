@@ -22,6 +22,7 @@
 
 
     <string-array name="categories">
+        <item>Select Category</item>
         <item>Electronics</item>
         <item>Clothing</item>
         <item>Books</item>
@@ -30,6 +31,7 @@
         <item>Other</item>
     </string-array>
     <string-array name="electronics_subcategories">
+        <item>Select Sub Category</item>
         <item>Phones</item>
         <item>Laptops</item>
         <item>Tablets</item>
@@ -38,6 +40,7 @@
         <item>Other</item>
     </string-array>
     <string-array name="region">
+        <item>Select Region</item>
         <item>Tel-Aviv</item>
         <item>Jerusalem</item>
         <item>Haifa</item>
@@ -46,6 +49,7 @@
         <item>Other</item>
     </string-array>
     <string-array name="product_status">
+        <item>Select Product Status</item>
         <item>New</item>
         <item>Used</item>
     </string-array>
