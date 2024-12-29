@@ -20,6 +20,7 @@
     <string name="select_sub_category">בחר תת קטגוריה</string>
 
     <string-array name="categories">
+        <item>בחר קטגוריה</item>
         <item>אלקטרוניקה</item>
         <item>ביגוד</item>
         <item>ספרים</item>
@@ -28,6 +29,7 @@
         <item>אחר</item>
     </string-array>
     <string-array name="electronics_subcategories">
+        <item>בחר תת קטגוריה</item>
         <item>טלפונים</item>
         <item>מחשבים ניידים</item>
         <item>טאבלטים</item>
@@ -36,6 +38,7 @@
         <item>אחר</item>
     </string-array>
     <string-array name="region">
+        <item>בחר אזור</item>
         <item>תל-אביב</item>
         <item>ירושלים</item>
         <item>חיפה</item>
@@ -44,6 +47,7 @@
         <item>אחר</item>
     </string-array>
     <string-array name="product_status">
+        <item>בחר מצב מוצר</item>
         <item>חדש</item>
         <item>משומש</item>
     </string-array>
