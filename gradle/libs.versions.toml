@@ -17,6 +17,7 @@ coordinatorlayout = "1.2.0"
 navigationFragmentKtx = "2.8.5"
 navigationUiKtx = "2.8.5"
 playServicesAuth = "21.3.0"
+playServicesMaps = "19.0.0"
 ucrop = "2.2.8"
 ucropVersion = "2.2.10"
 
@@ -41,6 +42,7 @@ material-v190 = { module = "com.google.android.material:material", version.ref =
 navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 ucrop-v2210 = { module = "com.github.yalantis:ucrop", version.ref = "ucropVersion" }
 
