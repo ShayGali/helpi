@@ -7,6 +7,10 @@ android {
     namespace = "com.sibi.helpi"
     compileSdk = 34
 
+    buildFeatures {
+        buildConfig = true  // Add this line
+    }
+
     defaultConfig {
         applicationId = "com.sibi.helpi"
         minSdk = 26
@@ -15,6 +19,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "MAPS_API_KEY", "\"${rootProject.extra["MAPS_API_KEY"]}\"")
     }
 
     buildTypes {
@@ -32,6 +37,7 @@ android {
     }
 }
 
+
 dependencies {
 
     implementation(libs.appcompat)
@@ -48,7 +54,7 @@ dependencies {
     implementation(libs.firebase.ui.auth)
 
     implementation(libs.material)
-    implementation (libs.material.v190)
+    implementation(libs.material.v190)
 
 //    navigation
     implementation(libs.navigation.fragment.ktx)
