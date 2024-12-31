@@ -1,4 +1,5 @@
 package com.sibi.helpi;
+//import com.sibi.helpi.BuildConfig;
 
 import android.os.Bundle;
 
@@ -6,10 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,8 +39,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View inflate = inflater.inflate(R.layout.fragment_home, container, false);
-        View homeButton = inflate.findViewById(R.id.imageView8);
-        homeButton.setOnClickListener(v -> {
+        View bell_img = inflate.findViewById(R.id.bell_img);
+        bell_img.setOnClickListener(v -> {
                     //TODO: remove this:
                     mAuth.signOut();
                     googleSignInClient.signOut();
