@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
@@ -8,7 +10,7 @@ android {
     compileSdk = 34
 
     buildFeatures {
-        buildConfig = true  // Add this line
+        buildConfig = true
     }
 
     defaultConfig {
@@ -19,7 +21,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "MAPS_API_KEY", "\"${rootProject.extra["MAPS_API_KEY"]}\"")
+
+        // Load secrets from the properties file
+        val properties = Properties()
+        file("../secrets.properties").inputStream().use { properties.load(it) }
+        buildConfigField("String", "MAPS_API_KEY", "\"${properties["MAPS_API_KEY"]}\"")
     }
 
     buildTypes {
@@ -31,15 +37,14 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
-
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
@@ -49,14 +54,18 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+    // for firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.ui.auth)
 
+    // Maps SDK for Android
+    implementation(libs.play.services.maps)
+
     implementation(libs.material)
     implementation(libs.material.v190)
 
-//    navigation
+    // navigation
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
 }

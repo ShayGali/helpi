@@ -62,25 +62,9 @@ public class RegisterFragment extends Fragment {
                 new ActivityResultContracts.GetContent(),
                 uri -> {
                     if (uri != null) {
-                        // Launch uCrop to crop the image
-                        Uri destinationUri = Uri.fromFile(new File(requireContext().getCacheDir(), "cropped_image.jpg"));
-//                        UCrop.of(uri, destinationUri)
-//                                .withAspectRatio(1, 1)
-//                                .withMaxResultSize(500, 500)
-//                                .start(requireContext(), this);
-                    }
-                }
-        );
-
-        cropImageLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-//                        final Uri resultUri = UCrop.getOutput(result.getData());
-//                        if (resultUri != null) {
-//                            ImageView imageView = getView().findViewById(R.id.reg_profile_picture);
-//                            imageView.setImageURI(resultUri);
-//                        }
+                        // puut the image in the image view
+                        ImageView imageView = requireView().findViewById(R.id.reg_profile_picture);
+                        imageView.setImageURI(uri);
                     }
                 }
         );
@@ -182,7 +166,7 @@ public class RegisterFragment extends Fragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Navigation.findNavController(requireView()).navigate(R.id.action_login_fragment_to_homeFragment);
+                        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
                     } else {
                         Log.w(TAG, "register with google:failure", task.getException());
                         Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
