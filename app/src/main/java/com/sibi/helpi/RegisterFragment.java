@@ -1,13 +1,20 @@
 package com.sibi.helpi;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import android.Manifest;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -26,12 +34,15 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.io.File;
+
 
 public class RegisterFragment extends Fragment {
-    // for google login
     private static final int RC_SIGN_IN = 1234;
     private GoogleSignInClient googleSignInClient;
     private FirebaseAuth mAuth;
+    private ActivityResultLauncher<String> pickImageLauncher;
+    private ActivityResultLauncher<Intent> cropImageLauncher;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -46,12 +57,38 @@ public class RegisterFragment extends Fragment {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
+
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                uri -> {
+                    if (uri != null) {
+                        // Launch uCrop to crop the image
+                        Uri destinationUri = Uri.fromFile(new File(requireContext().getCacheDir(), "cropped_image.jpg"));
+//                        UCrop.of(uri, destinationUri)
+//                                .withAspectRatio(1, 1)
+//                                .withMaxResultSize(500, 500)
+//                                .start(requireContext(), this);
+                    }
+                }
+        );
+
+        cropImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+//                        final Uri resultUri = UCrop.getOutput(result.getData());
+//                        if (resultUri != null) {
+//                            ImageView imageView = getView().findViewById(R.id.reg_profile_picture);
+//                            imageView.setImageURI(resultUri);
+//                        }
+                    }
+                }
+        );
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View inflate = inflater.inflate(R.layout.fragment_register, container, false);
 
         EditText fNameEditText = inflate.findViewById(R.id.first_name_input_reg);
@@ -60,16 +97,19 @@ public class RegisterFragment extends Fragment {
         EditText passwordEditText = inflate.findViewById(R.id.password_input);
 
         Button registerButton = inflate.findViewById(R.id.register_button);
+        Button chooseProfilePicButton = inflate.findViewById(R.id.choose_picture_button);
+
+        chooseProfilePicButton.setOnClickListener(v -> {
+            pickImageLauncher.launch("image/*");
+        });
 
         registerButton.setOnClickListener(v -> {
-            // get this user's input
             String fName = fNameEditText.getText().toString();
             String lName = lNameEditText.getText().toString();
             String email = emailEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
             EditText firstToFocus = null;
-            // check if the user has entered all the required fields
             if (fName.isEmpty()) {
                 fNameEditText.setError("First name is required");
                 firstToFocus = fNameEditText;
@@ -85,7 +125,7 @@ public class RegisterFragment extends Fragment {
                 if (firstToFocus == null) firstToFocus = emailEditText;
             }
 
-            if (password.isEmpty()) { // TODO: check if the password is strong enough
+            if (password.isEmpty()) {
                 passwordEditText.setError("Password is required");
                 if (firstToFocus == null) firstToFocus = passwordEditText;
             }
@@ -102,7 +142,6 @@ public class RegisterFragment extends Fragment {
                             Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            // TODO: show the error message to the user in a better way
                             Toast.makeText(getContext(), "Authentication failed." + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -110,7 +149,6 @@ public class RegisterFragment extends Fragment {
 
         View googleButton = inflate.findViewById(R.id.google_button);
         googleButton.setOnClickListener(v -> {
-            // start the google sign in flow
             signInWithGoogle();
         });
         return inflate;
@@ -134,6 +172,9 @@ public class RegisterFragment extends Fragment {
                 }
             }
         }
+//        } else if (requestCode == UCrop.REQUEST_CROP) {
+//            cropImageLauncher.launch(data);
+//        }
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
@@ -141,7 +182,6 @@ public class RegisterFragment extends Fragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Handle signed-in user
                         Navigation.findNavController(requireView()).navigate(R.id.action_login_fragment_to_homeFragment);
                     } else {
                         Log.w(TAG, "register with google:failure", task.getException());
@@ -149,5 +189,4 @@ public class RegisterFragment extends Fragment {
                     }
                 });
     }
-
 }
