@@ -25,7 +25,11 @@ android {
         // Load secrets from the properties file
         val properties = Properties()
         file("../secrets.properties").inputStream().use { properties.load(it) }
-        buildConfigField("String", "MAPS_API_KEY", "\"${properties["MAPS_API_KEY"]}\"")
+        val mapsApiKey = properties["MAPS_API_KEY"] as String
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
+
+        // Pass the MAPS_API_KEY to the manifest placeholders
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildTypes {
@@ -50,6 +54,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.coordinatorlayout)
     implementation(libs.play.services.auth)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
