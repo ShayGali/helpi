@@ -4,7 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#757575">
+    android:background="#757575"
+    tools:context=".ProfileFragment">
+
+    <TextView
+        android:id="@+id/textViewProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layoutDirection="ltr"
+        android:text="Profile"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/back_home_btn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/background_oval"
+        android:layoutDirection="ltr"
+        app:layout_constraintBottom_toTopOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_white_left_arrow" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -19,8 +59,8 @@
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layoutDirection="ltr"
             android:layout_weight="1"
+            android:layoutDirection="ltr"
             app:srcCompat="@drawable/white_circle" />
 
     </LinearLayout>
@@ -90,6 +130,9 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layoutDirection="ltr"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_round_speaker" />
 
 
@@ -132,6 +175,9 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layoutDirection="ltr"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_round_calendar" />
 
                     <ImageView
@@ -173,6 +219,9 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layoutDirection="ltr"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_round_camera" />
 
                     <ImageView
@@ -214,6 +263,9 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layoutDirection="ltr"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_round_share" />
 
                     <ImageView
@@ -242,6 +294,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/logout_btn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="32dp"
@@ -293,43 +346,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/pic_user_2" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="32dp"
-        android:background="@drawable/background_oval"
-        android:layoutDirection="ltr"
-        app:layout_constraintBottom_toTopOf="@+id/imageView4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layoutDirection="ltr"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_white_left_arrow" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/textViewProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="ltr"
-        android:text="Profile"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        tools:layout_editor_absoluteY="42dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
