@@ -79,6 +79,7 @@ public class ProductPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product_page, container, false);
 
         productImages = view.findViewById(R.id.imageSlider);
+
 //        productTitle = view.findViewById(R.id.productTitle);
 //        productCategory = view.findViewById(R.id.productCategory);
 //        productSubCategory = view.findViewById(R.id.productSubCategory);
@@ -95,6 +96,21 @@ public class ProductPageFragment extends Fragment {
 //            productImage.setImageResource(getArguments().getInt("productImageResourceId"));
 //        }
 //        ImageSliderAdapter adapter = new ImageSliderAdapter(getContext(), imageUrls);
+
+        int[] imageResIds = new int[]{
+                R.drawable.red_balloon,
+                R.drawable.blue_balon
+        };
+
+        // Convert resource IDs to URI strings
+        String[] imageUrls = new String[imageResIds.length];
+        for (int i = 0; i < imageResIds.length; i++) {
+            imageUrls[i] = "android.resource://" + getContext().getPackageName() + "/" + imageResIds[i];
+        }
+
+        ImageSliderAdapter adapter = new ImageSliderAdapter(getContext(), imageUrls);
+
+        productImages.setAdapter(adapter);
 
         return view;
     }
