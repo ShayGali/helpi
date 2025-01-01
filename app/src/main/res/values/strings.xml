@@ -19,6 +19,7 @@
     <string name="social_register">-----------------Social Register-----------------</string>
     <string name="select_category">Select Category</string>
     <string name="select_sub_category">Select SubCategory</string>
+    <string name="report">report</string>
 
 
     <string-array name="categories">
