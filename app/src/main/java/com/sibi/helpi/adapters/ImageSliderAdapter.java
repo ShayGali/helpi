@@ -1,6 +1,8 @@
 package com.sibi.helpi.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,39 +14,58 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.sibi.helpi.R;
 
-public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.ViewHolder> {
-    private int[] imageResIds; //TODO: check what happen if its not from id
-    private Context context;
+import java.util.ArrayList;
 
-    public ImageSliderAdapter(Context context, int[] imageResIds) {
+public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.ImageViewHolder> {
+    private Context context;
+    private String[] imageUrls;
+
+    // Constructor for URLs
+    public ImageSliderAdapter(Context context, String[] imageUrls) {
         this.context = context;
-        this.imageResIds = imageResIds;
+        this.imageUrls = imageUrls;
     }
+
+    public ImageSliderAdapter(Context context) {
+        this.context = context;
+        this.imageUrls = new String[0];
+    }
+
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_image_slider, parent, false);
-        return new ViewHolder(view);
+        return new ImageViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
+        // Load from URL
         Glide.with(context)
-                .load(imageResIds[position])
+                .load(imageUrls[position])
                 .fitCenter()
                 .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return imageResIds.length;
+        return imageUrls.length;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    @SuppressLint("NotifyDataSetChanged")
+    public void setImages(ArrayList<Uri> imagesUris) {
+        this.imageUrls = new String[imagesUris.size()];
+        for (int i = 0; i < imagesUris.size(); i++) {
+            this.imageUrls[i] = imagesUris.get(i).toString();
+        }
+        notifyDataSetChanged();
+    }
+
+    static class ImageViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
 
-        ViewHolder(@NonNull View itemView) {
+        ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.sliderImageView);
         }

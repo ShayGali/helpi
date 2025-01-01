@@ -34,7 +34,14 @@ public class ProductPageFragment extends Fragment {
                 R.drawable.red_balloon,
                 R.drawable.blue_balon
         };
-        ImageSliderAdapter adapter = new ImageSliderAdapter(getContext(), imageResIds);
+
+        // Convert resource IDs to URI strings
+        String[] imageUrls = new String[imageResIds.length];
+        for (int i = 0; i < imageResIds.length; i++) {
+            imageUrls[i] = "android.resource://" + getContext().getPackageName() + "/" + imageResIds[i];
+        }
+
+        ImageSliderAdapter adapter = new ImageSliderAdapter(getContext(), imageUrls);
 
         ViewPager2 viewPager = view.findViewById(R.id.imageSlider);
         viewPager.setAdapter(adapter);
