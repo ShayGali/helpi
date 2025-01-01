@@ -53,3 +53,4 @@ public class SearchProductResultFragment extends Fragment {
         return view;
     }
 }
+
