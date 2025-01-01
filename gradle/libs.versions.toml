@@ -20,6 +20,7 @@ playServicesAuth = "21.3.0"
 playServicesMaps = "19.0.0"
 ucrop = "2.2.8"
 ucropVersion = "2.2.10"
+playServicesLocation = "21.3.0"
 
 [libraries]
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
@@ -45,6 +46,7 @@ play-services-auth = { group = "com.google.android.gms", name = "play-services-a
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 ucrop-v2210 = { module = "com.github.yalantis:ucrop", version.ref = "ucropVersion" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
