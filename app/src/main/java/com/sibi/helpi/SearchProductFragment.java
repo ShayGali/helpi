@@ -8,10 +8,17 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class SearchProductFragment extends Fragment {
 
+    private Spinner categorySpinner;
+    private Spinner subcategorySpinner;
+    private Spinner regionSpinner;
+    private Spinner productStatusSpinner;
 
     public SearchProductFragment() {
         // Required empty public constructor
@@ -27,14 +34,31 @@ public class SearchProductFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search_product, container, false);
+        Button submitSearchButton = view.findViewById(R.id.btnSearchProduct);
 
-        // find the text place holder
-        TextView textView = view.findViewById(R.id.textPlaceHolder);
+        categorySpinner = view.findViewById(R.id.spinnerCategories);
+        subcategorySpinner = view.findViewById(R.id.spinnerSubCategory);
+        regionSpinner = view.findViewById(R.id.spinnerRegion);
+        productStatusSpinner = view.findViewById(R.id.spinnerProductSituation);
 
         // navigate to the product page
-        textView.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.action_searchProductFragment_to_profuctFragment);
+        submitSearchButton.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.action_searchProductFragment_to_searchProductResultFragment);
         });
+
+        String[] categories = getResources().getStringArray(R.array.categories);
+        String[] electronicsSubcategories = getResources().getStringArray(R.array.electronics_subcategories);
+        String[] regions = getResources().getStringArray(R.array.region);
+        String[] productStatus = getResources().getStringArray(R.array.product_status);
+
+        categorySpinner.setAdapter(new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, categories));
+        subcategorySpinner.setAdapter(new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, electronicsSubcategories));
+        regionSpinner.setAdapter(new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, regions));
+        productStatusSpinner.setAdapter(new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, productStatus));
         return view;
     }
 }
