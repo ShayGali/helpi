@@ -3,62 +3,57 @@ package com.sibi.helpi;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SearchServiceFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SearchServiceFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Spinner categorySpinner;
+    private Spinner subcategorySpinner;
+    private Spinner regionSpinner;
 
     public SearchServiceFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchServiceFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SearchServiceFragment newInstance(String param1, String param2) {
-        SearchServiceFragment fragment = new SearchServiceFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_service, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_service, container, false);
+        Button submitSearchButton = view.findViewById(R.id.btnSearchProduct);
+
+        categorySpinner = view.findViewById(R.id.spinnerCategories);
+        subcategorySpinner = view.findViewById(R.id.spinnerSubCategory);
+        regionSpinner = view.findViewById(R.id.spinnerRegion);
+
+        // navigate to the product page
+        submitSearchButton.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.action_searchProductFragment_to_searchProductResultFragment);
+        });
+
+        String[] categories = getResources().getStringArray(R.array.categories);
+        String[] electronicsSubcategories = getResources().getStringArray(R.array.electronics_subcategories);
+        String[] regions = getResources().getStringArray(R.array.region);
+
+        categorySpinner.setAdapter(new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, categories));
+        subcategorySpinner.setAdapter(new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, electronicsSubcategories));
+        regionSpinner.setAdapter(new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, regions));
+        return view;
     }
 }
