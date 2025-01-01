@@ -8,9 +8,10 @@
 
     <!-- TODO: center the text -->
     <TextView
+
+        android:id="@+id/textPlaceHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="search product"
         android:textSize="32sp"
         app:layout_constraintBottom_toBottomOf="parent"
