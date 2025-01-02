@@ -63,7 +63,11 @@
         android:id="@+id/searchServiceFragment"
         android:name="com.sibi.helpi.SearchServiceFragment"
         android:label="fragment_search_service"
-        tools:layout="@layout/fragment_search_service" />
+        tools:layout="@layout/fragment_search_service" >
+        <action
+            android:id="@+id/action_searchServiceFragment_to_searchServiceResultFragment"
+            app:destination="@id/searchServiceResultFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/productFragment"
@@ -91,5 +95,10 @@
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/searchServiceResultFragment"
+        android:name="com.sibi.helpi.SearchServiceResultFragment"
+        android:label="fragment_search_service_result"
+        tools:layout="@layout/fragment_search_service_result" />
 
 </navigation>

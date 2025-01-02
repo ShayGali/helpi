@@ -41,7 +41,7 @@ public class SearchServiceFragment extends Fragment {
 
         // navigate to the product page
         submitSearchButton.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.action_searchProductFragment_to_searchProductResultFragment);
+            Navigation.findNavController(view).navigate(R.id.action_searchServiceFragment_to_searchServiceResultFragment);
         });
 
         String[] categories = getResources().getStringArray(R.array.categories);
