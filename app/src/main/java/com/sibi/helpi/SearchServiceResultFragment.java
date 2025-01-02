@@ -41,7 +41,7 @@ public class SearchServiceResultFragment extends Fragment {
         serviceSliderAdapter = new ServiceSliderAdapter(serviceList, service -> {
             // Handle navigation to product page
             Bundle bundle = new Bundle();
-//            Navigation.findNavController(view).navigate(R.id.action_searchServiceResultFragment_to_ServiceFragment, bundle);
+            Navigation.findNavController(view).navigate(R.id.action_searchServiceResultFragment_to_servicePageFragment, bundle);
         });
 
         serviceRecyclerView.setAdapter(serviceSliderAdapter);
