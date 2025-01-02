@@ -32,7 +32,7 @@ public class ServiceSliderAdapter extends RecyclerView.Adapter<ServiceSliderAdap
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sreach_product, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sreach_service, parent, false);
         return new ProductViewHolder(view);
     }
 
