@@ -74,6 +74,10 @@ dependencies {
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
 
-    implementation (libs.glide)
-    annotationProcessor (libs.compiler)
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
+
+    // for image crop
+    implementation(libs.hdodenhof.circleimageview)
+    implementation(libs.ucrop)
 }

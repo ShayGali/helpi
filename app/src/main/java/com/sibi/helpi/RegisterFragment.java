@@ -5,7 +5,6 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -14,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.Manifest;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,8 +31,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class RegisterFragment extends Fragment {
@@ -62,9 +63,11 @@ public class RegisterFragment extends Fragment {
                 new ActivityResultContracts.GetContent(),
                 uri -> {
                     if (uri != null) {
-                        // puut the image in the image view
-                        ImageView imageView = requireView().findViewById(R.id.reg_profile_picture);
-                        imageView.setImageURI(uri);
+                        Uri destinationUri = Uri.fromFile(new File(requireContext().getCacheDir(), "cropped_image.jpg"));
+                        UCrop.of(uri, destinationUri)
+                                .withAspectRatio(1, 1) // Square aspect ratio
+                                .withMaxResultSize(500, 500) // Adjust resolution
+                                .start(requireContext(), this);
                     }
                 }
         );
@@ -124,6 +127,7 @@ public class RegisterFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getContext(), "Authentication failed." + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -147,19 +151,18 @@ public class RegisterFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            if (task.isSuccessful()) {
-                GoogleSignInAccount account = task.getResult();
-                if (account != null) {
-                    firebaseAuthWithGoogle(account);
-                }
+        if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            Uri croppedUri = UCrop.getOutput(data);
+            if (croppedUri != null) {
+                CircleImageView profilePic = requireView().findViewById(R.id.reg_profile_picture);
+                profilePic.setImageURI(croppedUri); // Show the cropped image
             }
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            Throwable cropError = UCrop.getError(data);
+            Toast.makeText(requireContext(), "Cropping failed: " + cropError.getMessage(), Toast.LENGTH_SHORT).show();
         }
-//        } else if (requestCode == UCrop.REQUEST_CROP) {
-//            cropImageLauncher.launch(data);
-//        }
     }
+
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
