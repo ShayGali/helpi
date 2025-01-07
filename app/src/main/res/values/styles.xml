@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -13,13 +13,10 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-
-    <style name="CustomBottomNavigationTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="android:textSize">12sp</item> <!-- Increase size for readability -->
-        <item name="android:ellipsize">none</item> <!-- Ensure no truncation -->
-        <item name="android:singleLine">false</item> <!-- Allows multi-line text -->
-        <item name="android:maxLines">2</item> <!-- Limit to two lines -->
-        <item name="android:gravity">center</item> <!-- Center the text within the space -->
-        <item name="android:textColor">@color/colorAccent</item> <!-- Ensure text is visible -->
+    <style name="CustomBottomNavigationTextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
     </style>
 </resources>
