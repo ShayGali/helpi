@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginFragment">
+
+  <ImageView
+      android:id="@+id/login_page_logo"
+      android:layout_width="317dp"
+      android:layout_height="106dp"
+      android:layout_marginTop="15dp"
+      android:gravity="center"
+      android:scaleType="centerCrop"
+      android:src="@drawable/logo_helpi"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+      android:id="@+id/Settings"
+      android:layout_width="wrap_content"
+      android:layout_height="43dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="30dp"
+      android:layout_marginEnd="282dp"
+      android:gravity="left"
+      android:text="@string/Settings"
+      android:textColor="@color/black"
+      android:textSize="30sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/login_page_logo" />
+
+  <View
+      android:id="@+id/grey_line"
+      android:layout_width="350dp"
+      android:layout_height="1dp"
+      android:layout_marginTop="6dp"
+      android:layout_marginStart="10dp"
+      android:background="@android:color/darker_gray"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/Settings" />
+
+  <Button
+    android:id="@+id/My_User_button"
+    android:layout_width="360dp"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:padding="0dp"
+    android:text="@string/My_User"
+    android:textAllCaps="false"
+    android:textColor="#000000"
+    android:textSize="20sp"
+    android:textColorLink="@color/black"
+    android:textStyle="bold"
+    android:gravity="start"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/grey_line" />
+
+  <Button
+    android:id="@+id/Report_a_problem_button"
+    android:layout_width="360dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="0dp"
+    android:background="@android:color/transparent"
+    android:textAllCaps="false"
+    android:padding="0dp"
+    android:gravity="left"
+    android:text="@string/Report_a_problem"
+    android:textColor="#000000"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/My_User_button" />
+
+  <Button
+    android:id="@+id/Contact_Us_button"
+    android:layout_width="360dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="0dp"
+    android:background="@android:color/transparent"
+    android:textAllCaps="false"
+    android:gravity="left"
+    android:padding="0dp"
+    android:text="@string/Contact_Us"
+    android:textColor="#000000"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/Report_a_problem_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

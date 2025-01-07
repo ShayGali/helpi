@@ -19,4 +19,11 @@
 
     <color name="bg_color">#F5F5F5</color>
     <color name="spinner_background">#AB45F1</color>
+
+    <!-- Background Colors -->
+    <color name="user_message_background">#AB45F1</color>
+    <color name="partner_message_background">#AB45F1</color>
+
+
+
 </resources>

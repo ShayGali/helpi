@@ -1,7 +1,11 @@
 package com.sibi.helpi;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -9,7 +13,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +26,10 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-        // hide the bottom navigation bar when the user is on the login fragment
+        // Customize the BottomNavigationView menu items
+        customizeBottomNavigationView(bottomNavigationView);
+
+        // Hide BottomNavigationView for specific fragments
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.loginFragment || destination.getId() == R.id.registerFragment) {
                 bottomNavigationView.setVisibility(View.GONE);
@@ -31,8 +37,23 @@ public class MainActivity extends AppCompatActivity {
                 bottomNavigationView.setVisibility(View.VISIBLE);
             }
         });
-
-
     }
 
+    private void customizeBottomNavigationView(BottomNavigationView bottomNavigationView) {
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+            MenuItem menuItem = bottomNavigationView.getMenu().getItem(i);
+
+            // Inflate custom layout for each menu item
+            View customView = LayoutInflater.from(this).inflate(R.layout.custom_bottom_navigation_item, bottomNavigationView, false);
+
+            // Set icon and text in the custom layout
+            ImageView icon = customView.findViewById(R.id.icon);
+            TextView text = customView.findViewById(R.id.text);
+            icon.setImageDrawable(menuItem.getIcon());
+            text.setText(menuItem.getTitle());
+
+            // Attach the custom view to the menu item
+            menuItem.setActionView(customView);
+        }
+    }
 }
