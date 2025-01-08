@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.sibi.helpi.adapters.ImageSliderAdapter;
@@ -21,8 +24,9 @@ import com.sibi.helpi.adapters.ImageSliderAdapter;
 import java.util.ArrayList;
 
 public class OfferProductFragment extends Fragment {
-    private static final int PICK_IMAGES_REQUEST = 1;
 
+    private OfferProductViewModel offerProductViewModel;
+    private static final int PICK_IMAGES_REQUEST = 1;
     private Spinner categorySpinner;
     private Spinner subcategorySpinner;
     private Spinner regionSpinner;
@@ -31,6 +35,10 @@ public class OfferProductFragment extends Fragment {
     private ViewPager2 imageSlider;
     private ImageSliderAdapter imageAdapter;
     private ArrayList<Uri> selectedImages;
+    private EditText etProductDescription;
+
+    Button btnPostProduct;
+    Button btnCancelPost;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +65,9 @@ public class OfferProductFragment extends Fragment {
         productStatusSpinner = view.findViewById(R.id.spinnerProductSituation);
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
         imageSlider = view.findViewById(R.id.imageSlider);
+        btnPostProduct = view.findViewById(R.id.btnPostProduct);
+        btnCancelPost = view.findViewById(R.id.btnCancelPost);
+        etProductDescription = view.findViewById(R.id.description);
 
         // Initialize ViewPager2 adapter
         imageAdapter = new ImageSliderAdapter(requireContext());
@@ -109,5 +120,53 @@ public class OfferProductFragment extends Fragment {
 
             imageAdapter.setImages(selectedImages);
         }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        offerProductViewModel = new ViewModelProvider(this).get(OfferProductViewModel.class);
+
+        btnPostProduct.setOnClickListener(v -> {
+            String description = this.etProductDescription.getText().toString();
+            String category = categorySpinner.getSelectedItem().toString();
+            String subCategory = subcategorySpinner.getSelectedItem().toString();
+            String region = regionSpinner.getSelectedItem().toString();
+            String condition = productStatusSpinner.getSelectedItem().toString();
+            String userId = "user1"; // Replace with the actual user ID
+
+            Product product = new Product();
+            product.setDescription(description);
+            product.setCategory(category);
+            product.setSubCategory(subCategory);
+            product.setRegion(region);
+            product.setCondition(condition);
+            product.setUserId(userId);
+
+            offerProductViewModel.postProduct(product);
+        });
+
+        observePostProductLiveData();
+    }
+
+    private void observePostProductLiveData() {
+        offerProductViewModel.getPostProductLiveData().observe(getViewLifecycleOwner(), resource -> {
+            switch (resource.getStatus()) {
+                case LOADING:
+                    // Show loading indicator
+                    break;
+                case SUCCESS:
+                    // Show success message
+                    String productId = resource.getData();
+                    // Navigate to product details screen or perform any other action
+                    break;
+                case ERROR:
+                    // Show error message
+                    String errorMessage = resource.getMessage();
+                    // Handle the error scenario
+                    break;
+            }
+        });
     }
 }
