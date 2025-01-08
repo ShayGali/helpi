@@ -120,20 +120,20 @@
             app:layout_constraintTop_toBottomOf="@+id/rvImages" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/btnCancelPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/colorError"
             android:clickable="true"
             android:src="@drawable/ic_cancel"
-            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton2"
+            app:layout_constraintEnd_toStartOf="@+id/btnPostProduct"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/description" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton2"
+            android:id="@+id/btnPostProduct"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -142,7 +142,7 @@
             android:src="@drawable/ic_upload"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/floatingActionButton"
+            app:layout_constraintStart_toEndOf="@+id/btnCancelPost"
             app:layout_constraintTop_toBottomOf="@+id/description" />
 
 
