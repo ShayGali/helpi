@@ -5,31 +5,31 @@
         android:icon="@drawable/ic_search_24dp"
         android:title="@string/search_product"
         android:tooltipText="@string/search_product"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/searchServiceFragment"
         android:icon="@drawable/ic_search_service"
         android:title="@string/search_service"
         android:tooltipText="@string/search_service"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/homeFragment"
         android:icon="@drawable/ic_home"
-        android:title="@string/search_service"
-        android:tooltipText="@string/search_service"
-        app:showAsAction="ifRoom" />
+        android:title="@string/home"
+        android:tooltipText="@string/home"
+        app:showAsAction="always" />
     <item
         android:id="@+id/offerServiceFragment"
         android:icon="@drawable/ic_offer_service_24"
         android:title="@string/offer_service"
         android:tooltipText="@string/offer_service"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:orderInCategory="100" />
     <item
         android:id="@+id/offerProductFragment"
         android:icon="@drawable/ic_offer_product"
         android:title="@string/offer_product"
         android:tooltipText="@string/offer_product"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:orderInCategory="101" />
 </menu>
