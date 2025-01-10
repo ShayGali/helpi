@@ -17,59 +17,112 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/spinnerCategories"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:padding="12dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
-
-    <Spinner
-        android:id="@+id/spinnerSubCategory"
+    <!-- Category Selection -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/categoryInputLayout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:padding="12dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:spinnerMode="dropdown"
+        android:hint="Select Category"
+        app:boxStrokeWidth="0dp"
+        app:boxBackgroundColor="@color/lightGray"
+        app:cornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCategories" />
+        app:layout_constraintTop_toBottomOf="@id/title">
 
-    <Spinner
-        android:id="@+id/spinnerRegion"
+        <AutoCompleteTextView
+            android:id="@+id/categorySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:background="@drawable/rounded_background" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Subcategory Selection -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/subcategoryInputLayout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:padding="12dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:spinnerMode="dropdown"
+        android:hint="Select Subcategory"
+        app:boxStrokeWidth="0dp"
+        app:boxBackgroundColor="@color/lightGray"
+        app:cornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerSubCategory" />
+        app:layout_constraintTop_toBottomOf="@id/categoryInputLayout">
 
-    <Spinner
-        android:id="@+id/spinnerProductSituation"
+        <AutoCompleteTextView
+            android:id="@+id/subcategorySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:background="@drawable/rounded_background" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Region Selection -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/regionInputLayout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:padding="12dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:spinnerMode="dropdown"
+        android:hint="Select Region"
+        app:boxStrokeWidth="0dp"
+        app:boxBackgroundColor="@color/lightGray"
+        app:cornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerRegion" />
+        app:layout_constraintTop_toBottomOf="@id/subcategoryInputLayout">
 
-    <!--    add button to search product-->
+        <AutoCompleteTextView
+            android:id="@+id/regionSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:background="@drawable/rounded_background" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Product Status Selection -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/productStatusInputLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Select Product Status"
+        app:boxStrokeWidth="0dp"
+        app:boxBackgroundColor="@color/lightGray"
+        app:cornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/regionInputLayout">
+
+        <AutoCompleteTextView
+            android:id="@+id/productStatusSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:background="@drawable/rounded_background" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Search Button -->
     <Button
         android:id="@+id/btnSearchProduct"
         android:layout_width="wrap_content"
@@ -78,5 +131,5 @@
         android:text="Search Product"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerProductSituation" />
+        app:layout_constraintTop_toBottomOf="@id/productStatusInputLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
