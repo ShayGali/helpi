@@ -11,6 +11,7 @@
     <color name="colorHint">#A6A6A6</color>
     <color name="colorError">#FF0000</color>
     <color name="colorSuccess">#00FF00</color>
+    <color name="blue_primary">#007BFF</color>
 
     <!-- Secondary Color (ירוק) -->
     <color name="colorSecondary">#4CAF50</color>
@@ -25,6 +26,11 @@
     <!-- Background Colors -->
     <color name="user_message_background">#AB45F1</color>
     <color name="partner_message_background">#AB45F1</color>
+
+    <color name="primaryColor">#3D8BFF</color>
+    <color name="lightGray">#D3D3D3</color>
+
+
 
 
 
