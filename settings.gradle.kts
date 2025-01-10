@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        google()
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -16,9 +17,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            setUrl("https://jitpack.io")
+        }
     }
 }
 
 rootProject.name = "helpi"
 include(":app")
- 
