@@ -106,7 +106,7 @@ public class Product {
                 ", category='" + category + '\'' +
                 ", subCategory='" + subCategory + '\'' +
                 ", region='" + region + '\'' +
-                ", situation='" + ProductCondition + '\'' +
+//                ", situation='" + ProductCondition + '\'' +
                 ", userId='" + userId + '\'' +
                 '}';
     }

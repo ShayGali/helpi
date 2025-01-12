@@ -27,9 +27,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.sibi.helpi.models.User;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -42,6 +45,7 @@ public class RegisterFragment extends Fragment {
     private GoogleSignInClient googleSignInClient;
     private FirebaseAuth mAuth;
     private ActivityResultLauncher<String> pickImageLauncher;
+    FirebaseFirestore db;
     private ActivityResultLauncher<Intent> cropImageLauncher;
 
     public RegisterFragment() {
@@ -52,6 +56,9 @@ public class RegisterFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
+
+        db = FirebaseFirestore.getInstance();
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -124,6 +131,10 @@ public class RegisterFragment extends Fragment {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            // Save user to database
+                            saveUserDatabase(fName, lName, email, "1234567890", null);
+
+                            // move to the home fragment
                             Log.d(TAG, "createUserWithEmail:success");
                             Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
                             Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
@@ -159,6 +170,16 @@ public class RegisterFragment extends Fragment {
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Throwable cropError = UCrop.getError(data);
             Toast.makeText(requireContext(), "Cropping failed: " + cropError.getMessage(), Toast.LENGTH_SHORT).show();
+        } else if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            if (task.isSuccessful()) {
+                GoogleSignInAccount account = task.getResult();
+                if (account != null) {
+                    firebaseAuthWithGoogle(account);
+                }
+            } else {
+                // Handle error
+            }
         }
     }
 
@@ -168,11 +189,28 @@ public class RegisterFragment extends Fragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
+                        if (isNewUser) {
+                            // Save user to database
+                            saveUserDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail(), "", account.getPhotoUrl());
+                        }
                         Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
                     } else {
                         Log.w(TAG, "register with google:failure", task.getException());
                         Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
                     }
+                });
+    }
+
+    private void saveUserDatabase(String fName, String lName, String email, String phoneNumber, Uri profilePicUri) {
+        // Save user to database
+        db.collection(MainActivity.USER_COLLECTION)
+                .add(new User(fName, lName, email, phoneNumber, "path"))
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error adding document", e);
                 });
     }
 }
