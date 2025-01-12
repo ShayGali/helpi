@@ -25,12 +25,12 @@ import java.util.ArrayList;
 
 public class OfferProductFragment extends Fragment {
 
-    private OfferProductViewModel offerProductViewModel;
+    private OfferProductViewModel offerProductViewModel;  // ViewModel to handle the post product operation
     private static final int PICK_IMAGES_REQUEST = 1;
     private Spinner categorySpinner;
     private Spinner subcategorySpinner;
     private Spinner regionSpinner;
-    private Spinner productStatusSpinner;
+    private Spinner productConditionSpinner;
     private Button btnUploadImage;
     private ViewPager2 imageSlider;
     private ImageSliderAdapter imageAdapter;
@@ -43,7 +43,7 @@ public class OfferProductFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        selectedImages = new ArrayList<>();
+        this.selectedImages = new ArrayList<>();
     }
 
     @Override
@@ -51,25 +51,26 @@ public class OfferProductFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_offer_product, container, false);
 
-        initializeViews(view);
-        setupSpinners();
-        setupImagePicker();
+        initializeViews(view);  // Initialize views
+        setupSpinners();        // Setup spinners
+        setupImagePicker();     // Setup image picker
 
         return view;
     }
 
     private void initializeViews(View view) {
+        // Assign views to variables (means to get the views from the layout file)
         categorySpinner = view.findViewById(R.id.spinnerCategories);
         subcategorySpinner = view.findViewById(R.id.spinnerSubCategory);
         regionSpinner = view.findViewById(R.id.spinnerRegion);
-        productStatusSpinner = view.findViewById(R.id.spinnerProductSituation);
+        productConditionSpinner = view.findViewById(R.id.spinnerProductCondition);
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
         imageSlider = view.findViewById(R.id.imageSlider);
         btnPostProduct = view.findViewById(R.id.btnPostProduct);
         btnCancelPost = view.findViewById(R.id.btnCancelPost);
         etProductDescription = view.findViewById(R.id.description);
 
-        // Initialize ViewPager2 adapter
+        // Initialize ViewPager2 adapter (means to set the adapter to the ViewPager2)
         imageAdapter = new ImageSliderAdapter(requireContext());
         imageSlider.setAdapter(imageAdapter);
     }
@@ -86,7 +87,7 @@ public class OfferProductFragment extends Fragment {
                 android.R.layout.simple_dropdown_item_1line, electronicsSubcategories));
         regionSpinner.setAdapter(new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_dropdown_item_1line, regions));
-        productStatusSpinner.setAdapter(new ArrayAdapter<>(requireContext(),
+        productConditionSpinner.setAdapter(new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_dropdown_item_1line, productStatus));
     }
 
@@ -126,28 +127,36 @@ public class OfferProductFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Initialize the ViewModel:
         offerProductViewModel = new ViewModelProvider(this).get(OfferProductViewModel.class);
 
+        // Set an onClickListener for the post product button:
         btnPostProduct.setOnClickListener(v -> {
             String description = this.etProductDescription.getText().toString();
             String category = categorySpinner.getSelectedItem().toString();
             String subCategory = subcategorySpinner.getSelectedItem().toString();
             String region = regionSpinner.getSelectedItem().toString();
-            String condition = productStatusSpinner.getSelectedItem().toString();
-            String userId = "user1"; // Replace with the actual user ID
+            String condition = productConditionSpinner.getSelectedItem().toString();
+            String userId = "user1"; // TODO: Replace with the actual user ID
 
-            Product product = new Product();
-            product.setDescription(description);
-            product.setCategory(category);
-            product.setSubCategory(subCategory);
-            product.setRegion(region);
-            product.setCondition(condition);
-            product.setUserId(userId);
+            Product product = new Product(description, category, subCategory, region, condition, userId);
 
-            offerProductViewModel.postProduct(product);
+            offerProductViewModel.postProduct(product, selectedImages);
         });
 
-        observePostProductLiveData();
+        observePostProductLiveData();  // Observe the LiveData returned by the ViewModel
+    }
+
+    private boolean validateInput() {
+        if (etProductDescription.getText().toString().trim().isEmpty()) {
+            etProductDescription.setError("Description is required");
+            return false;
+        }
+//        if (selectedImages.isEmpty()) {
+//            showErrorMessage("Please select at least one image");
+//            return false;
+//        }
+        return true;
     }
 
     private void observePostProductLiveData() {
@@ -169,4 +178,22 @@ public class OfferProductFragment extends Fragment {
             }
         });
     }
+//    TODO: an offer of how to implement the above methods:
+//    {
+//        switch (resource.getStatus()) {
+//            case LOADING:
+//                showLoadingDialog();
+//                break;
+//            case SUCCESS:
+//                hideLoadingDialog();
+//                showSuccessMessage("Product posted successfully!");
+//                navigateBack();
+//                break;
+//            case ERROR:
+//                hideLoadingDialog();
+//                showErrorMessage(resource.getMessage());
+//                break;
+//        }
+//    })
+
 }
