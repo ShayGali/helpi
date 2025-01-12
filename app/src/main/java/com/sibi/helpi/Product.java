@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class Product {
     private String id;
-    private String name;
     private String description;
     private String category;
     private String subCategory;
@@ -23,6 +22,15 @@ public class Product {
         // Default constructor required for Firebase
     }
 
+    public Product(String description, String category, String subCategory, String region, String condition, String userId) {
+        this.description = description;
+        this.category = category;
+        this.subCategory = subCategory;
+        this.region = region;
+        this.condition = condition;
+        this.userId = userId;
+    }
+
     // Getters and setters:
     public String getId() {
         return id;
@@ -30,14 +38,6 @@ public class Product {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
@@ -101,11 +101,11 @@ public class Product {
     public String toString() {
         return "Product{" +
                 "id='" + id + '\'' +
-                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", subCategory='" + subCategory + '\'' +
                 ", region='" + region + '\'' +
+                ", situation='" + condition + '\'' +
 //                ", situation='" + ProductCondition + '\'' +
                 ", userId='" + userId + '\'' +
                 '}';

@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class SearchProductFragment extends Fragment {
 
@@ -39,7 +38,7 @@ public class SearchProductFragment extends Fragment {
         categorySpinner = view.findViewById(R.id.spinnerCategories);
         subcategorySpinner = view.findViewById(R.id.spinnerSubCategory);
         regionSpinner = view.findViewById(R.id.spinnerRegion);
-        productStatusSpinner = view.findViewById(R.id.spinnerProductSituation);
+        productStatusSpinner = view.findViewById(R.id.spinnerProductCondition);
 
         // navigate to the product page
         submitSearchButton.setOnClickListener(v -> {
