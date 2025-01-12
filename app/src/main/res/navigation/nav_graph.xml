@@ -95,6 +95,9 @@
         <action
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_idoFragment"
+            app:destination="@id/idoFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchServiceResultFragment"
@@ -115,5 +118,10 @@
         android:name="com.sibi.helpi.AdminDashBoardFragment"
         android:label="fragment_admin_dash_board"
         tools:layout="@layout/fragment_admin_dash_board" />
+    <fragment
+        android:id="@+id/idoFragment"
+        android:name="com.sibi.helpi.IdoFragment"
+        android:label="fragment_ido"
+        tools:layout="@layout/fragment_ido" />
 
 </navigation>

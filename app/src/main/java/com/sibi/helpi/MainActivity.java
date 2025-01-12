@@ -13,7 +13,7 @@ import com.google.firebase.FirebaseApp;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    public static final String USER_COLLECTION = "users";
 
 
     @Override

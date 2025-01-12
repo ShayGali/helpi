@@ -39,6 +39,10 @@ public class ProfileFragment extends Fragment {
             });
         });
 
+        view.findViewById(R.id.share_btn).setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_idoFragment);
+        });
+
         return view;
     }
 }

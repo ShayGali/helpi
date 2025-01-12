@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
 
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ public class OfferProductFragment extends Fragment {
     private ArrayList<Uri> selectedImages;
     private EditText etProductDescription;
 
-    Button btnPostProduct;
-    Button btnCancelPost;
+    FloatingActionButton btnPostProduct;
+    FloatingActionButton btnCancelPost;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
