@@ -54,7 +54,7 @@ public class OfferServiceFragment extends Fragment {
         categorySpinner = view.findViewById(R.id.spinnerCategories);
         subcategorySpinner = view.findViewById(R.id.spinnerSubCategory);
         regionSpinner = view.findViewById(R.id.spinnerRegion);
-        productStatusSpinner = view.findViewById(R.id.spinnerProductSituation);
+        productStatusSpinner = view.findViewById(R.id.spinnerProductCondition);
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
         imageSlider = view.findViewById(R.id.imageSlider);
 
