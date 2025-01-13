@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
@@ -133,16 +135,18 @@ public class OfferProductFragment extends Fragment {
 
         // Set an onClickListener for the post product button:
         btnPostProduct.setOnClickListener(v -> {
-            String description = this.etProductDescription.getText().toString();
-            String category = categorySpinner.getSelectedItem().toString();
-            String subCategory = subcategorySpinner.getSelectedItem().toString();
-            String region = regionSpinner.getSelectedItem().toString();
-            String condition = productConditionSpinner.getSelectedItem().toString();
-            String userId = "user1"; // TODO: Replace with the actual user ID
+            // Add validation check here
+            if (validateInput()) {  // <-- Add this check
+                String description = this.etProductDescription.getText().toString();
+                String category = categorySpinner.getSelectedItem().toString();
+                String subCategory = subcategorySpinner.getSelectedItem().toString();
+                String region = regionSpinner.getSelectedItem().toString();
+                String condition = productConditionSpinner.getSelectedItem().toString();
+                String userId = "user1"; // TODO: Replace with the actual user ID
 
-            Product product = new Product(description, category, subCategory, region, condition, userId);
-
-            offerProductViewModel.postProduct(product, selectedImages);
+                Product product = new Product(description, category, subCategory, region, condition, userId);
+                offerProductViewModel.postProduct(product, selectedImages);
+            }
         });
 
         observePostProductLiveData();  // Observe the LiveData returned by the ViewModel
@@ -164,20 +168,36 @@ public class OfferProductFragment extends Fragment {
         offerProductViewModel.getPostProductLiveData().observe(getViewLifecycleOwner(), resource -> {
             switch (resource.getStatus()) {
                 case LOADING:
-                    // Show loading indicator
+                    showToast("Uploading product...");
+                    // You could also show a progress dialog here
                     break;
+
                 case SUCCESS:
-                    // Show success message
+                    showToast("Product posted successfully!");
                     String productId = resource.getData();
-                    // Navigate to product details screen or perform any other action
+                    clearForm();
+                    // You might want to navigate back or to another screen
+                    // getParentFragmentManager().popBackStack();
                     break;
+
                 case ERROR:
-                    // Show error message
-                    String errorMessage = resource.getMessage();
-                    // Handle the error scenario
+                    showToast("Error: " + resource.getMessage());
                     break;
             }
         });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    }
+    private void clearForm() {
+        etProductDescription.setText("");
+        selectedImages.clear();
+        imageAdapter.setImages(selectedImages);
+        categorySpinner.setSelection(0);
+        subcategorySpinner.setSelection(0);
+        regionSpinner.setSelection(0);
+        productConditionSpinner.setSelection(0);
     }
 //    TODO: an offer of how to implement the above methods:
 //    {

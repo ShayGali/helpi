@@ -1,6 +1,7 @@
 package com.sibi.helpi;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -23,7 +24,12 @@ public class OfferProductViewModel extends ViewModel {
     }
 
     public void postProduct(Product product, List<Uri> imageUris) {
-        postProductLiveData.setValue(Resource.loading(null));  // Set loading state
-        productRepository.postProduct(product, imageUris).observeForever(postProductLiveData::setValue);
+        Log.d("ViewModel", "Posting product: " + product.toString());
+        postProductLiveData.setValue(Resource.loading(null));
+        productRepository.postProduct(product, imageUris)
+                .observeForever(result -> {
+                    Log.d("ViewModel", "Got result: " + result.getStatus());
+                    postProductLiveData.setValue(result);
+                });
     }
 }
