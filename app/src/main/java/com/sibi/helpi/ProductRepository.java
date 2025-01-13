@@ -1,6 +1,7 @@
 package com.sibi.helpi;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -88,19 +89,18 @@ public class ProductRepository {
      */
     public LiveData<Resource<String>> postProduct(Product product, List<Uri> imageUris) {
         MutableLiveData<Resource<String>> mutableLiveData = new MutableLiveData<>();
+        Log.d("Repository", "Starting product post");
 
-        // Set initial loading state
         mutableLiveData.setValue(Resource.loading(null));
-
-        // Generate new product ID
         String productId = databaseReference.push().getKey();
 
         if (productId == null) {
-            mutableLiveData.setValue(
-                    Resource.error("Failed to generate product ID", null)
-            );
+            Log.e("Repository", "Failed to generate product ID");
+            mutableLiveData.setValue(Resource.error("Failed to generate product ID", null));
             return mutableLiveData;
         }
+
+        Log.d("Repository", "Generated product ID: " + productId);
 
         // Set product ID
         product.setId(productId);
