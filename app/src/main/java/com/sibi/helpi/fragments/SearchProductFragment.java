@@ -43,7 +43,15 @@ public class SearchProductFragment extends Fragment {
         productStatusSpinner = view.findViewById(R.id.spinnerProductCondition);
 
         // navigate to the product page
+        //TODO: if a filter is not selected, replace it with empty string ("")
         submitSearchButton.setOnClickListener(v -> {
+            // add the search query to the bundle
+            Bundle bundle = new Bundle();
+            bundle.putString("category", categorySpinner.getSelectedItem().toString());
+            bundle.putString("subcategory", subcategorySpinner.getSelectedItem().toString());
+            bundle.putString("region", regionSpinner.getSelectedItem().toString());
+            bundle.putString("productStatus", productStatusSpinner.getSelectedItem().toString());
+
             Navigation.findNavController(view).navigate(R.id.action_searchProductFragment_to_searchProductResultFragment);
         });
 
