@@ -3,6 +3,7 @@ package com.sibi.helpi.repositories;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -43,7 +45,61 @@ public class ProductRepository {
     }
 
     /**
+     * fetches products from the database based on the search query.
+     * if some a field is empty - don't filter by this field
+     *
+     * @param category      category of the product
+     * @param subcategory   subcategory of the product
+     * @param region        region of the product
+     * @param productStatus status of the product
+     * @return LiveData containing list of products
+     */
+    public LiveData<List<Product>> getProducts(@NonNull String category, @NonNull String subcategory, @NonNull String region, @NonNull String productStatus) {
+        MutableLiveData<List<Product>> mutableLiveData = new MutableLiveData<>();
+        databaseReference.get()
+                .addOnSuccessListener(dataSnapshot -> {
+                    List<Product> products = new ArrayList<>();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Product product = snapshot.getValue(Product.class);
+                        if (product != null) {
+                            // filter by fields
+                            if (!category.isEmpty() && !product.getCategory().equals(category)) {
+                                continue;
+                            }
+                            if (!subcategory.isEmpty() && !product.getSubCategory().equals(subcategory)) {
+                                continue;
+                            }
+                            if (!region.isEmpty() && !product.getRegion().equals(region)) {
+                                continue;
+                            }
+                            if (!productStatus.isEmpty() && !product.getCondition().equals(productStatus)) {
+                                continue;
+                            }
+                            products.add(product);
+                        }
+                    }
+                    mutableLiveData.setValue(products);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Repository", "Failed to fetch products: " + e.getMessage());
+                    mutableLiveData.setValue(null);
+                });
+
+        return mutableLiveData;
+    }
+
+    /**
+     * fetches all products from the database
+     * @return LiveData containing list of products
+     */
+    public LiveData<List<Product>> getProducts() {
+        return getProducts("", "", "", "");
+    }
+
+
+    /**
      * Uploads multiple images to Firebase Storage
+     *
      * @param imageUris List of image URIs to upload
      * @param productId Product ID to associate images with
      * @return Task containing list of download URLs
@@ -83,7 +139,8 @@ public class ProductRepository {
 
     /**
      * Posts a new product with images to Firebase
-     * @param product Product object to save
+     *
+     * @param product   Product object to save
      * @param imageUris List of image URIs to upload
      * @return LiveData containing Resource with product ID
      */
@@ -148,6 +205,7 @@ public class ProductRepository {
 
     /**
      * Deletes a product and its images
+     *
      * @param productId ID of product to delete
      * @return LiveData containing Resource with deletion status
      */

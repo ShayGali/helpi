@@ -1,10 +1,12 @@
 package com.sibi.helpi.fragments;
 
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import android.view.ViewGroup;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ProductSliderAdapter;
 import com.sibi.helpi.models.Product;
+import com.sibi.helpi.repositories.ProductRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +24,18 @@ public class SearchProductResultFragment extends Fragment {
     private RecyclerView productRecyclerView;
     private ProductSliderAdapter productSliderAdapter;
     private List<Product> productList;
+    private ProductRepository productRepository;
 
+    public SearchProductResultFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        productRepository = new ProductRepository();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_product_result, container, false);
@@ -28,6 +43,21 @@ public class SearchProductResultFragment extends Fragment {
         productRecyclerView = view.findViewById(R.id.productRecycleView);
         productRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // get the search query from the bundle
+        Bundle bundle = getArguments();
+        assert bundle != null;
+        String category = bundle.getString("category");
+        String subcategory = bundle.getString("subcategory");
+        String region = bundle.getString("region");
+        String productStatus = bundle.getString("productStatus");
+
+        // get the products from the repository
+        productRepository.getProducts(category, subcategory, region, productStatus)
+                .observe(getViewLifecycleOwner(), products -> {
+                    productList.clear();
+                    productList.addAll(products);
+                    productSliderAdapter.notifyDataSetChanged();
+                });
         // Initialize product list and adapter
         productList = new ArrayList<>();
 
