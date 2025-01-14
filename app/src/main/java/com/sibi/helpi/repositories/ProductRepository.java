@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.repositories;
 
 import android.net.Uri;
 import android.util.Log;
@@ -17,8 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.sibi.helpi.models.Product;
+import com.sibi.helpi.models.Resource;
 
 /**
  * This class is responsible for managing the products in the Firebase Realtime Database.

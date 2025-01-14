@@ -7,9 +7,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.sibi.helpi.Product;
-import com.sibi.helpi.ProductRepository;
-import com.sibi.helpi.Resource;
+import com.sibi.helpi.models.Product;
+import com.sibi.helpi.repositories.ProductRepository;
+import com.sibi.helpi.models.Resource;
 
 import java.util.List;
 

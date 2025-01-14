@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.sibi.helpi.repositories.HomeFragment"
+        android:name="com.sibi.helpi.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
