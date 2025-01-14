@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.models;
 
 public class Resource<T> {
     private final Status status;

@@ -1,4 +1,4 @@
-package com.sibi.helpi.repositories;
+package com.sibi.helpi.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
