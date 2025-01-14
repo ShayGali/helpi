@@ -21,7 +21,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sibi.helpi.OfferProductViewModel;
+import com.sibi.helpi.viewmodels.OfferProductViewModel;
 import com.sibi.helpi.Product;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
