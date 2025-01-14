@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class User {
-    String UID;
     String email;
     String firstName;
     String lastName;
@@ -13,7 +12,6 @@ public class User {
     String profileImgPath;
 
     public User(String UID, String email, String firstName, String lastName, String phoneNumber, List<Post> posts, String profileImgPath) {
-        this.UID = UID;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,13 +28,6 @@ public class User {
         this.profileImgPath = profileImgPath;
     }
 
-    public String getUID() {
-        return UID;
-    }
-
-    public void setUID(String UID) {
-        this.UID = UID;
-    }
 
     public String getEmail() {
         return email;

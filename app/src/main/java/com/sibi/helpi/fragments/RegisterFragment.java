@@ -34,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.User;
+import com.sibi.helpi.viewmodels.UserViewModel;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -44,10 +45,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RegisterFragment extends Fragment {
     private static final int RC_SIGN_IN = 1234;
     private GoogleSignInClient googleSignInClient;
-    private FirebaseAuth mAuth;
     private ActivityResultLauncher<String> pickImageLauncher;
-    FirebaseFirestore db;
     private ActivityResultLauncher<Intent> cropImageLauncher;
+    UserViewModel userViewModel;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -56,9 +56,8 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
 
-        db = FirebaseFirestore.getInstance();
+        userViewModel = new UserViewModel();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -129,20 +128,17 @@ public class RegisterFragment extends Fragment {
                 return;
             }
 
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Save user to database
-                            saveUserDatabase(fName, lName, email, "1234567890", null);
-
-                            // move to the home fragment
-                            Log.d(TAG, "createUserWithEmail:success");
-                            Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
-                        } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(getContext(), "Authentication failed." + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+            // Create user with email and password
+            User user = new User(fName, lName, email, "", null);
+            userViewModel.registerUserWithEmailAndPassword(user, password,
+                    documentReference -> {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
+                    },
+                    e -> {
+                        Log.w(TAG, "Error adding document", e);
+                        Toast.makeText(getContext(), "Authentication failed." + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
 
@@ -176,42 +172,53 @@ public class RegisterFragment extends Fragment {
             if (task.isSuccessful()) {
                 GoogleSignInAccount account = task.getResult();
                 if (account != null) {
-                    firebaseAuthWithGoogle(account);
+                    userViewModel.authWithGoogle(account,
+                            documentReference -> {
+                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                                Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
+                            },
+                            e -> {
+                                Log.w(TAG, "Error adding document", e);
+                                Toast.makeText(getContext(), "Authentication failed." + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
                 }
             } else {
                 // Handle error
             }
+        } else {
+            throw new IllegalStateException("Unexpected value: " + requestCode);
         }
     }
 
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
-                        if (isNewUser) {
-                            // Save user to database
-                            saveUserDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail(), "", account.getPhotoUrl());
-                        }
-                        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
-                    } else {
-                        Log.w(TAG, "register with google:failure", task.getException());
-                        Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
+//    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+//        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+//        mAuth.signInWithCredential(credential)
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
+//                        if (isNewUser) {
+//                            // Save user to database
+//                            saveUserDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail(), "", account.getPhotoUrl());
+//                        }
+//                        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
+//                    } else {
+//                        Log.w(TAG, "register with google:failure", task.getException());
+//                        Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
 
-    private void saveUserDatabase(String fName, String lName, String email, String phoneNumber, Uri profilePicUri) {
-        // Save user to database
-        db.collection(MainActivity.USER_COLLECTION)
-                .add(new User(fName, lName, email, phoneNumber, "path"))
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                })
-                .addOnFailureListener(e -> {
-                    Log.w(TAG, "Error adding document", e);
-                });
-    }
+//    private void saveUserDatabase(String fName, String lName, String email, String phoneNumber, Uri profilePicUri) {
+//        // Save user to database
+//        db.collection(MainActivity.USER_COLLECTION)
+//                .add(new User(fName, lName, email, phoneNumber, "path"))
+//                .addOnSuccessListener(documentReference -> {
+//                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.w(TAG, "Error adding document", e);
+//                });
+//    }
 }
