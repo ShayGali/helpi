@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.viewmodels;
 
 import androidx.lifecycle.ViewModel;
 

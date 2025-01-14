@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.viewmodels;
 
 import android.net.Uri;
 import android.util.Log;
@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.sibi.helpi.Product;
+import com.sibi.helpi.ProductRepository;
 import com.sibi.helpi.Resource;
 
 import java.util.List;
