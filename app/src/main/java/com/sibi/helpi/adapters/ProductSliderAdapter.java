@@ -38,12 +38,12 @@ public class ProductSliderAdapter extends RecyclerView.Adapter<ProductSliderAdap
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
-        holder.productTitle.setText(product.getTitle());
+        holder.productTitle.setText(product.getDescription());
         holder.productCategory.setText(product.getCategory());
         holder.productSubCategory.setText(product.getSubCategory());
         holder.productRegion.setText(product.getRegion());
-        holder.productStatus.setText(product.getStatus());
-        holder.productImage.setImageResource(product.getImageResourceId());
+        holder.productStatus.setText(product.getCondition());
+//        holder.productImage.setImageResource(product.getImageResourceId());
 
         holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(product));
     }
