@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.fragments;
 
 import android.os.Bundle;
 
@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ServiceSliderAdapter;
 import com.sibi.helpi.models.Service;
 

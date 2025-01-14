@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.sibi.helpi.OfferProductViewModel;
+import com.sibi.helpi.Product;
+import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
 
 import java.util.ArrayList;

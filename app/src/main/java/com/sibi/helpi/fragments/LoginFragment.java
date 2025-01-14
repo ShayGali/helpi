@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.fragments;
 
 import static android.content.ContentValues.TAG;
 
@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.sibi.helpi.R;
 
 public class LoginFragment extends Fragment {
     // for google login
