@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.sibi.helpi.R;
 
 public class ProfileFragment extends Fragment {
 
@@ -37,10 +38,6 @@ public class ProfileFragment extends Fragment {
             googleSignInClient.signOut().addOnCompleteListener(task -> {
                 Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_loginFragment);
             });
-        });
-
-        view.findViewById(R.id.share_btn).setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_idoFragment);
         });
 
         return view;

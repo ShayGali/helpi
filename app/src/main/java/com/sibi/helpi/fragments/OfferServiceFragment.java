@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
 
 import java.util.ArrayList;
