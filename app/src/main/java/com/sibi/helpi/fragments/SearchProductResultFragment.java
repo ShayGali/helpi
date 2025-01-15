@@ -70,7 +70,6 @@ public class SearchProductResultFragment extends Fragment {
 
         productSliderAdapter = new ProductSliderAdapter(productList, product -> {
             // Handle navigation to product page
-            Bundle bundle = new Bundle();
 //            bundle.putString("productTitle", product.getTitle());
 //            bundle.putString("productCategory", product.getCategory());
 //            bundle.putString("productSubCategory", product.getSubCategory());
