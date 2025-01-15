@@ -129,7 +129,7 @@ public class RegisterFragment extends Fragment {
             }
 
             // Create user with email and password
-            User user = new User(fName, lName, email, "", null);
+            User user = new User(email, fName, lName, "", null);
             userViewModel.registerUserWithEmailAndPassword(user, password,
                     documentReference -> {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
