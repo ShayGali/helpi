@@ -1,5 +1,6 @@
 package com.sibi.helpi.repositories;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
@@ -28,6 +29,7 @@ import com.sibi.helpi.models.Resource;
  */
 public class ProductRepository {
     public static ProductRepository instance;
+
     private static final Object LOCK = new Object();
 
     public synchronized static ProductRepository getInstance() {
@@ -44,10 +46,15 @@ public class ProductRepository {
 
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
+
+    private ImagesRepository imagesRepository;
     private static final String NODE_PRODUCTS = "products";
     private static final String STORAGE_PRODUCTS = "product_images";
 
     private ProductRepository() {
+
+        imagesRepository = ImagesRepository.getInstance();
+
         // Initialize Realtime Database reference
         databaseReference = FirebaseDatabase.getInstance()
                 .getReference()
@@ -160,7 +167,7 @@ public class ProductRepository {
      * @param imageUris List of image URIs to upload
      * @return LiveData containing Resource with product ID
      */
-    public LiveData<Resource<String>> postProduct(Product product, List<Uri> imageUris) {
+    public LiveData<Resource<String>> postProduct(Product product, List<Uri> imageUris, Context context) {
         MutableLiveData<Resource<String>> mutableLiveData = new MutableLiveData<>();
         Log.d("Repository", "Starting product post");
 
@@ -180,22 +187,7 @@ public class ProductRepository {
 
         // First upload images if any
         if (imageUris != null && !imageUris.isEmpty()) {
-            uploadImages(imageUris, productId)
-                    .addOnSuccessListener(imageUrls -> {
-                        // Set image URLs to product
-                        product.setImageUrls(imageUrls);
-
-                        // Save product data
-                        saveProductData(product, productId, mutableLiveData);
-                    })
-                    .addOnFailureListener(e ->
-                            mutableLiveData.setValue(
-                                    Resource.error("Failed to upload images: " + e.getMessage(), null)
-                            )
-                    );
-        } else {
-            // Save product without images
-            saveProductData(product, productId, mutableLiveData);
+            imagesRepository.uploadProductImages(context, productId, imageUris);
         }
 
         return mutableLiveData;

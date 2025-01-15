@@ -2,6 +2,7 @@ package com.sibi.helpi.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +23,16 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.sibi.helpi.utils.FileHandler;
 import com.sibi.helpi.viewmodels.OfferProductViewModel;
 import com.sibi.helpi.models.Product;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
+import com.sibi.helpi.viewmodels.UserViewModel;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class OfferProductFragment extends Fragment {
@@ -144,10 +151,10 @@ public class OfferProductFragment extends Fragment {
                 String subCategory = subcategorySpinner.getSelectedItem().toString();
                 String region = regionSpinner.getSelectedItem().toString();
                 String condition = productConditionSpinner.getSelectedItem().toString();
-                String userId = "user1"; // TODO: Replace with the actual user ID
+                String userId = UserViewModel.getInstance().getUUID();
 
                 Product product = new Product(description, category, subCategory, region, condition, userId);
-                offerProductViewModel.postProduct(product, selectedImages);
+                offerProductViewModel.postProduct(product, selectedImages, requireContext());
             }
         });
 
@@ -192,6 +199,7 @@ public class OfferProductFragment extends Fragment {
     private void showToast(String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
+
     private void clearForm() {
         etProductDescription.setText("");
         selectedImages.clear();
