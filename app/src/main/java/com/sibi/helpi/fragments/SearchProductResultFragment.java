@@ -3,6 +3,7 @@ package com.sibi.helpi.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,11 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ProductSliderAdapter;
 import com.sibi.helpi.models.Product;
 import com.sibi.helpi.repositories.ProductRepository;
+import com.sibi.helpi.viewmodels.SearchProductViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,7 @@ public class SearchProductResultFragment extends Fragment {
     private RecyclerView productRecyclerView;
     private ProductSliderAdapter productSliderAdapter;
     private List<Product> productList;
-    private ProductRepository productRepository;
+    private SearchProductViewModel searchProductViewModel;
 
     public SearchProductResultFragment() {
         // Required empty public constructor
@@ -33,8 +36,7 @@ public class SearchProductResultFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        productRepository = new ProductRepository();
+        searchProductViewModel = new SearchProductViewModel();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,23 +54,10 @@ public class SearchProductResultFragment extends Fragment {
         String productStatus = bundle.getString("productStatus");
 
         // get the products from the repository
-        productRepository.getProducts(category, subcategory, region, productStatus)
-                .observe(getViewLifecycleOwner(), products -> {
-                    productList.clear();
-                    productList.addAll(products);
-                    productSliderAdapter.notifyDataSetChanged();
-                });
-        // Initialize product list and adapter
-        productList = new ArrayList<>();
+        LiveData<List<Product>> productsLiveData =  searchProductViewModel.getProducts(category, subcategory, region, productStatus);
 
-        // Add dummy data TODO: replace with actual data
-//        productList.add(new Product("Product 1", "Category 1", "Subcategory 1", "Region 1", "Status 1", R.drawable.blue_balon));
-//        productList.add(new Product("Product 2", "Category 2", "Subcategory 2", "Region 2", "Status 2", R.drawable.red_balloon));
-//        productList.add(new Product("Product 3", "Category 3", "Subcategory 3", "Region 3", "Status 3", R.drawable.blue_balon));
-//        productList.add(new Product("Product 4", "Category 4", "Subcategory 4", "Region 4", "Status 4", R.drawable.red_balloon));
-//        productList.add(new Product("Product 5", "Category 5", "Subcategory 5", "Region 5", "Status 5", R.drawable.blue_balon));
 
-        productSliderAdapter = new ProductSliderAdapter(productList, product -> {
+        productSliderAdapter = new ProductSliderAdapter(product -> {
             // Handle navigation to product page
 //            bundle.putString("productTitle", product.getTitle());
 //            bundle.putString("productCategory", product.getCategory());
@@ -80,6 +69,12 @@ public class SearchProductResultFragment extends Fragment {
         });
 
         productRecyclerView.setAdapter(productSliderAdapter);
+
+        // observe the products
+        productsLiveData.observe(getViewLifecycleOwner(), products -> {
+            productList = new ArrayList<>(products);
+            productSliderAdapter.setProductList(productList);
+        });
 
         return view;
     }
