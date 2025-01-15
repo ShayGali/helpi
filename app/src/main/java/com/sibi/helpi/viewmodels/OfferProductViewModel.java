@@ -18,7 +18,7 @@ public class OfferProductViewModel extends ViewModel {
     private MutableLiveData<Resource<String>> postProductLiveData = new MutableLiveData<>();
 
     public OfferProductViewModel() {
-        productRepository = new ProductRepository();
+        productRepository = ProductRepository.getInstance();
     }
 
     public LiveData<Resource<String>> getPostProductLiveData() {

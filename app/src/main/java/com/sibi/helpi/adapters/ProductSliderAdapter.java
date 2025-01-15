@@ -1,5 +1,6 @@
 package com.sibi.helpi.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductSliderAdapter extends RecyclerView.Adapter<ProductSliderAdapter.ProductViewHolder> {
@@ -19,12 +21,18 @@ public class ProductSliderAdapter extends RecyclerView.Adapter<ProductSliderAdap
     private List<Product> productList;
     private OnItemClickListener onItemClickListener;
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+        notifyDataSetChanged();
+    }
+
     public interface OnItemClickListener {
         void onItemClick(Product product);
     }
 
-    public ProductSliderAdapter(List<Product> productList, OnItemClickListener onItemClickListener) {
-        this.productList = productList;
+    public ProductSliderAdapter(OnItemClickListener onItemClickListener) {
+        this.productList = new ArrayList<>();
         this.onItemClickListener = onItemClickListener;
     }
 

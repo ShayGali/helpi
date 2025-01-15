@@ -27,12 +27,27 @@ import com.sibi.helpi.models.Resource;
  * It provides methods to post a product to the database.
  */
 public class ProductRepository {
+    public static ProductRepository instance;
+    private static final Object LOCK = new Object();
+
+    public synchronized static ProductRepository getInstance() {
+        if (instance == null) {
+            synchronized (LOCK) {
+                if (instance == null) {
+                    instance = new ProductRepository();
+                }
+            }
+        }
+        return instance;
+    }
+
+
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
     private static final String NODE_PRODUCTS = "products";
     private static final String STORAGE_PRODUCTS = "product_images";
 
-    public ProductRepository() {
+    private ProductRepository() {
         // Initialize Realtime Database reference
         databaseReference = FirebaseDatabase.getInstance()
                 .getReference()
@@ -90,6 +105,7 @@ public class ProductRepository {
 
     /**
      * fetches all products from the database
+     *
      * @return LiveData containing list of products
      */
     public LiveData<List<Product>> getProducts() {
