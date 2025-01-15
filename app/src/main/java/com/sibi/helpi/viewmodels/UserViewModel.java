@@ -11,7 +11,21 @@ import com.sibi.helpi.models.User;
 import com.sibi.helpi.repositories.UserRepository;
 
 public class UserViewModel extends ViewModel {
-    UserRepository userRepository;
+
+    // singleton
+    private static UserViewModel instance;
+    private static final Object lock = new Object();
+
+    public static UserViewModel getInstance() {
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new UserViewModel();
+            }
+            return instance;
+        }
+    }
+
+    private UserRepository userRepository;
 
     public UserViewModel() {
         userRepository = new UserRepository();
@@ -23,5 +37,9 @@ public class UserViewModel extends ViewModel {
 
     public void authWithGoogle(GoogleSignInAccount account, @NonNull OnSuccessListener<? super DocumentReference> onSuccess, @NonNull OnFailureListener onFailure) {
         userRepository.authWithGoogle(account, onSuccess, onFailure);
+    }
+
+    public String getUUID() {
+        return userRepository.getUUID();
     }
 }

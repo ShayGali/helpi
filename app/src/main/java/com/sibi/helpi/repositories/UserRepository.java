@@ -86,4 +86,8 @@ public class UserRepository {
                     }
                 });
     }
+
+    public String getUUID() {
+        return mAuth.getCurrentUser().getUid();
+    }
 }

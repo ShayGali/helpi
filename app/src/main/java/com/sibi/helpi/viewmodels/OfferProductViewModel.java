@@ -1,5 +1,6 @@
 package com.sibi.helpi.viewmodels;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
@@ -25,10 +26,10 @@ public class OfferProductViewModel extends ViewModel {
         return postProductLiveData;
     }
 
-    public void postProduct(Product product, List<Uri> imageUris) {
-        Log.d("ViewModel", "Posting product: " + product.toString());
+    public void postProduct(Product product, List<Uri> imageUris, Context context) {
+        Log.d("ViewModel", "Posting product: " +product.toString());
         postProductLiveData.setValue(Resource.loading(null));
-        productRepository.postProduct(product, imageUris)
+        productRepository.postProduct(product, imageUris, context)
                 .observeForever(result -> {
                     Log.d("ViewModel", "Got result: " + result.getStatus());
                     postProductLiveData.setValue(result);
