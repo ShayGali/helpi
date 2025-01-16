@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
@@ -33,8 +36,6 @@ public class ImagesRepository {
             return instance;
         }
     }
-
-
 
     private static final String COLLECTION_PATH = "images";
     private static final String PRODUCT_IMAGES_PATH = "product_images";
@@ -102,4 +103,27 @@ public class ImagesRepository {
         return uploadTasks;
     }
 
+    public LiveData<List<String>> getProductImages(String productId) {
+        MutableLiveData<List<String>> imagesLiveData = new MutableLiveData<>();
+        StorageReference productImagesRef = productsRef.child(productId);
+
+        productImagesRef.listAll()
+                .addOnSuccessListener(listResult -> {
+                    List<String> imageUrls = new ArrayList<>();
+                    for (StorageReference item : listResult.getItems()) {
+                        item.getDownloadUrl().addOnSuccessListener(uri -> {
+                            imageUrls.add(uri.toString());
+                            if (imageUrls.size() == listResult.getItems().size()) {
+                                imagesLiveData.setValue(imageUrls);
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("ProductRepository", "Failed to fetch images: " + e.getMessage());
+                    imagesLiveData.setValue(null);
+                });
+
+        return imagesLiveData;
+    }
 }

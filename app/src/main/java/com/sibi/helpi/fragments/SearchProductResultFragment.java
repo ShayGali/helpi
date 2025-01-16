@@ -58,14 +58,9 @@ public class SearchProductResultFragment extends Fragment {
 
 
         productSliderAdapter = new ProductSliderAdapter(product -> {
-            // Handle navigation to product page
-//            bundle.putString("productTitle", product.getTitle());
-//            bundle.putString("productCategory", product.getCategory());
-//            bundle.putString("productSubCategory", product.getSubCategory());
-//            bundle.putString("productRegion", product.getRegion());
-//            bundle.putString("productStatus", product.getStatus());
-//            bundle.putInt("productImageResourceId", product.getImageResourceId());
-            Navigation.findNavController(view).navigate(R.id.action_searchProductResultFragment_to_productFragment, bundle);
+            Bundle productBundle = new Bundle();
+//            productBundle.put
+            Navigation.findNavController(view).navigate(R.id.action_searchProductResultFragment_to_productFragment, productBundle);
         });
 
         productRecyclerView.setAdapter(productSliderAdapter);
@@ -74,8 +69,15 @@ public class SearchProductResultFragment extends Fragment {
         productsLiveData.observe(getViewLifecycleOwner(), products -> {
             productList = new ArrayList<>(products);
             productSliderAdapter.setProductList(productList);
-        });
 
+            // Fetch images for each product
+            for (Product product : productList) {
+                searchProductViewModel.getProductImages(product.getId()).observe(getViewLifecycleOwner(), imageUrls -> {
+                    product.setImageUrls(imageUrls);
+                    productSliderAdapter.notifyDataSetChanged();
+                });
+            }
+        });
         return view;
     }
 }
