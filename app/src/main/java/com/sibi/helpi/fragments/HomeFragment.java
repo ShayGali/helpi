@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.sibi.helpi.R;
+import com.sibi.helpi.viewmodels.UserViewModel;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
@@ -38,6 +40,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        TextView username = view.findViewById(R.id.textView2);
+        username.setVisibility(View.GONE);
+
+        UserViewModel modelView = UserViewModel.getInstance();
+
+
+        modelView.getCurrentUser(user -> {
+            String name = "Hi, " +  user.getFirstName() + " " + user.getLastName() + "!";
+            username.setText(name);
+            username.setVisibility(View.VISIBLE);
+        }, e -> {
+            username.setText("John Doe");
+            username.setVisibility(View.VISIBLE);
+        });
+
 
         ImageView profileImage = view.findViewById(R.id.profile_img);
         profileImage.setOnClickListener(v -> {
