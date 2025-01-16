@@ -54,4 +54,33 @@
         <item>New</item>
         <item>Used</item>
     </string-array>
+    <string-array name="fashion_subcategories">
+        <item>Select Sub Category</item>
+        <item>Suits</item>
+        <item>Shirts</item>
+        <item>Shoes</item>
+    </string-array>
+    <string-array name="home_subcategories">
+        <item>Select Sub Category</item>
+        <item>Sofa</item>
+        <item>Table</item>
+        <item>Chair</item>
+    </string-array>
+
+    <string-array name="toys_subcategories">
+        <item>Select Sub Category</item>
+        <item>Board Games</item>
+        <item>Outdoor Games</item>
+        <item>Indoor Games</item>
+    </string-array>
+    <string-array name="books_subcategories">
+        <item>Select Sub Category</item>
+        <item>Novel</item>
+        <item>Textbook</item>
+        <item>Magazine</item>
+    </string-array>
+
+    <string-array name="other_subcategories">
+        <item>Other</item>
+    </string-array>
 </resources>

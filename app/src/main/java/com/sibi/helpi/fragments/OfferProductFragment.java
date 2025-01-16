@@ -3,6 +3,7 @@ package com.sibi.helpi.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -16,10 +17,12 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -89,19 +92,76 @@ public class OfferProductFragment extends Fragment {
     }
 
     private void setupSpinners() {
-        String[] categories = getResources().getStringArray(R.array.categories);
-        String[] electronicsSubcategories = getResources().getStringArray(R.array.electronics_subcategories);
-        String[] regions = getResources().getStringArray(R.array.region);
-        String[] productStatus = getResources().getStringArray(R.array.product_status);
 
-        categorySpinner.setAdapter(new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_dropdown_item_1line, categories));
-        subcategorySpinner.setAdapter(new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_dropdown_item_1line, electronicsSubcategories));
-        regionSpinner.setAdapter(new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_dropdown_item_1line, regions));
-        productConditionSpinner.setAdapter(new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_dropdown_item_1line, productStatus));
+        setUpSpinner(categorySpinner, R.array.categories);
+//        setUpSpinner(subcategorySpinner, R.array.electronics_subcategories);
+        setUpSpinner(regionSpinner, R.array.region);
+        setUpSpinner(productConditionSpinner, R.array.product_status);
+
+        // make the subcategorySpinner unclickable until a category is selected
+        subcategorySpinner.setEnabled(false);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                subcategorySpinner.setEnabled(position != 0);
+                if (position != 0) {
+                    subcategorySpinner.setEnabled(true);
+                    switch (position) {
+                        case 1:
+                            setUpSpinner(subcategorySpinner, R.array.electronics_subcategories);
+                            break;
+                        case 2:
+                            setUpSpinner(subcategorySpinner, R.array.fashion_subcategories);
+                            break;
+                        case 3:
+                            setUpSpinner(subcategorySpinner, R.array.books_subcategories);
+                            break;
+                        case 4:
+                            setUpSpinner(subcategorySpinner, R.array.home_subcategories);
+                            break;
+                        case 5:
+                            setUpSpinner(subcategorySpinner, R.array.toys_subcategories);
+                        case 6:
+                            setUpSpinner(subcategorySpinner, R.array.other_subcategories);
+                            subcategorySpinner.setEnabled(false);
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                subcategorySpinner.setEnabled(false);
+            }
+        });
+
+    }
+
+    private void setUpSpinner(Spinner spinner, int arrayResId) {
+        String[] items = getResources().getStringArray(arrayResId);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), R.layout.spinner_item, items) {
+            @Override
+            public boolean isEnabled(int position) {
+                return position != 0; // Disable the default text
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView textView = (TextView) view;
+                if (position == 0) {
+                    textView.setTextColor(Color.GRAY); // Set the default text color to gray
+                } else {
+                    textView.setTextColor(Color.BLACK); // Set the other items text color to black
+                }
+                return view;
+            }
+        };
+
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(0); // Set the default value
     }
 
     private void setupImagePicker() {
