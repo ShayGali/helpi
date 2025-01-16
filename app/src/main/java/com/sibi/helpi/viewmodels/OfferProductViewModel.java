@@ -26,10 +26,10 @@ public class OfferProductViewModel extends ViewModel {
         return postProductLiveData;
     }
 
-    public void postProduct(Product product, List<Uri> imageUris, Context context) {
+    public void postProduct(Product product, byte[][] images){
         Log.d("ViewModel", "Posting product: " +product.toString());
         postProductLiveData.setValue(Resource.loading(null));
-        productRepository.postProduct(product, imageUris, context)
+        productRepository.postProduct(product, images)
                 .observeForever(result -> {
                     Log.d("ViewModel", "Got result: " + result.getStatus());
                     postProductLiveData.setValue(result);

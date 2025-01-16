@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.utils.FileHandler;
 import com.sibi.helpi.viewmodels.OfferProductViewModel;
 import com.sibi.helpi.models.Product;
@@ -154,11 +155,36 @@ public class OfferProductFragment extends Fragment {
                 String userId = UserViewModel.getInstance().getUUID();
 
                 Product product = new Product(description, category, subCategory, region, condition, userId);
-                offerProductViewModel.postProduct(product, selectedImages, requireContext());
+                byte[][] images = getImagesData(selectedImages);
+
+                // check if all the images are in the correct size
+                for (byte[] imageData : images) {
+                    if (imageData.length > ImagesRepository.MAX_FILE_SIZE) {
+                        showToast("Image data cannot be greater than 0.5 MB");
+                        return;
+                    }
+                }
+
+                offerProductViewModel.postProduct(product, images);
             }
         });
 
         observePostProductLiveData();  // Observe the LiveData returned by the ViewModel
+    }
+
+    private byte[][] getImagesData(ArrayList<Uri> selectedImages) {
+        byte[][] images = new byte[selectedImages.size()][];
+        for (int i = 0; i < selectedImages.size(); i++) {
+            try {
+                Bitmap compressedImage = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), selectedImages.get(i));
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                compressedImage.compress(Bitmap.CompressFormat.JPEG, 30, baos);
+                images[i] = baos.toByteArray();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return images;
     }
 
     private boolean validateInput() {
