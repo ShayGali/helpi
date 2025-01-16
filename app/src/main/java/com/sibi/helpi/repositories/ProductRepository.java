@@ -164,10 +164,10 @@ public class ProductRepository {
      * Posts a new product with images to Firebase
      *
      * @param product   Product object to save
-     * @param imageUris List of image URIs to upload
+     * @param images array of byte arrays containing images
      * @return LiveData containing Resource with product ID
      */
-    public LiveData<Resource<String>> postProduct(Product product, List<Uri> imageUris, Context context) {
+    public LiveData<Resource<String>> postProduct(Product product, byte[][] images) {
         MutableLiveData<Resource<String>> mutableLiveData = new MutableLiveData<>();
         Log.d("Repository", "Starting product post");
 
@@ -186,8 +186,26 @@ public class ProductRepository {
         product.setId(productId);
 
         // First upload images if any
-        if (imageUris != null && !imageUris.isEmpty()) {
-            imagesRepository.uploadProductImages(context, productId, imageUris);
+        if (images != null && images.length > 0) {
+            List<Task<Uri>> uploadTasks = imagesRepository.uploadProductImages(productId, images);
+            Tasks.whenAllSuccess(uploadTasks)
+                    .addOnSuccessListener(uriList -> {
+                        // Save product data after images are uploaded
+                        // convert List<Uri> to List<String>
+                        List<String> uriStringList = new ArrayList<>();
+                        for (int i = 0; i < uriList.size(); i++) {
+                            uriStringList.add(uriList.get(i).toString());
+                        }
+
+                        product.setImageUrls(uriStringList);
+
+                        saveProductData(product, productId, mutableLiveData);
+                    })
+                    .addOnFailureListener(e ->
+                            mutableLiveData.setValue(
+                                    Resource.error("Failed to upload images: " + e.getMessage(), null)
+                            )
+                    );
         }
 
         return mutableLiveData;
