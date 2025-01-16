@@ -4,8 +4,11 @@ package com.sibi.helpi.repositories;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
@@ -116,5 +119,16 @@ public class UserRepository {
 
     public String getUUID() {
         return mAuth.getCurrentUser().getUid();
+    }
+
+    public void signOut(GoogleSignInClient googleSignInClient, @NonNull OnCompleteListener<Void> onSuccess) {
+        mAuth.signOut();
+        googleSignInClient.signOut().addOnCompleteListener(onSuccess);
+    }
+
+    public LiveData<User> getUser() {
+//        return new UserLiveData(userCollection.document(getUUID()));
+        //TODO - implement this
+        return null;
     }
 }

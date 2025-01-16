@@ -1,7 +1,5 @@
 package com.sibi.helpi.viewmodels;
 
-import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -11,8 +9,6 @@ import androidx.lifecycle.ViewModel;
 import com.sibi.helpi.models.Product;
 import com.sibi.helpi.repositories.ProductRepository;
 import com.sibi.helpi.models.Resource;
-
-import java.util.List;
 
 public class OfferProductViewModel extends ViewModel {
     private ProductRepository productRepository;  // Repository to handle the post product operation
@@ -26,8 +22,8 @@ public class OfferProductViewModel extends ViewModel {
         return postProductLiveData;
     }
 
-    public void postProduct(Product product, byte[][] images){
-        Log.d("ViewModel", "Posting product: " +product.toString());
+    public void postProduct(Product product, byte[][] images) {
+        Log.d("ViewModel", "Posting product: " + product.toString());
         postProductLiveData.setValue(Resource.loading(null));
         productRepository.postProduct(product, images)
                 .observeForever(result -> {
