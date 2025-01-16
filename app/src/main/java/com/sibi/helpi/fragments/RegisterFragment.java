@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +39,9 @@ import com.sibi.helpi.models.User;
 import com.sibi.helpi.viewmodels.UserViewModel;
 import com.yalantis.ucrop.UCrop;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -47,7 +51,9 @@ public class RegisterFragment extends Fragment {
     private GoogleSignInClient googleSignInClient;
     private ActivityResultLauncher<String> pickImageLauncher;
     private ActivityResultLauncher<Intent> cropImageLauncher;
-    UserViewModel userViewModel;
+    private UserViewModel userViewModel;
+
+    private Uri profilePicUri;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -130,7 +136,8 @@ public class RegisterFragment extends Fragment {
 
             // Create user with email and password
             User user = new User(email, fName, lName, "", null);
-            userViewModel.registerUserWithEmailAndPassword(user, password,
+            byte[] profileImg = getProfileImage();
+            userViewModel.registerUserWithEmailAndPassword(user, password, profileImg,
                     documentReference -> {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                         Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
@@ -149,6 +156,27 @@ public class RegisterFragment extends Fragment {
         return inflate;
     }
 
+    /**
+     * Get the profile image from the uri that was selected by the user
+     *
+     * @return byte array of the image (can be null if the uri is null)
+     */
+    @Nullable
+    private byte[] getProfileImage() {
+        if (profilePicUri == null) {
+            return null;
+        }
+
+        try {
+            Bitmap compressedImage = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), profilePicUri);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            compressedImage.compress(Bitmap.CompressFormat.JPEG, 30, baos);
+            return baos.toByteArray();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
     private void signInWithGoogle() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -159,10 +187,10 @@ public class RegisterFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
-            Uri croppedUri = UCrop.getOutput(data);
-            if (croppedUri != null) {
+            profilePicUri = UCrop.getOutput(data);
+            if (profilePicUri != null) {
                 CircleImageView profilePic = requireView().findViewById(R.id.reg_profile_picture);
-                profilePic.setImageURI(croppedUri); // Show the cropped image
+                profilePic.setImageURI(profilePicUri); // Show the cropped image
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Throwable cropError = UCrop.getError(data);

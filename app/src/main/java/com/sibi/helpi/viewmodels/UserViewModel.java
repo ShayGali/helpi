@@ -31,8 +31,8 @@ public class UserViewModel extends ViewModel {
         userRepository = new UserRepository();
     }
 
-    public void registerUserWithEmailAndPassword(User user, String password, @NonNull OnSuccessListener<? super DocumentReference> onSuccess, @NonNull OnFailureListener onFailure) {
-        userRepository.registerUserWithEmailAndPassword(user, password, onSuccess, onFailure);
+    public void registerUserWithEmailAndPassword(User user, String password, byte[] profileImg, @NonNull OnSuccessListener<? super DocumentReference> onSuccess, @NonNull OnFailureListener onFailure) {
+        userRepository.registerUserWithEmailAndPassword(user, password, profileImg, onSuccess, onFailure);
     }
 
     public void authWithGoogle(GoogleSignInAccount account, @NonNull OnSuccessListener<? super DocumentReference> onSuccess, @NonNull OnFailureListener onFailure) {
