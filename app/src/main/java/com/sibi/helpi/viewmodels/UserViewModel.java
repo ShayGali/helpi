@@ -42,4 +42,8 @@ public class UserViewModel extends ViewModel {
     public String getUUID() {
         return userRepository.getUUID();
     }
+
+    public void getCurrentUser(@NonNull OnSuccessListener<? super User> onSuccess, @NonNull OnFailureListener onFailure) {
+        userRepository.getCurrentUser(onSuccess, onFailure);
+    }
 }
