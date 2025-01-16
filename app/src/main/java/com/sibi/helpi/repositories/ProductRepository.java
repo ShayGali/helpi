@@ -121,46 +121,6 @@ public class ProductRepository {
 
 
     /**
-     * Uploads multiple images to Firebase Storage
-     *
-     * @param imageUris List of image URIs to upload
-     * @param productId Product ID to associate images with
-     * @return Task containing list of download URLs
-     */
-    private Task<List<String>> uploadImages(List<Uri> imageUris, String productId) {
-        List<Task<String>> uploadTasks = new ArrayList<>();
-
-        for (Uri imageUri : imageUris) {
-            // Generate unique name for each image
-            String imageName = UUID.randomUUID().toString() + ".jpg";
-            StorageReference imageRef = storageReference
-                    .child(productId)
-                    .child(imageName);
-
-            // Upload file and get download URL
-            UploadTask uploadTask = imageRef.putFile(imageUri);
-            Task<String> urlTask = uploadTask
-                    .continueWithTask(task -> {
-                        if (!task.isSuccessful()) {
-                            throw task.getException();
-                        }
-                        return imageRef.getDownloadUrl();
-                    })
-                    .continueWith(task -> {
-                        if (!task.isSuccessful()) {
-                            throw task.getException();
-                        }
-                        return task.getResult().toString();
-                    });
-
-            uploadTasks.add(urlTask);
-        }
-
-        // Combine all upload tasks
-        return Tasks.whenAllSuccess(uploadTasks);
-    }
-
-    /**
      * Posts a new product with images to Firebase
      *
      * @param product   Product object to save

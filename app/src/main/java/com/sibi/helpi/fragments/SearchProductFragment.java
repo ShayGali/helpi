@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -43,11 +44,7 @@ public class SearchProductFragment extends Fragment {
         regionSpinner = view.findViewById(R.id.spinnerRegion);
         productStatusSpinner = view.findViewById(R.id.spinnerProductCondition);
 
-        // Set up the spinners with default values
-        setUpSpinner(categorySpinner, R.array.categories);
-        setUpSpinner(subcategorySpinner, R.array.electronics_subcategories); //TODO: change the subcategories based on the category
-        setUpSpinner(regionSpinner, R.array.region);
-        setUpSpinner(productStatusSpinner, R.array.product_status);
+        setupSpinners();
 
         // navigate to the product page
         submitSearchButton.setOnClickListener(v -> {
@@ -61,7 +58,8 @@ public class SearchProductFragment extends Fragment {
                 bundle.putString("category", categorySpinner.getSelectedItem().toString());
             }
 
-            if (subcategorySpinner.getSelectedItem().toString().equals(getResources().getStringArray(R.array.electronics_subcategories)[0])) {
+
+            if (subcategorySpinner.getSelectedItem() == null || subcategorySpinner.getSelectedItem().toString().equals(getResources().getStringArray(R.array.electronics_subcategories)[0])) {
                 bundle.putString("subcategory", "");
             } else {
                 bundle.putString("subcategory", subcategorySpinner.getSelectedItem().toString());
@@ -83,6 +81,50 @@ public class SearchProductFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setupSpinners() {
+        // Set up the spinners with default values
+        setUpSpinner(categorySpinner, R.array.categories);
+        setUpSpinner(regionSpinner, R.array.region);
+        setUpSpinner(productStatusSpinner, R.array.product_status);
+
+        // make the subcategorySpinner unclickable until a category is selected
+        subcategorySpinner.setEnabled(false);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                subcategorySpinner.setEnabled(position != 0);
+                if (position != 0) {
+                    subcategorySpinner.setEnabled(true);
+                    switch (position) {
+                        case 1:
+                            setUpSpinner(subcategorySpinner, R.array.electronics_subcategories);
+                            break;
+                        case 2:
+                            setUpSpinner(subcategorySpinner, R.array.fashion_subcategories);
+                            break;
+                        case 3:
+                            setUpSpinner(subcategorySpinner, R.array.books_subcategories);
+                            break;
+                        case 4:
+                            setUpSpinner(subcategorySpinner, R.array.home_subcategories);
+                            break;
+                        case 5:
+                            setUpSpinner(subcategorySpinner, R.array.toys_subcategories);
+                        case 6:
+                            setUpSpinner(subcategorySpinner, R.array.other_subcategories);
+                            subcategorySpinner.setEnabled(false);
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                subcategorySpinner.setEnabled(false);
+            }
+        });
     }
 
     private void setUpSpinner(Spinner spinner, int arrayResId) {

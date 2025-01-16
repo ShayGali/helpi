@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.Product;
 
@@ -51,7 +52,12 @@ public class ProductSliderAdapter extends RecyclerView.Adapter<ProductSliderAdap
         holder.productSubCategory.setText(product.getSubCategory());
         holder.productRegion.setText(product.getRegion());
         holder.productStatus.setText(product.getCondition());
-//        holder.productImage.setImageResource(product.getImageResourceId());
+
+        if (!product.getImageUrls().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(product.getImageUrls().get(0))
+                    .into(holder.productImage);
+        }
 
         holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(product));
     }
