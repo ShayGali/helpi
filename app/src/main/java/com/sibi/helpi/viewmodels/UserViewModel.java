@@ -1,19 +1,26 @@
 package com.sibi.helpi.viewmodels;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.sibi.helpi.models.User;
+import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.UserRepository;
+
+import java.util.List;
 
 public class UserViewModel extends ViewModel {
 
     // singleton
     private static UserViewModel instance;
+
     private static final Object lock = new Object();
 
     public static UserViewModel getInstance() {
@@ -26,9 +33,11 @@ public class UserViewModel extends ViewModel {
     }
 
     private UserRepository userRepository;
+    private ImagesRepository imagesRepository;
 
-    public UserViewModel() {
+    private UserViewModel() {
         userRepository = new UserRepository();
+        imagesRepository = ImagesRepository.getInstance();
     }
 
     public void registerUserWithEmailAndPassword(User user, String password, byte[] profileImg, @NonNull OnSuccessListener<? super DocumentReference> onSuccess, @NonNull OnFailureListener onFailure) {
@@ -41,5 +50,17 @@ public class UserViewModel extends ViewModel {
 
     public String getUUID() {
         return userRepository.getUUID();
+    }
+
+    public void signOut(GoogleSignInClient googleSignInClient, @NonNull OnCompleteListener<Void> onSuccess) {
+        userRepository.signOut(googleSignInClient, onSuccess);
+    }
+
+    public LiveData<String> getProfileImage() {
+        return imagesRepository.getProfileImage(userRepository.getUUID());
+    }
+
+    public LiveData<User> getUser() {
+        return userRepository.getUser();
     }
 }

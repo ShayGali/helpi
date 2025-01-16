@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sibi.helpi.repositories.ImagesRepository;
-import com.sibi.helpi.utils.FileHandler;
 import com.sibi.helpi.viewmodels.OfferProductViewModel;
 import com.sibi.helpi.models.Product;
 import com.sibi.helpi.R;
@@ -35,7 +34,6 @@ import com.sibi.helpi.adapters.ImageSliderAdapter;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
