@@ -94,7 +94,6 @@ public class OfferProductFragment extends Fragment {
     private void setupSpinners() {
 
         setUpSpinner(categorySpinner, R.array.categories);
-//        setUpSpinner(subcategorySpinner, R.array.electronics_subcategories);
         setUpSpinner(regionSpinner, R.array.region);
         setUpSpinner(productConditionSpinner, R.array.product_status);
 
