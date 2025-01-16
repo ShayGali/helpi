@@ -21,11 +21,13 @@ public class UserRepository {
     private final FirebaseAuth mAuth;
     private final FirebaseFirestore db;
     private final CollectionReference userCollection;
+    private final ImagesRepository imagesRepository;
 
     public UserRepository() {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         userCollection = db.collection(COLLECTION_NAME);
+        imagesRepository = ImagesRepository.getInstance();
     }
 
 
@@ -38,12 +40,12 @@ public class UserRepository {
      * @param onFailure callback when failure
      */
 
-    public void registerUserWithEmailAndPassword(User user, String password, @NonNull OnSuccessListener<? super DocumentReference> onSuccess, @NonNull OnFailureListener onFailure) {
+    public void registerUserWithEmailAndPassword(User user, String password, byte[] profileImg, @NonNull OnSuccessListener<? super DocumentReference> onSuccess, @NonNull OnFailureListener onFailure) {
         mAuth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         //TODO - upload image to storage and get the path
-                        saveUserData(user, onSuccess);
+                        saveUserData(user, profileImg, onSuccess);
                     } else {
                         if (task.getException() != null)
                             onFailure.onFailure(task.getException());
@@ -57,11 +59,35 @@ public class UserRepository {
 
 
     /**
-     * This function save new user to firestore
+     * This function save new user to firestore with image
+     *
+     * @param user       user object
+     * @param onSuccess  callback when success (return document reference)
+     * @param profileImg user profile image
+     */
+    public void saveUserData(User user, byte[] profileImg, @NonNull OnSuccessListener<? super DocumentReference> onSuccess) {
+        if (profileImg == null) {
+            user.setProfileImgPath("");
+            saveUserData(user, onSuccess);
+            return;
+        }
+        userCollection.add(user).addOnSuccessListener(documentReference -> {
+            imagesRepository.uploadProfileImage(documentReference.getId(), profileImg)
+                    .addOnSuccessListener(uri -> {
+                        userCollection.document(documentReference.getId()).update("profileImgPath", uri.toString())
+                                .addOnSuccessListener(aVoid -> onSuccess.onSuccess(documentReference))
+                                .addOnFailureListener(e -> Log.e("UserRepository", "Failed to update profile image path: " + e));
+                    })
+                    .addOnFailureListener(e -> Log.e("UserRepository", "Failed to upload profile image: " + e));
+        }).addOnFailureListener(e -> Log.e("UserRepository", "Failed to save user data: " + e));
+    }
+
+
+    /**
+     * save user data to firestore without image
      *
      * @param user      user object
      * @param onSuccess callback when success (return document reference)
-     * @return void
      */
     public void saveUserData(User user, @NonNull OnSuccessListener<? super DocumentReference> onSuccess) {
         userCollection.add(user).addOnSuccessListener(onSuccess);
@@ -75,6 +101,7 @@ public class UserRepository {
                         boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
                         if (isNewUser) {
                             User user = new User(account.getGivenName(), account.getFamilyName(), account.getEmail(), "", account.getPhotoUrl().toString());
+                            // get image  from google account
                             saveUserData(user, onSuccess);
                         }
                     } else {

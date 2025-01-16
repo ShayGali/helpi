@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ImagesRepository {
     public static final long MAX_FILE_SIZE = (long) (0.5 * 1024 * 1024); // 0.5 MB
@@ -39,17 +40,22 @@ public class ImagesRepository {
 
     private static final String COLLECTION_PATH = "images";
     private static final String PRODUCT_IMAGES_PATH = "product_images";
+    private static final String PROFILE_IMAGES_PATH = "profile_images";
 
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference storageReference;
-
-    private StorageReference productsRef;
+    private final FirebaseStorage storage;
+    private final StorageReference storageReference;
+    private final StorageReference productsRef;
+    private final StorageReference profileRef;
 
     private ImagesRepository() {
+        storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         productsRef = storageReference.child(COLLECTION_PATH).child(PRODUCT_IMAGES_PATH);
+        profileRef = storageReference.child(COLLECTION_PATH).child(PROFILE_IMAGES_PATH);
     }
 
+
+    // products
     private Task<Uri> uploadProductImage(String productUUID, byte[] data) {
         // Create the complete reference path first
         StorageReference productImagesRef = productsRef
@@ -64,7 +70,7 @@ public class ImagesRepository {
                 .continueWithTask(task -> {
                     if (!task.isSuccessful()) {
                         Log.e("ImagesRepository", "Failed to upload image: " + task.getException());
-                        throw task.getException();
+                        throw Objects.requireNonNull(task.getException());
                     }
                     // Get the download URL
                     return productImagesRef.getDownloadUrl();
@@ -126,4 +132,55 @@ public class ImagesRepository {
 
         return imagesLiveData;
     }
+
+    // profile
+    public Task<Uri> uploadProfileImage(String userUUID, byte[] data) {
+        // Create the complete reference path first
+        StorageReference profileImagesRef = profileRef
+                .child(userUUID)
+                .child(System.currentTimeMillis() + ".jpg");
+
+        // Start upload with the correct reference
+        UploadTask uploadTask = profileImagesRef.putBytes(data);
+
+        // Return a Task that will complete with the download URL
+        return uploadTask
+                .continueWithTask(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e("ImagesRepository", "Failed to upload image: " + task.getException());
+                        throw Objects.requireNonNull(task.getException());
+                    }
+                    // Get the download URL
+                    return profileImagesRef.getDownloadUrl();
+                })
+                .addOnSuccessListener(uri -> {
+                    Log.d("ImagesRepository", "Image uploaded successfully. URL: " + uri.toString());
+                })
+                .addOnFailureListener(exception -> {
+                    Log.e("ImagesRepository", "Failed to upload image: " + exception);
+                });
+    }
+
+    public LiveData<String> getProfileImage(String userUUID) {
+        MutableLiveData<String> imageLiveData = new MutableLiveData<>();
+        StorageReference profileImagesRef = profileRef.child(userUUID);
+
+        profileImagesRef.listAll()
+                .addOnSuccessListener(listResult -> {
+                    if (!listResult.getItems().isEmpty()) {
+                        listResult.getItems().get(0).getDownloadUrl().addOnSuccessListener(uri -> {
+                            imageLiveData.setValue(uri.toString());
+                        });
+                    } else {
+                        imageLiveData.setValue(null);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("ImagesRepository", "Failed to fetch images: " + e.getMessage());
+                    imageLiveData.setValue(null);
+                });
+
+        return imageLiveData;
+    }
+
 }

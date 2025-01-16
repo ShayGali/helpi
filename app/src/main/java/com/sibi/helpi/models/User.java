@@ -11,14 +11,6 @@ public class User {
     List<Post> posts;
     String profileImgPath;
 
-    public User(String UID, String email, String firstName, String lastName, String phoneNumber, List<Post> posts, String profileImgPath) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.posts = posts;
-        this.profileImgPath = profileImgPath;
-    }
 
     public User(String email, String firstName, String lastName, String phoneNumber, String profileImgPath) {
         this.email = email;
