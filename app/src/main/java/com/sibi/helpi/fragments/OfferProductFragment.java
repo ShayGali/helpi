@@ -51,8 +51,8 @@ public class OfferProductFragment extends Fragment {
     private ArrayList<Uri> selectedImages;
     private EditText etProductDescription;
 
-    FloatingActionButton btnPostProduct;
-    FloatingActionButton btnCancelPost;
+    private FloatingActionButton btnPostProduct;
+    private FloatingActionButton btnCancelPost;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -224,6 +224,10 @@ public class OfferProductFragment extends Fragment {
 
                 offerProductViewModel.postProduct(product, images);
             }
+        });
+
+        btnCancelPost.setOnClickListener(v -> {
+            clearForm();
         });
 
         observePostProductLiveData();  // Observe the LiveData returned by the ViewModel
