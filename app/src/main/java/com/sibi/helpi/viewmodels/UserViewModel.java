@@ -63,4 +63,8 @@ public class UserViewModel extends ViewModel {
     public LiveData<User> getUser() {
         return userRepository.getUser();
     }
+
+    public void getCurrentUser(@NonNull OnSuccessListener<? super User> onSuccess, @NonNull OnFailureListener onFailure) {
+        userRepository.getCurrentUser(onSuccess, onFailure);
+    }
 }

@@ -19,6 +19,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sibi.helpi.models.User;
 
+import java.util.Objects;
+
 public class UserRepository {
     public static final String COLLECTION_NAME = "users";
     private final FirebaseAuth mAuth;
@@ -48,7 +50,7 @@ public class UserRepository {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         //TODO - upload image to storage and get the path
-                        saveUserData(user, profileImg, onSuccess);
+                        saveUserData(user, getUUID(), profileImg, onSuccess);
                     } else {
                         if (task.getException() != null)
                             onFailure.onFailure(task.getException());
@@ -68,21 +70,19 @@ public class UserRepository {
      * @param onSuccess  callback when success (return document reference)
      * @param profileImg user profile image
      */
-    public void saveUserData(User user, byte[] profileImg, @NonNull OnSuccessListener<? super DocumentReference> onSuccess) {
+    public void saveUserData(User user, String uid, byte[] profileImg, @NonNull OnSuccessListener<? super DocumentReference> onSuccess) {
         if (profileImg == null) {
             user.setProfileImgPath("");
-            saveUserData(user, onSuccess);
+            saveUserData(user, getUUID(), onSuccess);
             return;
         }
-        userCollection.add(user).addOnSuccessListener(documentReference -> {
-            imagesRepository.uploadProfileImage(documentReference.getId(), profileImg)
-                    .addOnSuccessListener(uri -> {
-                        userCollection.document(documentReference.getId()).update("profileImgPath", uri.toString())
-                                .addOnSuccessListener(aVoid -> onSuccess.onSuccess(documentReference))
-                                .addOnFailureListener(e -> Log.e("UserRepository", "Failed to update profile image path: " + e));
-                    })
-                    .addOnFailureListener(e -> Log.e("UserRepository", "Failed to upload profile image: " + e));
-        }).addOnFailureListener(e -> Log.e("UserRepository", "Failed to save user data: " + e));
+        // upload the image, if success save the user data
+        imagesRepository.uploadProfileImage(uid, profileImg)
+                .addOnSuccessListener(uri -> {
+                    user.setProfileImgPath(uri.toString());
+                    saveUserData(user, uid, onSuccess);
+                })
+                .addOnFailureListener(e -> Log.e("UserRepository", "Failed to upload profile image: " + e));
     }
 
 
@@ -92,9 +92,12 @@ public class UserRepository {
      * @param user      user object
      * @param onSuccess callback when success (return document reference)
      */
-    public void saveUserData(User user, @NonNull OnSuccessListener<? super DocumentReference> onSuccess) {
-        userCollection.add(user).addOnSuccessListener(onSuccess);
+    public void saveUserData(User user, String uid, @NonNull OnSuccessListener<? super DocumentReference> onSuccess) {
+        DocumentReference documentReference = userCollection.document(uid);
+        documentReference.set(user)
+                .addOnSuccessListener(aVoid -> onSuccess.onSuccess(documentReference));
     }
+
 
     public void authWithGoogle(GoogleSignInAccount account, @NonNull OnSuccessListener<? super DocumentReference> onSuccess, @NonNull OnFailureListener onFailure) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -103,9 +106,9 @@ public class UserRepository {
                     if (task.isSuccessful()) {
                         boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
                         if (isNewUser) {
-                            User user = new User(account.getGivenName(), account.getFamilyName(), account.getEmail(), "", account.getPhotoUrl().toString());
                             // get image  from google account
-                            saveUserData(user, onSuccess);
+                            User user = new User(account.getEmail(), account.getGivenName(), account.getFamilyName(), "", account.getPhotoUrl().toString());
+                            saveUserData(user, getUUID(), onSuccess);
                         }
                     } else {
                         if (task.getException() != null)
@@ -118,7 +121,29 @@ public class UserRepository {
     }
 
     public String getUUID() {
-        return mAuth.getCurrentUser().getUid();
+        return Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+    }
+
+    public void getCurrentUser(@NonNull OnSuccessListener<? super User> onSuccess, @NonNull OnFailureListener onFailure) {
+        userCollection.document(getUUID()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    // if document exists
+                    if (documentSnapshot.exists()) {
+                        // get user data string by string
+                        String email = documentSnapshot.getString("email");
+                        String firstName = documentSnapshot.getString("firstName");
+                        String lastName = documentSnapshot.getString("lastName");
+                        String phoneNumber = documentSnapshot.getString("phoneNumber");
+                        String profilePic = documentSnapshot.getString("profilePic");
+                        User user = new User(email, firstName, lastName, phoneNumber, profilePic);
+
+                        onSuccess.onSuccess(user);
+                    } else {
+                        onFailure.onFailure(new Exception("User data is null"));
+                    }
+                })
+                .addOnFailureListener(onFailure);
+
     }
 
     public void signOut(GoogleSignInClient googleSignInClient, @NonNull OnCompleteListener<Void> onSuccess) {
