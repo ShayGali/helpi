@@ -20,6 +20,10 @@ public class User {
         this.profileImgPath = profileImgPath;
     }
 
+    public String getUsername() {
+        return firstName + " " + lastName;
+    }
+
 
     public String getEmail() {
         return email;
