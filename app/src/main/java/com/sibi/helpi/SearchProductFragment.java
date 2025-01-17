@@ -1,4 +1,4 @@
-package com.sibi.helpi.fragments;
+package com.sibi.helpi;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -14,12 +14,12 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-public class SearchServiceFragment extends Fragment {
+public class SearchProductFragment extends Fragment {
 
-    private AutoCompleteTextView categorySpinner, subcategorySpinner, regionSpinner;
-    private TextInputLayout categoryInputLayout, subcategoryInputLayout, regionInputLayout;
+    private AutoCompleteTextView categorySpinner, subcategorySpinner, regionSpinner, productStatusSpinner;
+    private TextInputLayout categoryInputLayout, subcategoryInputLayout, regionInputLayout, productStatusInputLayout;
 
-    public SearchServiceFragment() {
+    public SearchProductFragment() {
         // Required empty public constructor
     }
 
@@ -31,32 +31,36 @@ public class SearchServiceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search_service, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_product, container, false);
 
         // Reference to the AutoCompleteTextViews
         categorySpinner = view.findViewById(R.id.categorySpinner);
         categorySpinner.setKeyListener(null);  // Disable typing
         subcategorySpinner = view.findViewById(R.id.subcategorySpinner);
         regionSpinner = view.findViewById(R.id.regionSpinner);
+        productStatusSpinner = view.findViewById(R.id.productStatusSpinner);
 
         // Reference to the TextInputLayouts
         categoryInputLayout = view.findViewById(R.id.categoryInputLayout);
         subcategoryInputLayout = view.findViewById(R.id.subcategoryInputLayout);
         regionInputLayout = view.findViewById(R.id.regionInputLayout);
+        productStatusInputLayout = view.findViewById(R.id.productStatusInputLayout);
 
         // Get the data arrays
         String[] categories = getResources().getStringArray(R.array.categories);
         String[] subcategories = getResources().getStringArray(R.array.electronics_subcategories);
         String[] regions = getResources().getStringArray(R.array.region);
+        String[] productStatus = getResources().getStringArray(R.array.product_status);
 
         // Setup the AutoCompleteTextViews with background, rounded corners, and adapter
         setupAutoCompleteTextView(categorySpinner, categoryInputLayout, categories);
         setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, subcategories);
         setupAutoCompleteTextView(regionSpinner, regionInputLayout, regions);
+        setupAutoCompleteTextView(productStatusSpinner, productStatusInputLayout, productStatus);
 
         // Set the search button click listener
-        view.findViewById(R.id.btnSearchService).setOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_searchServiceFragment_to_searchServiceResultFragment)
+        view.findViewById(R.id.btnSearchProduct).setOnClickListener(v ->
+                Navigation.findNavController(view).navigate(R.id.action_searchProductFragment_to_searchProductResultFragment)
         );
 
         return view;
