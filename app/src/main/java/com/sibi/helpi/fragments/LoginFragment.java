@@ -101,6 +101,8 @@ public class LoginFragment extends Fragment {
                 }
             } else {
                 // Handle error
+                Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "register with google:failure", task.getException());
             }
         }
     }
