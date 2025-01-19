@@ -46,19 +46,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void customizeBottomNavigationView(BottomNavigationView bottomNavigationView) {
         for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
-            MenuItem menuItem = bottomNavigationView.getMenu().getItem(i);
-
-            // Inflate custom layout for each menu item
-            View customView = LayoutInflater.from(this).inflate(R.layout.custom_bottom_navigation_item, bottomNavigationView, false);
-
-            // Set icon and text in the custom layout
-            ImageView icon = customView.findViewById(R.id.icon);
-            TextView text = customView.findViewById(R.id.text);
-            icon.setImageDrawable(menuItem.getIcon());
-            text.setText(menuItem.getTitle());
-
-            // Attach the custom view to the menu item
-            menuItem.setActionView(customView);
+//            MenuItem menuItem = bottomNavigationView.getMenu().getItem(i);
+//
+//            // Inflate custom layout for each menu item
+//            View customView = LayoutInflater.from(this).inflate(R.layout.custom_bottom_navigation_item, bottomNavigationView, false);
+//
+//            // Set icon and text in the custom layout
+//            ImageView icon = customView.findViewById(R.id.icon);
+//            TextView text = customView.findViewById(R.id.text);
+//            icon.setImageDrawable(menuItem.getIcon());
+//            text.setText(menuItem.getTitle());
+//
+//            // Attach the custom view to the menu item
+//            menuItem.setActionView(customView);
         }
     }
 }
