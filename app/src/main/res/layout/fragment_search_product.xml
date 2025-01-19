@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SearchProductFragment">
+    tools:context="fragments.SearchProductFragment">
 
     <TextView
         android:id="@+id/title"
@@ -99,8 +99,6 @@
     <!-- Product Status Selection -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/productStatusInputLayout"
-    <Spinner
-        android:id="@+id/spinnerProductCondition"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
