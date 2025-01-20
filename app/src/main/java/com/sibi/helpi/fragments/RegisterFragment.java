@@ -1,9 +1,10 @@
-package com.sibi.helpi;
+package com.sibi.helpi.fragments;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,13 +15,13 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -31,9 +32,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.sibi.helpi.MainActivity;
+import com.sibi.helpi.R;
+import com.sibi.helpi.models.User;
+import com.sibi.helpi.viewmodels.UserViewModel;
 import com.yalantis.ucrop.UCrop;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -41,18 +49,22 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RegisterFragment extends Fragment {
     private static final int RC_SIGN_IN = 1234;
     private GoogleSignInClient googleSignInClient;
-    private FirebaseAuth mAuth;
     private ActivityResultLauncher<String> pickImageLauncher;
     private ActivityResultLauncher<Intent> cropImageLauncher;
+    private UserViewModel userViewModel;
+
+    private Uri profilePicUri;
 
     public RegisterFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+        userViewModel = UserViewModel.getInstance();
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -122,16 +134,18 @@ public class RegisterFragment extends Fragment {
                 return;
             }
 
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
-                            Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
-                        } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(getContext(), "Authentication failed." + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+            // Create user with email and password
+            User user = new User(email, fName, lName, "", null);
+            byte[] profileImg = getProfileImage();
+            userViewModel.registerUserWithEmailAndPassword(user, password, profileImg,
+                    documentReference -> {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
+                    },
+                    e -> {
+                        Log.w(TAG, "Error adding document", e);
+                        Toast.makeText(getContext(), "Authentication failed." + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         });
 
@@ -140,6 +154,27 @@ public class RegisterFragment extends Fragment {
             signInWithGoogle();
         });
         return inflate;
+    }
+
+    /**
+     * Get the profile image from the uri that was selected by the user
+     *
+     * @return byte array of the image (can be null if the uri is null)
+     */
+    @Nullable
+    private byte[] getProfileImage() {
+        if (profilePicUri == null) {
+            return null;
+        }
+
+        try {
+            Bitmap compressedImage = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), profilePicUri);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            compressedImage.compress(Bitmap.CompressFormat.JPEG, 30, baos);
+            return baos.toByteArray();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     private void signInWithGoogle() {
@@ -152,28 +187,66 @@ public class RegisterFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
-            Uri croppedUri = UCrop.getOutput(data);
-            if (croppedUri != null) {
+            profilePicUri = UCrop.getOutput(data);
+            if (profilePicUri != null) {
                 CircleImageView profilePic = requireView().findViewById(R.id.reg_profile_picture);
-                profilePic.setImageURI(croppedUri); // Show the cropped image
+                profilePic.setImageURI(profilePicUri); // Show the cropped image
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Throwable cropError = UCrop.getError(data);
             Toast.makeText(requireContext(), "Cropping failed: " + cropError.getMessage(), Toast.LENGTH_SHORT).show();
+        } else if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            if (task.isSuccessful()) {
+                GoogleSignInAccount account = task.getResult();
+                if (account != null) {
+                    userViewModel.authWithGoogle(account,
+                            documentReference -> {
+                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                                Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
+                            },
+                            e -> {
+                                Log.w(TAG, "Error adding document", e);
+                                Toast.makeText(getContext(), "Authentication failed." + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                }
+            } else {
+                // Handle error
+            }
+        } else {
+            throw new IllegalStateException("Unexpected value: " + requestCode);
         }
     }
 
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
-                    } else {
-                        Log.w(TAG, "register with google:failure", task.getException());
-                        Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
+//    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+//        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+//        mAuth.signInWithCredential(credential)
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
+//                        if (isNewUser) {
+//                            // Save user to database
+//                            saveUserDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail(), "", account.getPhotoUrl());
+//                        }
+//                        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
+//                    } else {
+//                        Log.w(TAG, "register with google:failure", task.getException());
+//                        Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
+
+//    private void saveUserDatabase(String fName, String lName, String email, String phoneNumber, Uri profilePicUri) {
+//        // Save user to database
+//        db.collection(MainActivity.USER_COLLECTION)
+//                .add(new User(fName, lName, email, phoneNumber, "path"))
+//                .addOnSuccessListener(documentReference -> {
+//                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.w(TAG, "Error adding document", e);
+//                });
+//    }
 }

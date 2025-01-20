@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.fragments;
 
 import static android.content.ContentValues.TAG;
 
@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.sibi.helpi.R;
 
 public class LoginFragment extends Fragment {
     // for google login
@@ -72,7 +73,7 @@ public class LoginFragment extends Fragment {
         loginButton = view.findViewById(R.id.login_button);
         loginButton.setOnClickListener(v -> signIn());
 
-        Button goToRegisterButton = view.findViewById(R.id.got_to_reg_button);
+        Button goToRegisterButton = view.findViewById(R.id.go_to_reg_button);
         goToRegisterButton.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_login_fragment_to_registerFragment)
         );
@@ -111,7 +112,12 @@ public class LoginFragment extends Fragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
+                        boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
+                        if (isNewUser) {
+                            // Save user to database
+                            // TODO: implement saveUserDatabase method
+//                            saveUserDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail(), "", account.getPhotoUrl());
+                        }
                         navigateToHome();
                     } else {
                         // Handle error

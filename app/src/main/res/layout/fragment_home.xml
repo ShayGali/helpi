@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    tools:context=".fragments.HomeFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layoutDirection="ltr"
-            android:text="Hi, Alex!"
+            android:text=""
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"

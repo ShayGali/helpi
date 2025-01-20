@@ -56,9 +56,15 @@ dependencies {
     implementation(libs.coordinatorlayout)
     implementation(libs.play.services.auth)
     implementation(libs.play.services.location)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
 
     // for firebase
     implementation(platform(libs.firebase.bom))
