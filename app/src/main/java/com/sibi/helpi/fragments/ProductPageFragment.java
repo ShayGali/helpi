@@ -49,7 +49,7 @@
 //    }
 //}
 
-package com.sibi.helpi;
+package com.sibi.helpi.fragments;
 
 import android.os.Bundle;
 
@@ -59,9 +59,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
 
 public class ProductPageFragment extends Fragment {

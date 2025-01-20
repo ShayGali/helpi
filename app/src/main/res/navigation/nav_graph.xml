@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.sibi.helpi.LoginFragment"
+        android:name="com.sibi.helpi.fragments.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login"
         >
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.sibi.helpi.HomeFragment"
+        android:name="com.sibi.helpi.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.sibi.helpi.RegisterFragment"
+        android:name="com.sibi.helpi.fragments.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register">
         <action
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchProductFragment"
-        android:name="com.sibi.helpi.SearchProductFragment"
+        android:name="com.sibi.helpi.fragments.SearchProductFragment"
         android:label="fragment_search_product"
         tools:layout="@layout/fragment_search_product" >
         <action
@@ -51,18 +51,18 @@
     </fragment>
     <fragment
         android:id="@+id/offerProductFragment"
-        android:name="com.sibi.helpi.OfferProductFragment"
+        android:name="com.sibi.helpi.fragments.OfferProductFragment"
         android:label="fragment_offer_product"
         tools:layout="@layout/fragment_offer_product" />
 
     <fragment
         android:id="@+id/offerServiceFragment"
-        android:name="com.sibi.helpi.OfferServiceFragment"
+        android:name="com.sibi.helpi.fragments.OfferServiceFragment"
         android:label="fragment_offer_service"
         tools:layout="@layout/fragment_offer_service" />
     <fragment
         android:id="@+id/searchServiceFragment"
-        android:name="com.sibi.helpi.SearchServiceFragment"
+        android:name="com.sibi.helpi.fragments.SearchServiceFragment"
         android:label="fragment_search_service"
         tools:layout="@layout/fragment_search_service" >
         <action
@@ -72,12 +72,12 @@
 
     <fragment
         android:id="@+id/productFragment"
-        android:name="com.sibi.helpi.ProductPageFragment"
+        android:name="com.sibi.helpi.fragments.ProductPageFragment"
         android:label="fragment_product"
         tools:layout="@layout/fragment_product_page" />
     <fragment
         android:id="@+id/searchProductResultFragment"
-        android:name="com.sibi.helpi.SearchProductResultFragment"
+        android:name="com.sibi.helpi.fragments.SearchProductResultFragment"
         android:label="fragment_search_product_result"
         tools:layout="@layout/fragment_search_product_result" >
         <action
@@ -86,7 +86,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.sibi.helpi.ProfileFragment"
+        android:name="com.sibi.helpi.fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -98,7 +98,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchServiceResultFragment"
-        android:name="com.sibi.helpi.SearchServiceResultFragment"
+        android:name="com.sibi.helpi.fragments.SearchServiceResultFragment"
         android:label="fragment_search_service_result"
         tools:layout="@layout/fragment_search_service_result" >
         <action
@@ -107,12 +107,12 @@
     </fragment>
     <fragment
         android:id="@+id/servicePageFragment"
-        android:name="com.sibi.helpi.ServicePageFragment"
+        android:name="com.sibi.helpi.fragments.ServicePageFragment"
         android:label="fragment_service_page"
         tools:layout="@layout/fragment_service_page" />
     <fragment
         android:id="@+id/adminDashBoardFragment"
-        android:name="com.sibi.helpi.AdminDashBoardFragment"
+        android:name="com.sibi.helpi.fragments.AdminDashBoardFragment"
         android:label="fragment_admin_dash_board"
         tools:layout="@layout/fragment_admin_dash_board" />
 

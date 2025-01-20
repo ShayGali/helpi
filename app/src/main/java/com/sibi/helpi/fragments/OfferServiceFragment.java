@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,11 +16,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
 
 import java.util.ArrayList;
 
-public class OfferProductFragment extends Fragment {
+public class OfferServiceFragment extends Fragment {
     private static final int PICK_IMAGES_REQUEST = 1;
 
     private Spinner categorySpinner;
@@ -41,7 +42,7 @@ public class OfferProductFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_offer_product, container, false);
+        View view = inflater.inflate(R.layout.fragment_offer_service, container, false);
 
         initializeViews(view);
         setupSpinners();
@@ -54,7 +55,7 @@ public class OfferProductFragment extends Fragment {
         categorySpinner = view.findViewById(R.id.spinnerCategories);
         subcategorySpinner = view.findViewById(R.id.spinnerSubCategory);
         regionSpinner = view.findViewById(R.id.spinnerRegion);
-        productStatusSpinner = view.findViewById(R.id.spinnerProductSituation);
+        productStatusSpinner = view.findViewById(R.id.spinnerProductCondition);
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
         imageSlider = view.findViewById(R.id.imageSlider);
 

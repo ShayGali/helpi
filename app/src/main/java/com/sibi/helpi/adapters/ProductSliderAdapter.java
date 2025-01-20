@@ -1,5 +1,6 @@
 package com.sibi.helpi.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductSliderAdapter extends RecyclerView.Adapter<ProductSliderAdapter.ProductViewHolder> {
@@ -19,12 +22,18 @@ public class ProductSliderAdapter extends RecyclerView.Adapter<ProductSliderAdap
     private List<Product> productList;
     private OnItemClickListener onItemClickListener;
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+        notifyDataSetChanged();
+    }
+
     public interface OnItemClickListener {
         void onItemClick(Product product);
     }
 
-    public ProductSliderAdapter(List<Product> productList, OnItemClickListener onItemClickListener) {
-        this.productList = productList;
+    public ProductSliderAdapter(OnItemClickListener onItemClickListener) {
+        this.productList = new ArrayList<>();
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -38,12 +47,17 @@ public class ProductSliderAdapter extends RecyclerView.Adapter<ProductSliderAdap
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
-        holder.productTitle.setText(product.getTitle());
+        holder.productTitle.setText(product.getDescription());
         holder.productCategory.setText(product.getCategory());
         holder.productSubCategory.setText(product.getSubCategory());
         holder.productRegion.setText(product.getRegion());
-        holder.productStatus.setText(product.getStatus());
-        holder.productImage.setImageResource(product.getImageResourceId());
+        holder.productStatus.setText(product.getCondition());
+
+        if (!product.getImageUrls().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(product.getImageUrls().get(0))
+                    .into(holder.productImage);
+        }
 
         holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(product));
     }

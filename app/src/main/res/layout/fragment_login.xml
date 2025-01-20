@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginFragment">
+    tools:context=".fragments.LoginFragment">
 
     <ImageView
 
@@ -67,7 +67,7 @@
         app:layout_constraintTop_toBottomOf="@+id/password_input" />
 
     <Button
-        android:id="@+id/got_to_reg_button"
+        android:id="@+id/go_to_reg_button"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -92,7 +92,7 @@
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/got_to_reg_button" />
+        app:layout_constraintTop_toBottomOf="@+id/go_to_reg_button" />
 
     <ImageView
         android:id="@+id/facebook_button"
