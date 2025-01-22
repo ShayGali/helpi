@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String USER_COLLECTION = "users";
+    private ProgressBar progressBar;
 
 
     @Override
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        progressBar = findViewById(R.id.global_progress_bar);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         // Customize the BottomNavigationView menu items
@@ -42,6 +44,18 @@ public class MainActivity extends AppCompatActivity {
                 bottomNavigationView.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    public void showProgressBar() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideProgressBar() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
     }
 
     private void customizeBottomNavigationView(BottomNavigationView bottomNavigationView) {

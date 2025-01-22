@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.sibi.helpi.models.Product;
@@ -23,12 +24,14 @@ public class OfferProductViewModel extends ViewModel {
     }
 
     public void postProduct(Product product, byte[][] images) {
-        Log.d("ViewModel", "Posting product: " + product.toString());
         postProductLiveData.setValue(Resource.loading(null));
-        productRepository.postProduct(product, images)
-                .observeForever(result -> {
-                    Log.d("ViewModel", "Got result: " + result.getStatus());
-                    postProductLiveData.setValue(result);
-                });
+        LiveData<Resource<String>> result = productRepository.postProduct(product, images);
+        result.observeForever(new Observer<>() {
+            @Override
+            public void onChanged(Resource<String> stringResource) {
+                postProductLiveData.setValue(stringResource);
+                result.removeObserver(this);
+            }
+        });
     }
 }

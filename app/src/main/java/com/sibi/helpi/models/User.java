@@ -4,13 +4,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class User {
-    String email;
-    String firstName;
-    String lastName;
-    String phoneNumber;
-    List<Post> posts;
-    String profileImgPath;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+    private List<Post> posts;
+    private String profileImgPath;
 
+    public User() {
+    }
 
     public User(String email, String firstName, String lastName, String phoneNumber, String profileImgPath) {
         this.email = email;

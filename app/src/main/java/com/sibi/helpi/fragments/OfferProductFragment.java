@@ -200,16 +200,20 @@ public class OfferProductFragment extends Fragment {
         // Initialize the ViewModel:
         offerProductViewModel = new ViewModelProvider(this).get(OfferProductViewModel.class);
 
+        // get the current user id from the user model
+        UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        String userId = userViewModel.getUserId();
+
+
         // Set an onClickListener for the post product button:
         btnPostProduct.setOnClickListener(v -> {
             // Add validation check here
-            if (validateInput()) {  // <-- Add this check
+            if (validateInput()) {
                 String description = this.etProductDescription.getText().toString();
                 String category = categorySpinner.getSelectedItem().toString();
                 String subCategory = subcategorySpinner.getSelectedItem().toString();
                 String region = regionSpinner.getSelectedItem().toString();
                 String condition = productConditionSpinner.getSelectedItem().toString();
-                String userId = UserViewModel.getInstance().getUUID();
 
                 Product product = new Product(description, category, subCategory, region, condition, userId);
                 byte[][] images = getImagesData(selectedImages);
