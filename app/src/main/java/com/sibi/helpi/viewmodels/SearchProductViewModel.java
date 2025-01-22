@@ -10,7 +10,7 @@ import com.sibi.helpi.repositories.ProductRepository;
 import java.util.List;
 
 public class SearchProductViewModel extends ViewModel {
-    private final ProductRepository productRepository;
+    private final    ProductRepository productRepository;
     private final ImagesRepository imagesRepository;
 
     public SearchProductViewModel() {

@@ -34,12 +34,12 @@
 
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/userNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layoutDirection="ltr"
-            android:text=""
+            android:text="usename"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
