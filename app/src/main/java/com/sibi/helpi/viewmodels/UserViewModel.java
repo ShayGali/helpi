@@ -13,6 +13,8 @@ import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.UserRepository;
 import com.sibi.helpi.stats.UserState;
 
+import java.util.Objects;
+
 public class UserViewModel extends ViewModel {
     private static final String TAG = "UserViewModel";
     private final MutableLiveData<UserState> userState;
@@ -86,8 +88,11 @@ public class UserViewModel extends ViewModel {
                 .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
     }
 
-    // LiveData methods remain the same
-    public LiveData<String> getProfileImage() {
+    public LiveData<String> getProfileImageUri() {
+        if(!isInitialized || Objects.requireNonNull(userState.getValue()).isIdle()){
+            throw new IllegalStateException("User not initialized - cant get profile image");
+        }
+
         return imagesRepository.getProfileImage(userRepository.getUUID());
     }
 

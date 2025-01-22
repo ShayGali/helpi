@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        userViewModel.getCurrentUser();
     }
 
     @Override
@@ -85,21 +86,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 String name = "Hi, " + state.getUser().getFirstName() +
                         " " + state.getUser().getLastName() + "!";
                 usernameTextView.setText(name);
+
+                String imageUrl = state.getUser().getProfileImgUri();
+                Log.d("HomeFragment", "Profile image URL: " + imageUrl);
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    Glide.with(this)
+                            .load(imageUrl)
+                            .into(profileImage);
+                }
+
             } else {
                 hideLoading();
                 Log.w("HomeFragment", "State: Unknown - neither loading, error, nor user");
                 usernameTextView.setText("Welcome, Guest");
-            }
-        });
-
-        // Observe profile image changes
-        userViewModel.getProfileImage().observe(getViewLifecycleOwner(), imageUrl -> {
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                // Load image using your preferred image loading library
-                // For example, using Glide:
-                Glide.with(this)
-                        .load(imageUrl)
-                        .into(profileImage);
             }
         });
     }

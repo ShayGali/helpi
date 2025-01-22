@@ -42,4 +42,8 @@ public class UserState {
     public String getError() {
         return error;
     }
+
+    public boolean isIdle() {
+        return !isLoading && user == null && error == null;
+    }
 }

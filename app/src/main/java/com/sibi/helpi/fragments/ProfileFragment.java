@@ -86,7 +86,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        userViewModel.getProfileImage().observe(getViewLifecycleOwner(), this::updateProfileImage);
     }
 
     private void showLoading() {
