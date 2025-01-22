@@ -1,7 +1,6 @@
 package com.sibi.helpi.models;
 
 import java.util.List;
-import java.util.UUID;
 
 public class User {
     private String email;
@@ -9,17 +8,17 @@ public class User {
     private String lastName;
     private String phoneNumber;
     private List<Post> posts;
-    private String profileImgPath;
+    private String profileImgUri;
 
     public User() {
     }
 
-    public User(String email, String firstName, String lastName, String phoneNumber, String profileImgPath) {
+    public User(String email, String firstName, String lastName, String phoneNumber, String profileImgUri) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.profileImgPath = profileImgPath;
+        this.profileImgUri = profileImgUri;
     }
 
     public String getUsername() {
@@ -67,11 +66,11 @@ public class User {
         this.posts = posts;
     }
 
-    public String getProfileImgPath() {
-        return profileImgPath;
+    public String getProfileImgUri() {
+        return profileImgUri;
     }
 
-    public void setProfileImgPath(String profileImgPath) {
-        this.profileImgPath = profileImgPath;
+    public void setProfileImgUri(String profileImgUri) {
+        this.profileImgUri = profileImgUri;
     }
 }

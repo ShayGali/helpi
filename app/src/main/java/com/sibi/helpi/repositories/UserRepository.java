@@ -43,14 +43,14 @@ public class UserRepository {
     private Task<DocumentReference> uploadProfileImageAndSaveUser(User user, byte[] profileImg) {
         String uid = authService.getCurrentUserId();
         if (profileImg == null) {
-            user.setProfileImgPath("");
+            user.setProfileImgUri("");
             return Tasks.forResult(null);
         }
 
         return imagesRepository.uploadProfileImage(uid, profileImg)
                 .continueWithTask(task -> {
                     if (task.isSuccessful()) {
-                        user.setProfileImgPath(task.getResult().toString());
+                        user.setProfileImgUri(task.getResult().toString());
                         return saveUserData(user, uid);
                     }
                     return Tasks.forResult(null);
