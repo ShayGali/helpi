@@ -1,6 +1,6 @@
 // File: app/src/main/java/com/sibi/helpi/Message.java
 
-package com.sibi.helpi;
+package com.sibi.helpi.models;
 
 public class Message {
     private String text;
