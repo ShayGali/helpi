@@ -51,9 +51,9 @@
     </fragment>
     <fragment
         android:id="@+id/offerProductFragment"
-        android:name="com.sibi.helpi.fragments.OfferProductFragment"
+        android:name="com.sibi.helpi.fragments.OfferPostFragment"
         android:label="fragment_offer_product"
-        tools:layout="@layout/fragment_offer_product" />
+        tools:layout="@layout/fragment_offer_post" />
 
     <fragment
         android:id="@+id/offerServiceFragment"

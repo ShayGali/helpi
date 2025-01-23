@@ -1,22 +1,20 @@
 package com.sibi.helpi.repositories;
 
-import android.content.Context;
-import android.graphics.Bitmap;
+import static com.sibi.helpi.utils.AppConstants.COLLECTION_PATH;
+import static com.sibi.helpi.utils.AppConstants.POST_IMAGES_PATH;
+import static com.sibi.helpi.utils.AppConstants.PROFILE_IMAGES_PATH;
+
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,19 +36,15 @@ public class ImagesRepository {
         }
     }
 
-    private static final String COLLECTION_PATH = "images";
-    private static final String PRODUCT_IMAGES_PATH = "product_images";
-    private static final String PROFILE_IMAGES_PATH = "profile_images";
-
     private final FirebaseStorage storage;
     private final StorageReference storageReference;
-    private final StorageReference productsRef;
+    private final StorageReference postsRef;
     private final StorageReference profileRef;
 
     private ImagesRepository() {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        productsRef = storageReference.child(COLLECTION_PATH).child(PRODUCT_IMAGES_PATH);
+        postsRef = storageReference.child(COLLECTION_PATH).child(POST_IMAGES_PATH);
         profileRef = storageReference.child(COLLECTION_PATH).child(PROFILE_IMAGES_PATH);
     }
 
@@ -58,7 +52,7 @@ public class ImagesRepository {
     // products
     private Task<Uri> uploadProductImage(String productUUID, byte[] data) {
         // Create the complete reference path first
-        StorageReference productImagesRef = productsRef
+        StorageReference productImagesRef = postsRef
                 .child(productUUID)
                 .child(System.currentTimeMillis() + ".jpg");
 
@@ -83,7 +77,7 @@ public class ImagesRepository {
                 });
     }
 
-    public List<Task<Uri>> uploadProductImages(String productId, byte[][] images) {
+    public List<Task<Uri>> uploadPostImages(String productId, byte[][] images) {
         // check if the images are not null
         if (images == null) {
             throw new IllegalArgumentException("Images cannot be null");
@@ -111,7 +105,7 @@ public class ImagesRepository {
 
     public LiveData<List<String>> getProductImages(String productId) {
         MutableLiveData<List<String>> imagesLiveData = new MutableLiveData<>();
-        StorageReference productImagesRef = productsRef.child(productId);
+        StorageReference productImagesRef = postsRef.child(productId);
 
         productImagesRef.listAll()
                 .addOnSuccessListener(listResult -> {

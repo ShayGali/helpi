@@ -26,9 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.sibi.helpi.models.Postable;
+import com.sibi.helpi.models.ProductPost;
+import com.sibi.helpi.models.ServicePost;
 import com.sibi.helpi.repositories.ImagesRepository;
-import com.sibi.helpi.viewmodels.OfferProductViewModel;
-import com.sibi.helpi.models.Product;
+import com.sibi.helpi.viewmodels.OfferPostViewModel;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
 import com.sibi.helpi.viewmodels.UserViewModel;
@@ -37,22 +39,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class OfferProductFragment extends Fragment {
+public class OfferPostFragment extends Fragment {
 
-    private OfferProductViewModel offerProductViewModel;  // ViewModel to handle the post product operation
+    private OfferPostViewModel offerPostViewModel;
     private static final int PICK_IMAGES_REQUEST = 1;
     private Spinner categorySpinner;
     private Spinner subcategorySpinner;
     private Spinner regionSpinner;
-
-    private Spinner productConditionSpinner;
+    private Spinner typeSpinner;
+    private Spinner conditionSpinner;
     private Button btnUploadImage;
     private ViewPager2 imageSlider;
     private ImageSliderAdapter imageAdapter;
     private ArrayList<Uri> selectedImages;
-    private EditText etProductDescription;
-
-    private FloatingActionButton btnPostProduct;
+    private EditText etDescription;
+    private FloatingActionButton btnPost;
     private FloatingActionButton btnCancelPost;
 
     @Override
@@ -64,11 +65,11 @@ public class OfferProductFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_offer_product, container, false);
+        View view = inflater.inflate(R.layout.fragment_offer_post, container, false);
 
-        initializeViews(view);  // Initialize views
-        setupSpinners();        // Setup spinners
-        setupImagePicker();     // Setup image picker
+        initializeViews(view);
+        setupSpinners();
+        setupImagePicker();
 
         return view;
     }
@@ -78,12 +79,13 @@ public class OfferProductFragment extends Fragment {
         categorySpinner = view.findViewById(R.id.spinnerCategories);
         subcategorySpinner = view.findViewById(R.id.spinnerSubCategory);
         regionSpinner = view.findViewById(R.id.spinnerRegion);
-        productConditionSpinner = view.findViewById(R.id.spinnerProductCondition);
+        typeSpinner = view.findViewById(R.id.spinnerPostType);
+        conditionSpinner = view.findViewById(R.id.spinnerProductCondition);
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
         imageSlider = view.findViewById(R.id.imageSlider);
-        btnPostProduct = view.findViewById(R.id.btnPostProduct);
+        btnPost = view.findViewById(R.id.btnPostProduct);
         btnCancelPost = view.findViewById(R.id.btnCancelPost);
-        etProductDescription = view.findViewById(R.id.description);
+        etDescription = view.findViewById(R.id.description);
 
         // Initialize ViewPager2 adapter (means to set the adapter to the ViewPager2)
         imageAdapter = new ImageSliderAdapter(requireContext());
@@ -94,9 +96,40 @@ public class OfferProductFragment extends Fragment {
 
         setUpSpinner(categorySpinner, R.array.categories);
         setUpSpinner(regionSpinner, R.array.region);
-        setUpSpinner(productConditionSpinner, R.array.product_status);
+        setUpSpinner(typeSpinner, R.array.type);
+        setUpSpinner(conditionSpinner, R.array.product_condition);
 
-        // make the subcategorySpinner unclickable until a category is selected
+        subCategoryBlocker();
+        typeBlocker();
+    }
+
+    /**
+     * This method blocks the condition spinner until a type is selected.
+     * If the type is service, the condition spinner is disabled.
+     */
+    private void typeBlocker() {
+        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedType = parent.getItemAtPosition(position).toString();
+                if ("Service".equalsIgnoreCase(selectedType)) {
+                    conditionSpinner.setEnabled(false);
+                    conditionSpinner.setSelection(0);
+                } else {
+                    conditionSpinner.setEnabled(true);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                conditionSpinner.setEnabled(false);
+            }
+        });
+    }
+
+    /**
+     * This method blocks the subcategory spinner until a category is selected
+     */
+    private void subCategoryBlocker() {
         subcategorySpinner.setEnabled(false);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -126,13 +159,12 @@ public class OfferProductFragment extends Fragment {
                     }
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 subcategorySpinner.setEnabled(false);
+
             }
         });
-
     }
 
     private void setUpSpinner(Spinner spinner, int arrayResId) {
@@ -198,36 +230,15 @@ public class OfferProductFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize the ViewModel:
-        offerProductViewModel = new ViewModelProvider(this).get(OfferProductViewModel.class);
+        offerPostViewModel = new ViewModelProvider(this).get(OfferPostViewModel.class);
 
-        // get the current user id from the user model
         UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-        String userId = userViewModel.getUserId();
 
-
-        // Set an onClickListener for the post product button:
-        btnPostProduct.setOnClickListener(v -> {
-            // Add validation check here
-            if (validateInput()) {
-                String description = this.etProductDescription.getText().toString();
-                String category = categorySpinner.getSelectedItem().toString();
-                String subCategory = subcategorySpinner.getSelectedItem().toString();
-                String region = regionSpinner.getSelectedItem().toString();
-                String condition = productConditionSpinner.getSelectedItem().toString();
-
-                Product product = new Product(description, category, subCategory, region, condition, userId);
-                byte[][] images = getImagesData(selectedImages);
-
-                // check if all the images are in the correct size
-                for (byte[] imageData : images) {
-                    if (imageData.length > ImagesRepository.MAX_FILE_SIZE) {
-                        showToast("Image data cannot be greater than 0.5 MB");
-                        return;
-                    }
-                }
-
-                offerProductViewModel.postProduct(product, images);
+        btnPost.setOnClickListener(v -> {  // onClickListener for the post product button:
+            byte[][] images = getImagesData(selectedImages);
+            if (validateInput(images)) {
+                Postable post = createConcretePost(userViewModel.getUserId());
+                offerPostViewModel.savePost(post, images);
             }
         });
 
@@ -236,6 +247,17 @@ public class OfferProductFragment extends Fragment {
         });
 
         observePostProductLiveData();  // Observe the LiveData returned by the ViewModel
+    }
+
+    private Postable createConcretePost(String userId) {
+        Postable post = typeSpinner.getSelectedItem().toString().equalsIgnoreCase("Service") ?
+                new ServicePost(etDescription.getText().toString(), categorySpinner.getSelectedItem().toString(),
+                        subcategorySpinner.getSelectedItem().toString(), regionSpinner.getSelectedItem().toString(),
+                        userId, conditionSpinner.getSelectedItem().toString()) :
+                new ProductPost(etDescription.getText().toString(), categorySpinner.getSelectedItem().toString(),
+                        subcategorySpinner.getSelectedItem().toString(), regionSpinner.getSelectedItem().toString(),
+                        conditionSpinner.getSelectedItem().toString(), userId);
+        return post;
     }
 
     private byte[][] getImagesData(ArrayList<Uri> selectedImages) {
@@ -253,20 +275,42 @@ public class OfferProductFragment extends Fragment {
         return images;
     }
 
-    private boolean validateInput() {
-        if (etProductDescription.getText().toString().trim().isEmpty()) {
-            etProductDescription.setError("Description is required");
+    private boolean validateInput(byte[][] images) {
+        if (etDescription.getText().toString().trim().isEmpty()) {
+            showToast(getString(R.string.allFieldsRequired));
             return false;
         }
-//        if (selectedImages.isEmpty()) {
-//            showErrorMessage("Please select at least one image");
-//            return false;
-//        }
+        if (categorySpinner.getSelectedItemPosition() == 0) {
+            showToast(getString(R.string.allFieldsRequired));
+            return false;
+        }
+        if (subcategorySpinner.getSelectedItemPosition() == 0) {
+            showToast(getString(R.string.allFieldsRequired));
+            return false;
+        }
+        if (regionSpinner.getSelectedItemPosition() == 0) {
+            showToast(getString(R.string.allFieldsRequired));
+            return false;
+        }
+        if (typeSpinner.getSelectedItemPosition() == 0) {
+            showToast(getString(R.string.allFieldsRequired));
+            return false;
+        }
+        if (conditionSpinner.getSelectedItemPosition() == 0) {
+            showToast(getString(R.string.allFieldsRequired));
+            return false;
+        }
+        for (byte[] imageData : images) {
+            if (imageData.length > ImagesRepository.MAX_FILE_SIZE) {
+                showToast(getString(R.string.imgTooLarge));
+                return false;
+            }
+        }
         return true;
     }
 
     private void observePostProductLiveData() {
-        offerProductViewModel.getPostProductLiveData().observe(getViewLifecycleOwner(), resource -> {
+        offerPostViewModel.getPostLiveData().observe(getViewLifecycleOwner(), resource -> {
             switch (resource.getStatus()) {
                 case LOADING:
                     showToast("Uploading product...");
@@ -293,13 +337,13 @@ public class OfferProductFragment extends Fragment {
     }
 
     private void clearForm() {
-        etProductDescription.setText("");
+        etDescription.setText("");
         selectedImages.clear();
         imageAdapter.setImages(selectedImages);
         categorySpinner.setSelection(0);
         subcategorySpinner.setSelection(0);
         regionSpinner.setSelection(0);
-        productConditionSpinner.setSelection(0);
+        conditionSpinner.setSelection(0);
     }
 //    TODO: an offer of how to implement the above methods:
 //    {

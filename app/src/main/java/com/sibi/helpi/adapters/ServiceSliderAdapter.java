@@ -3,29 +3,26 @@ package com.sibi.helpi.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sibi.helpi.R;
-import com.sibi.helpi.models.Product;
-import com.sibi.helpi.models.Service;
+import com.sibi.helpi.models.ServicePost;
 
 import java.util.List;
 
 public class ServiceSliderAdapter extends RecyclerView.Adapter<ServiceSliderAdapter.ProductViewHolder> {
 
-    private List<Service> ServiceList;
+    private List<ServicePost> servicePostList;
     private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(Service service);
+        void onItemClick(ServicePost servicePost);
     }
 
-    public ServiceSliderAdapter(List<Service> productList, OnItemClickListener onItemClickListener) {
-        this.ServiceList = productList;
+    public ServiceSliderAdapter(List<ServicePost> productList, OnItemClickListener onItemClickListener) {
+        this.servicePostList = productList;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -38,15 +35,15 @@ public class ServiceSliderAdapter extends RecyclerView.Adapter<ServiceSliderAdap
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Service service = ServiceList.get(position);
+        ServicePost servicePost = servicePostList.get(position);
 
 
-        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(service));
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(servicePost));
     }
 
     @Override
     public int getItemCount() {
-        return ServiceList.size();
+        return servicePostList.size();
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {

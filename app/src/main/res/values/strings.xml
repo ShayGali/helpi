@@ -25,6 +25,8 @@
     <string name="select_category">Select Category</string>
     <string name="select_sub_category">Select SubCategory</string>
     <string name="report">report</string>
+    <string name="allFieldsRequired">All fields are required</string>
+    <string name="imgTooLarge">Image is too large</string>
 
 
     <string-array name="categories">
@@ -54,7 +56,12 @@
         <item>Eilat</item>
         <item>Select Current Location</item>
     </string-array>
-    <string-array name="product_status">
+    <string-array name="type">
+        <item>Select Post Type</item>
+        <item>Product</item>
+        <item>Service</item>
+    </string-array>
+    <string-array name="product_condition">
         <item>Select Product Status</item>
         <item>New</item>
         <item>Used</item>
