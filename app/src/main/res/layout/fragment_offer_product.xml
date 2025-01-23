@@ -15,8 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:text="Add Post"
             android:textSize="32dp"
-            android:text="Offer Product"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -61,6 +61,21 @@
             app:layout_constraintTop_toBottomOf="@+id/spinnerSubCategory" />
 
         <Spinner
+            android:id="@+id/postType"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="12dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerRegion"
+
+            />
+
+        <Spinner
             android:id="@+id/spinnerProductCondition"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -71,7 +86,7 @@
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerRegion" />
+            app:layout_constraintTop_toBottomOf="@+id/postType" />
 
         <Button
             android:id="@+id/btnUploadImage"
@@ -144,6 +159,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btnCancelPost"
             app:layout_constraintTop_toBottomOf="@+id/description" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

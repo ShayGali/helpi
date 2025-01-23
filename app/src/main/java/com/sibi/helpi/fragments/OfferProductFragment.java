@@ -44,6 +44,7 @@ public class OfferProductFragment extends Fragment {
     private Spinner categorySpinner;
     private Spinner subcategorySpinner;
     private Spinner regionSpinner;
+
     private Spinner productConditionSpinner;
     private Button btnUploadImage;
     private ViewPager2 imageSlider;
