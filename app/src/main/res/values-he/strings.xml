@@ -6,10 +6,10 @@
     <string name="hello_blank_fragment">שלום פרגמנט ריק</string>
     <string name="social_login">-----------------------התחברות דרך רשת חברתית-----------------------</string>
     <string name="navigation">ניווט</string>
-    <string name="search_product">חיפוש\nnמוצר</string>
+    <string name="search">חיפוש\nnמוצר</string>
     <string name="search_service">חיפוש\nnשירות</string>
     <string name="offer_service">הצע\nnשירות</string>
-    <string name="offer_product">הצע\nnמוצר</string>
+    <string name="add_post">הצע\nnמוצר</string>
     <string name="first_name">שם פרטי</string>
     <string name="last_name">שם משפחה</string>
     <string name="My_User">המשתמש שלי</string>

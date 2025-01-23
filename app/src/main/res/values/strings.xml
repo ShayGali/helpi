@@ -6,10 +6,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="social_login">-----------------------Social Login-----------------------</string>
     <string name="navigation">Navigation</string>
-    <string name="search_product">Product</string>
+    <string name="search">Search</string>
     <string name="search_service">Service</string>
     <string name="offer_service">Service</string>
-    <string name="offer_product">Product</string>
+    <string name="add_post">Post</string>
     <string name="register">Register</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
@@ -52,7 +52,7 @@
         <item>Haifa</item>
         <item>Beer-Sheva</item>
         <item>Eilat</item>
-        <item>Other</item>
+        <item>Select Current Location</item>
     </string-array>
     <string-array name="product_status">
         <item>Select Product Status</item>
