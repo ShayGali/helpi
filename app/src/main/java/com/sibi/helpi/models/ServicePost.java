@@ -1,37 +1,30 @@
 package com.sibi.helpi.models;
 
-import java.util.ArrayList;
 import java.util.List;
+import com.sibi.helpi.utils.AppConstants.PostStatus;
 
-/**
- * This class represents a product in the Helpi app.
- * Each product has a name, description, category, subcategory, region, situation, and userId.
- * The userId is the id of the user who created the product.
- */
-public class Product {
+public class ServicePost implements Postable{
     private String id;
     private String description;
     private String category;
     private String subCategory;
     private String region;
-    private String condition;
     private String userId;
+    private PostStatus status;
     private List<String> imageUrls;
 
-    public Product() {
+    public ServicePost() {
         // Default constructor required for Firebase
     }
 
-    public Product(String description, String category, String subCategory, String region, String condition, String userId) {
+    public ServicePost(String description, String category, String subCategory, String region, String userId, String condition) {
         this.description = description;
         this.category = category;
         this.subCategory = subCategory;
         this.region = region;
-        this.condition = condition;
         this.userId = userId;
     }
 
-    // Getters and setters:
     public String getId() {
         return id;
     }
@@ -72,14 +65,6 @@ public class Product {
         this.region = region;
     }
 
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String situation) {
-        this.condition = situation;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -89,27 +74,32 @@ public class Product {
     }
 
     public List<String> getImageUrls() {
-        return imageUrls != null ? imageUrls : new ArrayList<>();
+        return imageUrls;
     }
 
     public void setImageUrls(List<String> imageUrls) {
         this.imageUrls = imageUrls;
     }
 
-    // toString method:
+    public PostStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PostStatus status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "Product{" +
+        return "Service{" +
                 "id='" + id + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", subCategory='" + subCategory + '\'' +
                 ", region='" + region + '\'' +
-                ", situation='" + condition + '\'' +
-//                ", situation='" + ProductCondition + '\'' +
                 ", userId='" + userId + '\'' +
+                ", imageUrls=" + imageUrls +
+                ", postStatus=" + status.getStatusText() +
                 '}';
     }
-
-
 }

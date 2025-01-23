@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ServiceSliderAdapter;
-import com.sibi.helpi.models.Service;
+import com.sibi.helpi.models.ServicePost;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class SearchServiceResultFragment extends Fragment {
 
     private RecyclerView serviceRecyclerView;
     private ServiceSliderAdapter serviceSliderAdapter;
-    private List<Service> serviceList;
+    private List<ServicePost> servicePostList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,14 +32,14 @@ public class SearchServiceResultFragment extends Fragment {
         serviceRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize product list and adapter
-        serviceList = new ArrayList<>();
+        servicePostList = new ArrayList<>();
 
         // Add dummy data TODO: replace with actual data
-        serviceList.add(new Service());
-        serviceList.add(new Service());
-        serviceList.add(new Service());
+        servicePostList.add(new ServicePost());
+        servicePostList.add(new ServicePost());
+        servicePostList.add(new ServicePost());
 
-        serviceSliderAdapter = new ServiceSliderAdapter(serviceList, service -> {
+        serviceSliderAdapter = new ServiceSliderAdapter(servicePostList, servicePost -> {
             // Handle navigation to product page
             Bundle bundle = new Bundle();
             Navigation.findNavController(view).navigate(R.id.action_searchServiceResultFragment_to_servicePageFragment, bundle);

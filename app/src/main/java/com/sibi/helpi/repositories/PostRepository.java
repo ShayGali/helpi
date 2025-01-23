@@ -1,5 +1,8 @@
 package com.sibi.helpi.repositories;
 
+import static com.sibi.helpi.utils.AppConstants.COLLECTION_POSTS;
+import static com.sibi.helpi.utils.AppConstants.STORAGE_POSTS;
+
 import android.net.Uri;
 import android.util.Log;
 
@@ -10,76 +13,68 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.sibi.helpi.models.Product;
+import com.sibi.helpi.models.Postable;
+import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductRepository {
-    public static ProductRepository instance;
+public class PostRepository {
+    public static PostRepository instance;
 
     private static final Object LOCK = new Object();
 
-    public synchronized static ProductRepository getInstance() {
+    public synchronized static PostRepository getInstance() {
         if (instance == null) {
             synchronized (LOCK) {
                 if (instance == null) {
-                    instance = new ProductRepository();
+                    instance = new PostRepository();
                 }
             }
         }
         return instance;
     }
 
-    private CollectionReference productCollection;
+    private CollectionReference postsCollection;
     private StorageReference storageReference;
     private ImagesRepository imagesRepository;
 
-    private static final String COLLECTION_PRODUCTS = "products";
-    private static final String STORAGE_PRODUCTS = "product_images";
-
-    private ProductRepository() {
+    private PostRepository() {
         imagesRepository = ImagesRepository.getInstance();
-
-        // Initialize Firestore collection reference
-        productCollection = FirebaseFirestore.getInstance().collection(COLLECTION_PRODUCTS);
-
-        // Initialize Storage reference
-        storageReference = FirebaseStorage.getInstance().getReference().child(STORAGE_PRODUCTS);
+        postsCollection = FirebaseFirestore.getInstance().collection(COLLECTION_POSTS);
+        storageReference = FirebaseStorage.getInstance().getReference().child(STORAGE_POSTS);
     }
 
-    public LiveData<List<Product>> getProducts(@NonNull String category, @NonNull String subcategory, @NonNull String region, @NonNull String productStatus) {
-        MutableLiveData<List<Product>> mutableLiveData = new MutableLiveData<>();
-        productCollection.get()
+    public LiveData<List<ProductPost>> getPosts(@NonNull String category, @NonNull String subcategory, @NonNull String region, @NonNull String productStatus) {
+        MutableLiveData<List<ProductPost>> mutableLiveData = new MutableLiveData<>();
+        postsCollection.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Product> products = new ArrayList<>();
+                    List<ProductPost> productPosts = new ArrayList<>();
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                        Product product = document.toObject(Product.class);
-                        if (product != null) {
+                        ProductPost productPost = document.toObject(ProductPost.class);
+                        if (productPost != null) {
                             // filter by fields
-                            if (!category.isEmpty() && !product.getCategory().equals(category)) {
+                            if (!category.isEmpty() && !productPost.getCategory().equals(category)) {
                                 continue;
                             }
-                            if (!subcategory.isEmpty() && !product.getSubCategory().equals(subcategory)) {
+                            if (!subcategory.isEmpty() && !productPost.getSubCategory().equals(subcategory)) {
                                 continue;
                             }
-                            if (!region.isEmpty() && !product.getRegion().equals(region)) {
+                            if (!region.isEmpty() && !productPost.getRegion().equals(region)) {
                                 continue;
                             }
-                            if (!productStatus.isEmpty() && !product.getCondition().equals(productStatus)) {
+                            if (!productStatus.isEmpty() && !productPost.getCondition().equals(productStatus)) {
                                 continue;
                             }
-                            products.add(product);
+                            productPosts.add(productPost);
                         }
                     }
-                    mutableLiveData.setValue(products);
+                    mutableLiveData.setValue(productPosts);
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Repository", "Failed to fetch products: " + e.getMessage());
@@ -89,25 +84,22 @@ public class ProductRepository {
         return mutableLiveData;
     }
 
-    public LiveData<List<Product>> getProducts() {
-        return getProducts("", "", "", "");
+    public LiveData<List<ProductPost>> getPosts() {
+        return getPosts("", "", "", "");
     }
 
-    public LiveData<Resource<String>> postProduct(Product product, byte[][] images) {
-        MutableLiveData<Resource<String>> mutableLiveData = new MutableLiveData<>();
+    public LiveData<Resource<String>> savePost(Postable post, byte[][] images) {
         Log.d("Repository", "Starting product post");
 
+        MutableLiveData<Resource<String>> mutableLiveData = new MutableLiveData<>();
         mutableLiveData.setValue(Resource.loading(null));
-        String productId = productCollection.document().getId();
 
-        Log.d("Repository", "Generated product ID: " + productId);
+        String postId = postsCollection.document().getId();
+        Log.d("Repository", "Generated product ID: " + postId);
+        post.setId(postId);
 
-        // Set product ID
-        product.setId(productId);
-
-        // First upload images if any
         if (images != null && images.length > 0) {
-            List<Task<Uri>> uploadTasks = imagesRepository.uploadProductImages(productId, images);
+            List<Task<Uri>> uploadTasks = imagesRepository.uploadPostImages(postId, images);
             Tasks.whenAllSuccess(uploadTasks)
                     .addOnSuccessListener(uriList -> {
                         // Save product data after images are uploaded
@@ -118,9 +110,9 @@ public class ProductRepository {
                             uriStringList.add(uri.toString());
                         }
 
-                        product.setImageUrls(uriStringList);
+                        post.setImageUrls(uriStringList);
 
-                        saveProductData(product, productId, mutableLiveData);
+                        savePostData(post, postId, mutableLiveData);
                     })
                     .addOnFailureListener(e ->
                             mutableLiveData.setValue(
@@ -128,15 +120,15 @@ public class ProductRepository {
                             )
                     );
         } else {
-            saveProductData(product, productId, mutableLiveData);
+            savePostData(post, postId, mutableLiveData);
         }
 
         return mutableLiveData;
     }
 
-    private void saveProductData(Product product, String productId, MutableLiveData<Resource<String>> mutableLiveData) {
-        productCollection.document(productId)
-                .set(product)
+    private void savePostData(Postable productPost, String productId, MutableLiveData<Resource<String>> mutableLiveData) {
+        postsCollection.document(productId)
+                .set(productPost)
                 .addOnSuccessListener(aVoid ->
                         mutableLiveData.setValue(Resource.success(productId))
                 )
@@ -147,14 +139,14 @@ public class ProductRepository {
                 );
     }
 
-    public LiveData<Resource<Void>> deleteProduct(String productId) {
+    public LiveData<Resource<Void>> deletePost(String productId) {
         MutableLiveData<Resource<Void>> mutableLiveData = new MutableLiveData<>();
 
         // Set initial loading state
         mutableLiveData.setValue(Resource.loading(null));
 
         // Delete product data
-        productCollection.document(productId)
+        postsCollection.document(productId)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     // Also delete associated images
