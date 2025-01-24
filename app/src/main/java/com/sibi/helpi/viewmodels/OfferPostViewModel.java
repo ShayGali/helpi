@@ -10,7 +10,7 @@ import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.models.Resource;
 
 public class OfferPostViewModel extends ViewModel {
-    private PostRepository postRepository;  // Repository to handle the post product operation
+    private PostRepository postRepository;
     private MutableLiveData<Resource<String>> postLiveData = new MutableLiveData<>();
 
     public OfferPostViewModel() {
@@ -21,15 +21,8 @@ public class OfferPostViewModel extends ViewModel {
         return postLiveData;
     }
 
-    public void savePost(Postable productPost, byte[][] images) {
+    public void savePost(Postable post, byte[][] images) {
         postLiveData.setValue(Resource.loading(null));
-        LiveData<Resource<String>> result = postRepository.savePost(productPost, images);
-        result.observeForever(new Observer<>() {
-            @Override
-            public void onChanged(Resource<String> stringResource) {
-                postLiveData.setValue(stringResource);
-                result.removeObserver(this);
-            }
-        });
+        postRepository.savePost(post, images, postLiveData);
     }
 }

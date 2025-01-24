@@ -1,6 +1,8 @@
 package com.sibi.helpi.repositories;
 
 import static com.sibi.helpi.utils.AppConstants.COLLECTION_POSTS;
+import static com.sibi.helpi.utils.AppConstants.IMG_UPLOAD_FAILED;
+import static com.sibi.helpi.utils.AppConstants.POST_UPLOAD_FAILED;
 import static com.sibi.helpi.utils.AppConstants.STORAGE_POSTS;
 
 import android.net.Uri;
@@ -24,6 +26,9 @@ import com.sibi.helpi.models.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TODO: separate this file into two files: one for saving data in the database and the other for fetching data from the database!!!!
+ */
 public class PostRepository {
     public static PostRepository instance;
 
@@ -88,53 +93,47 @@ public class PostRepository {
         return getPosts("", "", "", "");
     }
 
-    public LiveData<Resource<String>> savePost(Postable post, byte[][] images) {
+    public void savePost(Postable post, byte[][] images, MutableLiveData<Resource<String>> postLiveData) {
         Log.d("Repository", "Starting product post");
-
-        MutableLiveData<Resource<String>> mutableLiveData = new MutableLiveData<>();
-        mutableLiveData.setValue(Resource.loading(null));
 
         String postId = postsCollection.document().getId();
         Log.d("Repository", "Generated product ID: " + postId);
         post.setId(postId);
 
         if (images != null && images.length > 0) {
-            List<Task<Uri>> uploadTasks = imagesRepository.uploadPostImages(postId, images);
-            Tasks.whenAllSuccess(uploadTasks)
-                    .addOnSuccessListener(uriList -> {
-                        // Save product data after images are uploaded
-                        // convert List<Uri> to List<String>
-                        List<String> uriStringList = new ArrayList<>();
-
-                        for (Object uri : uriList) {
-                            uriStringList.add(uri.toString());
-                        }
-
-                        post.setImageUrls(uriStringList);
-
-                        savePostData(post, postId, mutableLiveData);
-                    })
-                    .addOnFailureListener(e ->
-                            mutableLiveData.setValue(
-                                    Resource.error("Failed to upload images: " + e.getMessage(), null)
-                            )
-                    );
-        } else {
-            savePostData(post, postId, mutableLiveData);
+            saveImgData(post, images, postLiveData);
+        } else{
+            savePostData(post, postLiveData);
         }
-
-        return mutableLiveData;
     }
 
-    private void savePostData(Postable productPost, String productId, MutableLiveData<Resource<String>> mutableLiveData) {
-        postsCollection.document(productId)
-                .set(productPost)
+    private void saveImgData(Postable post, byte[][] images, MutableLiveData<Resource<String>> postLiveData) {
+        List<Task<Uri>> uploadTasks = imagesRepository.uploadPostImages(post.getId(), images);
+        Tasks.whenAllSuccess(uploadTasks)
+                .addOnSuccessListener(uriList -> {
+                    List<String> uriStringList = new ArrayList<>();
+                    for (Object uri : uriList) {
+                        uriStringList.add(uri.toString());
+                    }
+                    post.setImageUrls(uriStringList);
+                    savePostData(post, postLiveData);
+                })
+                .addOnFailureListener(e ->
+                        postLiveData.setValue(
+                                Resource.error(IMG_UPLOAD_FAILED + e.getMessage(), null)
+                        )
+                );
+    }
+
+    private void savePostData(Postable post, MutableLiveData<Resource<String>> postLiveData) {
+        postsCollection.document(post.getId())
+                .set(post)
                 .addOnSuccessListener(aVoid ->
-                        mutableLiveData.setValue(Resource.success(productId))
+                        postLiveData.setValue(Resource.success(post.getId()))
                 )
                 .addOnFailureListener(e ->
-                        mutableLiveData.setValue(
-                                Resource.error("Failed to save product: " + e.getMessage(), null)
+                        postLiveData.setValue(
+                                Resource.error(POST_UPLOAD_FAILED + e.getMessage(), null)
                         )
                 );
     }
