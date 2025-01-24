@@ -28,6 +28,7 @@ import java.util.List;
 
 /**
  * TODO: separate this file into two files: one for saving data in the database and the other for fetching data from the database!!!!
+ * TODO: handle errors in the image upload process, delete the post if the image upload fails.
  */
 public class PostRepository {
     public static PostRepository instance;
