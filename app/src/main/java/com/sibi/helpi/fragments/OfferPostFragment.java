@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.provider.MediaStore;
@@ -99,15 +101,15 @@ public class OfferPostFragment extends Fragment {
         setUpSpinner(typeSpinner, R.array.type);
         setUpSpinner(conditionSpinner, R.array.product_condition);
 
-        subCategoryBlocker();
-        typeBlocker();
+        setSubCategoryBlocker();
+        setTypeBlocker();
     }
 
     /**
      * This method blocks the condition spinner until a type is selected.
      * If the type is service, the condition spinner is disabled.
      */
-    private void typeBlocker() {
+    private void setTypeBlocker() {
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -129,7 +131,7 @@ public class OfferPostFragment extends Fragment {
     /**
      * This method blocks the subcategory spinner until a category is selected
      */
-    private void subCategoryBlocker() {
+    private void setSubCategoryBlocker() {
         subcategorySpinner.setEnabled(false);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -313,20 +315,17 @@ public class OfferPostFragment extends Fragment {
         offerPostViewModel.getPostLiveData().observe(getViewLifecycleOwner(), resource -> {
             switch (resource.getStatus()) {
                 case LOADING:
-                    showToast("Uploading product...");
-                    // You could also show a progress dialog here
+                    showToast(getString(R.string.uploadingPost));
                     break;
 
                 case SUCCESS:
-                    showToast("Product posted successfully!");
-                    String productId = resource.getData();
+                    showToast(getString(R.string.postedSuccessfully));
                     clearForm();
-                    // You might want to navigate back or to another screen
-                    // getParentFragmentManager().popBackStack();
+                    Navigation.findNavController(requireView()).navigate(R.id.action_offerPostFragment_to_homeFragment);
                     break;
 
                 case ERROR:
-                    showToast("Error: " + resource.getMessage());
+                    showToast(getString(R.string.errorPosting));
                     break;
             }
         });

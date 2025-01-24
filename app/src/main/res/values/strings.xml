@@ -27,6 +27,9 @@
     <string name="report">report</string>
     <string name="allFieldsRequired">All fields are required</string>
     <string name="imgTooLarge">Image is too large</string>
+    <string name="uploadingPost">Uploading Post</string>
+    <string name="postedSuccessfully">Post uploaded successfully</string>
+    <string name="errorPosting">Post upload failed</string>
 
 
     <string-array name="categories">

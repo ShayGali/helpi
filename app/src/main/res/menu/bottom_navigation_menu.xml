@@ -13,7 +13,7 @@
         android:tooltipText="@string/home"
         app:showAsAction="always" />
     <item
-        android:id="@+id/offerProductFragment"
+        android:id="@+id/offerPostFragment"
         android:icon="@drawable/ic_offer_product"
         android:title="@string/add_post"
         android:tooltipText="@string/add_post"

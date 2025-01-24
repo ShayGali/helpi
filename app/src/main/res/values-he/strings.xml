@@ -26,6 +26,9 @@
     <string name="select_sub_category">בחר תת קטגוריה</string>
     <string name="allFieldsRequired">כל השדות הינם חובה</string>
     <string name="imgTooLarge">התמונה גדולה מדי</string>
+    <string name="uploadingPost">מעלה פוסט</string>
+    <string name="postedSuccessfully">הפוסט הועלה בהצלחה</string>
+    <string name="errorPosting">העלאת הפוסט נכשלה</string>
 
     <string-array name="categories">
         <item>בחר קטגוריה</item>
