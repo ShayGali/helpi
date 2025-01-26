@@ -70,7 +70,7 @@ public class LoginFragment extends Fragment {
         // initialize the views
         emailEditText = view.findViewById(R.id.login_email_input);
         passwordEditText = view.findViewById(R.id.password_input);
-        loginButton = view.findViewById(R.id.login_button);
+        loginButton = view.findViewById(R.id.login_button); // Corrected ID
         loginButton.setOnClickListener(v -> signIn());
 
         Button goToRegisterButton = view.findViewById(R.id.go_to_reg_button);
@@ -78,9 +78,9 @@ public class LoginFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_login_fragment_to_registerFragment)
         );
 
-        View facebook_button = view.findViewById(R.id.facebook_button);
-        View Google_button = view.findViewById(R.id.google_button);
-        Google_button.setOnClickListener(v -> signInWithGoogle());
+        View facebookButton = view.findViewById(R.id.facebook_button);
+        View googleButton = view.findViewById(R.id.google_button);
+        googleButton.setOnClickListener(v -> signInWithGoogle());
     }
 
     private void signInWithGoogle() {
