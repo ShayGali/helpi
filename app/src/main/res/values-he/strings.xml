@@ -6,18 +6,17 @@
     <string name="hello_blank_fragment">שלום פרגמנט ריק</string>
     <string name="social_login">-----------------------התחברות דרך רשת חברתית-----------------------</string>
     <string name="navigation">ניווט</string>
-    <string name="search_product">חיפוש\nnמוצר</string>
+    <string name="search">חיפוש\nnמוצר</string>
     <string name="search_service">חיפוש\nnשירות</string>
     <string name="offer_service">הצע\nnשירות</string>
-    <string name="offer_product">הצע\nnמוצר</string>
+    <string name="add_post">הצע\nnמוצר</string>
     <string name="first_name">שם פרטי</string>
     <string name="last_name">שם משפחה</string>
     <string name="My_User">המשתמש שלי</string>
     <string name="Report_a_problem">דווח על בעיה</string>
     <string name="Contact_Us">צור קשר</string>
     <string name="My_Chats">השיחות שלי</string>
-
-
+    <string name="report">דווח</string>
     <string name="Settings">הגדרות</string>
     <string name="email">אימייל</string>
     <string name="choose_profile_picture">בחר תמונת פרופיל</string>
@@ -25,6 +24,11 @@
     <string name="social_register">-----------------Social Register-----------------</string>
     <string name="select_category">בחר קטגוריה</string>
     <string name="select_sub_category">בחר תת קטגוריה</string>
+    <string name="allFieldsRequired">כל השדות הינם חובה</string>
+    <string name="imgTooLarge">התמונה גדולה מדי</string>
+    <string name="uploadingPost">מעלה פוסט</string>
+    <string name="postedSuccessfully">הפוסט הועלה בהצלחה</string>
+    <string name="errorPosting">העלאת הפוסט נכשלה</string>
 
     <string-array name="categories">
         <item>בחר קטגוריה</item>
@@ -53,7 +57,12 @@
         <item>אילת</item>
         <item>אחר</item>
     </string-array>
-    <string-array name="product_status">
+    <string-array name="type">
+        <item>בחר סוג פרסום</item>
+        <item>מוצר</item>
+        <item>שירות</item>
+    </string-array>
+    <string-array name="product_condition">
         <item>בחר מצב מוצר</item>
         <item>חדש</item>
         <item>משומש</item>

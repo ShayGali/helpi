@@ -1,6 +1,6 @@
 // File: app/src/main/java/com/sibi/helpi/ChatAdapter.java
 
-package com.sibi.helpi;
+package com.sibi.helpi.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.sibi.helpi.R;
+import com.sibi.helpi.models.Message;
+
 import java.util.List;
 
 

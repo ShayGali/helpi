@@ -12,28 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sibi.helpi.R;
-import com.sibi.helpi.models.Product;
+import com.sibi.helpi.models.ProductPost;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductSliderAdapter extends RecyclerView.Adapter<ProductSliderAdapter.ProductViewHolder> {
 
-    private List<Product> productList;
+    private List<ProductPost> productPostList;
     private OnItemClickListener onItemClickListener;
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void setProductList(List<ProductPost> productPostList) {
+        this.productPostList = productPostList;
         notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Product product);
+        void onItemClick(ProductPost productPost);
     }
 
     public ProductSliderAdapter(OnItemClickListener onItemClickListener) {
-        this.productList = new ArrayList<>();
+        this.productPostList = new ArrayList<>();
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -46,25 +46,25 @@ public class ProductSliderAdapter extends RecyclerView.Adapter<ProductSliderAdap
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product product = productList.get(position);
-        holder.productTitle.setText(product.getDescription());
-        holder.productCategory.setText(product.getCategory());
-        holder.productSubCategory.setText(product.getSubCategory());
-        holder.productRegion.setText(product.getRegion());
-        holder.productStatus.setText(product.getCondition());
+        ProductPost productPost = productPostList.get(position);
+        holder.productTitle.setText(productPost.getDescription());
+        holder.productCategory.setText(productPost.getCategory());
+        holder.productSubCategory.setText(productPost.getSubCategory());
+        holder.productRegion.setText(productPost.getRegion());
+        holder.productStatus.setText(productPost.getCondition());
 
-        if (!product.getImageUrls().isEmpty()) {
+        if (!productPost.getImageUrls().isEmpty()) {
             Glide.with(holder.itemView.getContext())
-                    .load(product.getImageUrls().get(0))
+                    .load(productPost.getImageUrls().get(0))
                     .into(holder.productImage);
         }
 
-        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(product));
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(productPost));
     }
 
     @Override
     public int getItemCount() {
-        return productList.size();
+        return productPostList.size();
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {

@@ -1,70 +1,103 @@
 package com.sibi.helpi.viewmodels;
 
-import androidx.annotation.NonNull;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.sibi.helpi.models.User;
 import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.UserRepository;
+import com.sibi.helpi.stats.UserState;
 
-import java.util.List;
+import java.util.Objects;
 
 public class UserViewModel extends ViewModel {
+    private static final String TAG = "UserViewModel";
+    private final MutableLiveData<UserState> userState;
+    private boolean isInitialized;
+    private final UserRepository userRepository;
+    private final ImagesRepository imagesRepository;
 
-    // singleton
-    private static UserViewModel instance;
-
-    private static final Object lock = new Object();
-
-    public static UserViewModel getInstance() {
-        synchronized (lock) {
-            if (instance == null) {
-                instance = new UserViewModel();
-            }
-            return instance;
-        }
-    }
-
-    private UserRepository userRepository;
-    private ImagesRepository imagesRepository;
-
-    private UserViewModel() {
+    public UserViewModel() {
         userRepository = new UserRepository();
         imagesRepository = ImagesRepository.getInstance();
+        userState = new MutableLiveData<>();
+        userState.setValue(UserState.idle());
+        isInitialized = false;
     }
 
-    public void registerUserWithEmailAndPassword(User user, String password, byte[] profileImg, @NonNull OnSuccessListener<? super DocumentReference> onSuccess, @NonNull OnFailureListener onFailure) {
-        userRepository.registerUserWithEmailAndPassword(user, password, profileImg, onSuccess, onFailure);
+    public LiveData<UserState> getUserState() {
+        if (!isInitialized) {
+            try {
+            getCurrentUser();
+            isInitialized = true;
+            }catch (IllegalStateException ignored){
+            }
+        }
+        return userState;
     }
 
-    public void authWithGoogle(GoogleSignInAccount account, @NonNull OnSuccessListener<? super DocumentReference> onSuccess, @NonNull OnFailureListener onFailure) {
-        userRepository.authWithGoogle(account, onSuccess, onFailure);
+    public void registerUser(User user, String password, byte[] profileImg) {
+        userState.setValue(UserState.loading());
+        userRepository.registerUser(user, password, profileImg)
+                .addOnSuccessListener(documentRef -> userState.setValue(UserState.success(user)))
+                .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
     }
 
-    public String getUUID() {
-        return userRepository.getUUID();
+    public void authWithGoogle(GoogleSignInAccount account) {
+        userState.setValue(UserState.loading());
+        userRepository.authWithGoogle(account)
+                .addOnSuccessListener(documentRef -> getCurrentUser())
+                .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
     }
 
-    public void signOut(GoogleSignInClient googleSignInClient, @NonNull OnCompleteListener<Void> onSuccess) {
-        userRepository.signOut(googleSignInClient, onSuccess);
+    public void getCurrentUser() {
+        UserState currentState = userState.getValue();
+        if (currentState != null && currentState.getUser() != null) {
+            Log.d(TAG, "getCurrentUser: User already in state, returning");
+            return;
+        }
+
+        Log.d(TAG, "getCurrentUser: Fetching user data...");
+        userState.setValue(UserState.loading());
+
+        userRepository.getCurrentUser()
+                .addOnSuccessListener(user -> {
+                    Log.d(TAG, "getCurrentUser: Success - User: " + (user != null ? user.getEmail() : "null"));
+                    if (user != null) {
+                        userState.setValue(UserState.success(user));
+                        isInitialized = true;
+                    } else {
+                        userState.setValue(UserState.error("User data is null"));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "getCurrentUser: Error", e);
+                    userState.setValue(UserState.error(e.getMessage()));
+                });
     }
 
-    public LiveData<String> getProfileImage() {
+    public void signOut(GoogleSignInClient googleSignInClient) {
+        userState.setValue(UserState.loading());
+        userRepository.signOut(googleSignInClient)
+                .addOnSuccessListener(aVoid -> userState.setValue(UserState.success(null)))
+                .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
+    }
+
+    public LiveData<String> getProfileImageUri() {
+        if(!isInitialized || Objects.requireNonNull(userState.getValue()).isIdle()){
+            throw new IllegalStateException("User not initialized - cant get profile image");
+        }
+
         return imagesRepository.getProfileImage(userRepository.getUUID());
     }
 
-    public LiveData<User> getUser() {
-        return userRepository.getUser();
+    public String getUserId() {
+        return userRepository.getUUID();
     }
 
-    public void getCurrentUser(@NonNull OnSuccessListener<? super User> onSuccess, @NonNull OnFailureListener onFailure) {
-        userRepository.getCurrentUser(onSuccess, onFailure);
-    }
 }
