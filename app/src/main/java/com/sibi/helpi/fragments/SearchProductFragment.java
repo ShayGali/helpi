@@ -52,7 +52,7 @@ public class SearchProductFragment extends Fragment {
 
         String[] categories = getResources().getStringArray(R.array.categories);
         String[] regions = getResources().getStringArray(R.array.region);
-        String[] productStatus = getResources().getStringArray(R.array.product_status);
+        String[] productStatus = getResources().getStringArray(R.array.product_condition);
 
         // Setup the AutoCompleteTextViews with background, rounded corners, and adapter
         setupAutoCompleteTextView(categorySpinner, categoryInputLayout, categories);

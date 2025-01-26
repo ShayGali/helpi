@@ -11,12 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ProductSliderAdapter;
-import com.sibi.helpi.models.Product;
-import com.sibi.helpi.repositories.ProductRepository;
+import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.viewmodels.SearchProductViewModel;
 
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public class SearchProductResultFragment extends Fragment {
 
     private RecyclerView productRecyclerView;
     private ProductSliderAdapter productSliderAdapter;
-    private List<Product> productList;
+    private List<ProductPost> productPostList;
     private SearchProductViewModel searchProductViewModel;
 
     public SearchProductResultFragment() {
@@ -54,7 +52,7 @@ public class SearchProductResultFragment extends Fragment {
         String productStatus = bundle.getString("productStatus");
 
         // get the products from the repository
-        LiveData<List<Product>> productsLiveData =  searchProductViewModel.getProducts(category, subcategory, region, productStatus);
+        LiveData<List<ProductPost>> productsLiveData =  searchProductViewModel.getProducts(category, subcategory, region, productStatus);
 
 
         productSliderAdapter = new ProductSliderAdapter(product -> {
@@ -67,13 +65,13 @@ public class SearchProductResultFragment extends Fragment {
 
         // observe the products
         productsLiveData.observe(getViewLifecycleOwner(), products -> {
-            productList = new ArrayList<>(products);
-            productSliderAdapter.setProductList(productList);
+            productPostList = new ArrayList<>(products);
+            productSliderAdapter.setProductList(productPostList);
 
             // Fetch images for each product
-            for (Product product : productList) {
-                searchProductViewModel.getProductImages(product.getId()).observe(getViewLifecycleOwner(), imageUrls -> {
-                    product.setImageUrls(imageUrls);
+            for (ProductPost productPost : productPostList) {
+                searchProductViewModel.getProductImages(productPost.getId()).observe(getViewLifecycleOwner(), imageUrls -> {
+                    productPost.setImageUrls(imageUrls);
                     productSliderAdapter.notifyDataSetChanged();
                 });
             }

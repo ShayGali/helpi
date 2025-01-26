@@ -6,10 +6,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="social_login">-----------------------Social Login-----------------------</string>
     <string name="navigation">Navigation</string>
-    <string name="search_product">Product</string>
+    <string name="search">Search</string>
     <string name="search_service">Service</string>
     <string name="offer_service">Service</string>
-    <string name="offer_product">Product</string>
+    <string name="add_post">Post</string>
     <string name="register">Register</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
@@ -25,6 +25,11 @@
     <string name="select_category">Select Category</string>
     <string name="select_sub_category">Select SubCategory</string>
     <string name="report">report</string>
+    <string name="allFieldsRequired">All fields are required</string>
+    <string name="imgTooLarge">Image is too large</string>
+    <string name="uploadingPost">Uploading Post</string>
+    <string name="postedSuccessfully">Post uploaded successfully</string>
+    <string name="errorPosting">Post upload failed</string>
 
 
     <string-array name="categories">
@@ -52,9 +57,14 @@
         <item>Haifa</item>
         <item>Beer-Sheva</item>
         <item>Eilat</item>
-        <item>Other</item>
+        <item>Select Current Location</item>
     </string-array>
-    <string-array name="product_status">
+    <string-array name="type">
+        <item>Select Post Type</item>
+        <item>Product</item>
+        <item>Service</item>
+    </string-array>
+    <string-array name="product_condition">
         <item>Select Product Status</item>
         <item>New</item>
         <item>Used</item>

@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 
@@ -29,11 +30,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.User;
 import com.sibi.helpi.viewmodels.UserViewModel;
@@ -55,15 +51,24 @@ public class RegisterFragment extends Fragment {
 
     private Uri profilePicUri;
 
+    EditText fNameEditText;
+    EditText lNameEditText;
+    EditText emailEditText;
+    EditText passwordEditText;
+    Button registerButton;
+    Button chooseProfilePicButton;
+    View googleButton;
+
     public RegisterFragment() {
         // Required empty public constructor
     }
 
     @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        userViewModel = UserViewModel.getInstance();
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -85,19 +90,52 @@ public class RegisterFragment extends Fragment {
         );
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_register, container, false);
 
-        EditText fNameEditText = inflate.findViewById(R.id.first_name_input_reg);
-        EditText lNameEditText = inflate.findViewById(R.id.last_name_input_reg);
-        EditText emailEditText = inflate.findViewById(R.id.email);
-        EditText passwordEditText = inflate.findViewById(R.id.password_input);
+        setupViews(inflate);
+        setupObservers();
+        setupButtons();
 
-        Button registerButton = inflate.findViewById(R.id.register_button);
-        Button chooseProfilePicButton = inflate.findViewById(R.id.choose_picture_button);
+        return inflate;
+    }
 
+    private void setupObservers() {
+        userViewModel.getUserState().observe(getViewLifecycleOwner(), state -> {
+            if (state.isLoading()) {
+                // Show loading indicator
+                showLoadingIndicator();
+            } else if (state.getError() != null) {
+                // Hide loading and show error
+                hideLoadingIndicator();
+                Log.w(TAG, "Authentication failed: " + state.getError());
+                Toast.makeText(requireContext(), "Authentication failed: " + state.getError(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), state.getError(), Toast.LENGTH_SHORT).show();
+            } else if (state.getUser() != null) {
+                // Registration successful, navigate to next screen
+                hideLoadingIndicator();
+                Log.d(TAG, "Authentication successful");
+                Toast.makeText(requireContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(requireView())
+                        .navigate(R.id.action_registerFragment_to_homeFragment);
+            }
+        });
+    }
+
+    private void setupViews(View view) {
+        fNameEditText = view.findViewById(R.id.first_name_input_reg);
+        lNameEditText = view.findViewById(R.id.last_name_input_reg);
+        emailEditText = view.findViewById(R.id.email);
+        passwordEditText = view.findViewById(R.id.password_input);
+        registerButton = view.findViewById(R.id.register_button);
+        chooseProfilePicButton = view.findViewById(R.id.choose_picture_button);
+        googleButton = view.findViewById(R.id.google_button);
+    }
+
+
+    private void setupButtons() {
         chooseProfilePicButton.setOnClickListener(v -> {
             pickImageLauncher.launch("image/*");
         });
@@ -137,23 +175,14 @@ public class RegisterFragment extends Fragment {
             // Create user with email and password
             User user = new User(email, fName, lName, "", null);
             byte[] profileImg = getProfileImage();
-            userViewModel.registerUserWithEmailAndPassword(user, password, profileImg,
-                    documentReference -> {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
-                        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
-                    },
-                    e -> {
-                        Log.w(TAG, "Error adding document", e);
-                        Toast.makeText(getContext(), "Authentication failed." + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
+
+            userViewModel.registerUser(user, password, profileImg);
         });
 
-        View googleButton = inflate.findViewById(R.id.google_button);
         googleButton.setOnClickListener(v -> {
             signInWithGoogle();
         });
-        return inflate;
+
     }
 
     /**
@@ -200,53 +229,24 @@ public class RegisterFragment extends Fragment {
             if (task.isSuccessful()) {
                 GoogleSignInAccount account = task.getResult();
                 if (account != null) {
-                    userViewModel.authWithGoogle(account,
-                            documentReference -> {
-                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
-                                Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
-                            },
-                            e -> {
-                                Log.w(TAG, "Error adding document", e);
-                                Toast.makeText(getContext(), "Authentication failed." + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
+                    // Call the new authWithGoogle method
+                    userViewModel.authWithGoogle(account);
                 }
             } else {
-                // Handle error
+                // Handle sign-in failure
+                Log.w(TAG, "Google sign-in failed", task.getException());
+                Toast.makeText(requireContext(), "Google sign-in failed", Toast.LENGTH_SHORT).show();
             }
         } else {
             throw new IllegalStateException("Unexpected value: " + requestCode);
         }
     }
 
+    private void hideLoadingIndicator() {
+        //TODO: Hide loading indicator
+    }
 
-//    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-//        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-//        mAuth.signInWithCredential(credential)
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
-//                        if (isNewUser) {
-//                            // Save user to database
-//                            saveUserDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail(), "", account.getPhotoUrl());
-//                        }
-//                        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
-//                    } else {
-//                        Log.w(TAG, "register with google:failure", task.getException());
-//                        Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//    }
-
-//    private void saveUserDatabase(String fName, String lName, String email, String phoneNumber, Uri profilePicUri) {
-//        // Save user to database
-//        db.collection(MainActivity.USER_COLLECTION)
-//                .add(new User(fName, lName, email, phoneNumber, "path"))
-//                .addOnSuccessListener(documentReference -> {
-//                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//                })
-//                .addOnFailureListener(e -> {
-//                    Log.w(TAG, "Error adding document", e);
-//                });
-//    }
+    private void showLoadingIndicator() {
+        //TODO: Show loading indicator
+    }
 }
