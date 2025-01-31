@@ -4,6 +4,8 @@ import static com.sibi.helpi.utils.AppConstants.COLLECTION_POSTS;
 import static com.sibi.helpi.utils.AppConstants.IMG_UPLOAD_FAILED;
 import static com.sibi.helpi.utils.AppConstants.POST_UPLOAD_FAILED;
 import static com.sibi.helpi.utils.AppConstants.STORAGE_POSTS;
+import static com.sibi.helpi.utils.AppConstants.PostStatus;
+
 
 import android.net.Uri;
 import android.util.Log;
@@ -77,6 +79,9 @@ public class PostRepository {
                             if (!productStatus.isEmpty() && !productPost.getCondition().equals(productStatus)) {
                                 continue;
                             }
+//                            if(productPost.getStatus() != null && productPost.getStatus() != PostStatus.APPROVED ) {
+//                                continue;
+//                            }  works well. TODO: uncomment this line after admin approval is implemented
                             productPosts.add(productPost);
                         }
                     }

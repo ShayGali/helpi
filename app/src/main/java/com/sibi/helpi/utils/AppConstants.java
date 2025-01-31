@@ -22,4 +22,9 @@ public class AppConstants {
             return statusText;
         }
     }
+
+    public enum UserType {
+        DEFAULT_USER, LOCAL_ADMIN, GLOBAL_ADMIN
+    }
+
 }

@@ -49,7 +49,7 @@ public class SearchProductResultFragment extends Fragment {
         String category = bundle.getString("category");
         String subcategory = bundle.getString("subcategory");
         String region = bundle.getString("region");
-        String productStatus = bundle.getString("productStatus");
+        String productStatus = bundle.getString("productStatus"); // the condition of the product
 
         // get the products from the repository
         LiveData<List<ProductPost>> productsLiveData =  searchProductViewModel.getProducts(category, subcategory, region, productStatus);

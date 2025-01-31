@@ -1,6 +1,8 @@
 package com.sibi.helpi.models;
 
 import java.util.List;
+import com.sibi.helpi.utils.AppConstants.UserType;
+
 
 public class User {
     private String email;
@@ -74,5 +76,13 @@ public class User {
 
     public void setProfileImgUri(String profileImgUri) {
         this.profileImgUri = profileImgUri;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 }
