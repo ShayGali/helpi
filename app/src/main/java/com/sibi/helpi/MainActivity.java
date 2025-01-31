@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
                 bottomNavigationView.setVisibility(View.VISIBLE);
             }
         });
+
+
+
     }
 
     public void showProgressBar() {

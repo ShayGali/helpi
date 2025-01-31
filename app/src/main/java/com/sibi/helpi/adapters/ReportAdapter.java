@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {
 
-    private List<Report> reportList;
+    private final List<Report> reportList;
 
     public ReportAdapter(List<Report> reportList) {
         this.reportList = reportList;
@@ -32,13 +32,28 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     @Override
     public void onBindViewHolder(@NonNull ReportViewHolder holder, int position) {
         Report report = reportList.get(position);
-        holder.reasonTextView.setText(report.getReason());
-        holder.descriptionTextView.setText(report.getDescription());
+        holder.reasonTextView.setText(report.getReason().toString());
+        holder.descriptionTextView.setText(report.getReporterNotes());
+        holder.deleteButton.setOnClickListener(v -> { //TODO  delete the post and mark the report as resolved
+        }
+        );
+        holder.rejectButton.setOnClickListener(v -> { //TODO  reject the report and mark the report as resolved
+        }
+        );
     }
 
     @Override
     public int getItemCount() {
+        if (reportList == null) {
+            return 0;
+        }
         return reportList.size();
+    }
+
+    public void setReportList(List<Report> reportList) {
+        this.reportList.clear();
+        this.reportList.addAll(reportList);
+        notifyDataSetChanged();
     }
 
     public static class ReportViewHolder extends RecyclerView.ViewHolder {
