@@ -99,9 +99,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateUserInfo(User user) {
-        Toast.makeText(requireContext(), "Welcome " + user.getUsername(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(requireContext(), "Welcome " + user.getUsername(), Toast.LENGTH_SHORT).show();  Toast is not needed
         usernameTextView.setText(user.getUsername());
         emailTextView.setText(user.getEmail());
+        updateProfileImage(user.getProfileImgUri());
     }
 
     private void updateProfileImage(String imageUrl) {
