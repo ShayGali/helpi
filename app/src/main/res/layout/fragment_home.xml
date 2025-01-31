@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_bar"
         android:layout_width="match_parent"
@@ -32,7 +31,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/pic_user_1" />
 
-
         <TextView
             android:id="@+id/userNameTextView"
             android:layout_width="wrap_content"
@@ -56,7 +54,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/profile_img"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_notification" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,8 +114,15 @@
             app:layout_constraintTop_toBottomOf="@+id/editTextText" />
     </FrameLayout>
 
-
+    <!-- Add a Button to switch to the admin dashboard -->
+    <Button
+        android:id="@+id/goToAdminDashboardButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin Dashboard"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

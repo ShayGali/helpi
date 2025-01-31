@@ -85,4 +85,8 @@ public class User {
     public void setUserType(UserType userType) {
         this.userType = userType;
     }
+
+    public boolean isAdmin() {
+        return userType == UserType.LOCAL_ADMIN || userType == UserType.GLOBAL_ADMIN;
+    }
 }
