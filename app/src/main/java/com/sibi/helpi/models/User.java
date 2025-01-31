@@ -9,6 +9,7 @@ public class User {
     private String phoneNumber;
     private List<Post> posts;
     private String profileImgUri;
+    private UserType userType;
 
     public User() {
     }
@@ -19,6 +20,7 @@ public class User {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.profileImgUri = profileImgUri;
+        this.userType = UserType.DEFAULT_USER;
     }
 
     public String getUsername() {

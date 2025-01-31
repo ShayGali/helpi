@@ -93,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layoutDirection="ltr"
-                    android:text="Alex Floree"
+                    android:text="User Name"
                     android:textAlignment="center"
                     android:textColor="@color/textPrimary"
                     android:textSize="26sp"
@@ -104,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layoutDirection="ltr"
-                    android:text="alexfloree@gmail.com"
+                    android:text="User Email"
                     android:textAlignment="center"
                     android:textColor="@color/textSecondary" />
 
@@ -335,7 +335,7 @@
         </ScrollView>
     </LinearLayout>
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
 
         android:id="@+id/profile_img_profile_frag"
         android:layout_width="125dp"
@@ -347,6 +347,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/pic_user_2" />
+
+<!--    <de.hdodenhof.circleimageview.CircleImageView-->
+<!--        android:id="@+id/profile_img"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginStart="32dp"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:layoutDirection="ltr"-->
+<!--        app:civ_border_color="#FFFFFF"-->
+<!--        app:civ_border_width="2dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@drawable/pic_user_1" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
