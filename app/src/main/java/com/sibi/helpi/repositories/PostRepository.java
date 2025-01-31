@@ -4,6 +4,8 @@ import static com.sibi.helpi.utils.AppConstants.COLLECTION_POSTS;
 import static com.sibi.helpi.utils.AppConstants.IMG_UPLOAD_FAILED;
 import static com.sibi.helpi.utils.AppConstants.POST_UPLOAD_FAILED;
 import static com.sibi.helpi.utils.AppConstants.STORAGE_POSTS;
+import static com.sibi.helpi.utils.AppConstants.PostStatus;
+
 
 import android.net.Uri;
 import android.util.Log;
@@ -19,6 +21,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.sibi.helpi.models.Post;
 import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Resource;
@@ -77,6 +80,9 @@ public class PostRepository {
                             if (!productStatus.isEmpty() && !productPost.getCondition().equals(productStatus)) {
                                 continue;
                             }
+//                            if(productPost.getStatus() != null && productPost.getStatus() != PostStatus.APPROVED ) {
+//                                continue;
+//                            }  works well. TODO: uncomment this line after admin approval is implemented
                             productPosts.add(productPost);
                         }
                     }
@@ -172,4 +178,53 @@ public class PostRepository {
 
         return mutableLiveData;
     }
+
+//    public LiveData<List<Postable>> getUnderReviewPosts() {
+//        MutableLiveData<List<Postable>> mutableLiveData = new MutableLiveData<>();
+//        postsCollection.get()
+//                .addOnSuccessListener(queryDocumentSnapshots -> {
+//                    List<Postable> posts = new ArrayList<>();
+//                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+//                        Postable post = document.toObject(ProductPost.class);
+//                        if (post != null) {
+//                            if (post.getStatus() != null && post.getStatus() == PostStatus.UNDER_REVIEW) {
+//                                posts.add(post);
+//                            }
+//                        }
+//                    }
+//                    mutableLiveData.setValue(posts);
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.e("Repository", "Failed to fetch posts: " + e.getMessage());
+//                    mutableLiveData.setValue(null);
+//                });
+//
+//
+//        return mutableLiveData;
+//    }
+
+
+    public LiveData<List<ProductPost>> getUnderReviewPosts() {
+        MutableLiveData<List<ProductPost>> mutableLiveData = new MutableLiveData<>();
+
+        postsCollection.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<ProductPost> productPosts = new ArrayList<>();
+                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                        ProductPost productPost = document.toObject(ProductPost.class);
+                        if (productPost != null) {
+                            if (productPost.getStatus() != null && productPost.getStatus() == PostStatus.UNDER_REVIEW) {
+                                productPosts.add(productPost);
+                            }
+                        }
+                    }
+                    mutableLiveData.setValue(productPosts);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Repository", "Failed to fetch products: " + e.getMessage());
+                    mutableLiveData.setValue(null);
+                });
+        return mutableLiveData;
+    }
+
 }

@@ -38,6 +38,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private TextView usernameTextView;
     private ImageView profileImage;
 
+    private Button goToAdminDashboardButton;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         usernameTextView = view.findViewById(R.id.userNameTextView);
         profileImage = view.findViewById(R.id.profile_img);
+        goToAdminDashboardButton = view.findViewById(R.id.goToAdminDashboardButton);
 
         setupViews(view);
         setupObservers();
@@ -61,6 +64,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+
+
         return view;
     }
 
@@ -68,6 +73,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         profileImage.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_profileFragment)
         );
+        goToAdminDashboardButton.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_adminDashBoardFragment)
+        );
+
+        goToAdminDashboardButton.setVisibility(View.GONE);
+
     }
 
     private void setupObservers() {
@@ -94,6 +105,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     Glide.with(this)
                             .load(imageUrl)
                             .into(profileImage);
+                }
+
+                if (state.getUser() != null && state.getUser().isAdmin()) {
+                    goToAdminDashboardButton.setVisibility(View.VISIBLE);
+                } else {
+                    goToAdminDashboardButton.setVisibility(View.GONE);
                 }
 
             } else {
