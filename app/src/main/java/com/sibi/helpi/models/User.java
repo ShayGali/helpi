@@ -1,6 +1,8 @@
 package com.sibi.helpi.models;
 
 import java.util.List;
+import com.sibi.helpi.utils.AppConstants.UserType;
+
 
 public class User {
     private String email;
@@ -9,6 +11,7 @@ public class User {
     private String phoneNumber;
     private List<Post> posts;
     private String profileImgUri;
+    private UserType userType;
 
     public User() {
     }
@@ -19,6 +22,7 @@ public class User {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.profileImgUri = profileImgUri;
+        this.userType = UserType.DEFAULT_USER;
     }
 
     public String getUsername() {
@@ -72,5 +76,17 @@ public class User {
 
     public void setProfileImgUri(String profileImgUri) {
         this.profileImgUri = profileImgUri;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    public boolean isAdmin() {
+        return userType == UserType.LOCAL_ADMIN || userType == UserType.GLOBAL_ADMIN;
     }
 }

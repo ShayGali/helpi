@@ -93,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layoutDirection="ltr"
-                    android:text="Alex Floree"
+                    android:text="User Name"
                     android:textAlignment="center"
                     android:textColor="@color/textPrimary"
                     android:textSize="26sp"
@@ -104,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layoutDirection="ltr"
-                    android:text="alexfloree@gmail.com"
+                    android:text="User Email"
                     android:textAlignment="center"
                     android:textColor="@color/textSecondary" />
 
@@ -335,7 +335,7 @@
         </ScrollView>
     </LinearLayout>
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
 
         android:id="@+id/profile_img_profile_frag"
         android:layout_width="125dp"
@@ -347,6 +347,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/pic_user_2" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,6 +32,10 @@ public class ProductSliderAdapter extends RecyclerView.Adapter<ProductSliderAdap
         void onItemClick(ProductPost productPost);
     }
 
+    public ProductSliderAdapter() {
+        this.productPostList = new ArrayList<>();
+    }
+
     public ProductSliderAdapter(OnItemClickListener onItemClickListener) {
         this.productPostList = new ArrayList<>();
         this.onItemClickListener = onItemClickListener;
