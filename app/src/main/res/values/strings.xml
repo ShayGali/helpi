@@ -32,7 +32,8 @@
     <string name="errorPosting">Post upload failed</string>
     <string name="dont_have_an_account_yet">Don\'t have an account yet?</string>
     <string name="now">now!</string>
-    <string name="or">OR</string>
+    <string name="or">OR </string>
+    <string name="or_login_with">OR login with</string>
 
     <string-array name="categories">
         <item>Select Category</item>
