@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ProductSliderAdapter;
@@ -17,11 +18,12 @@ import com.sibi.helpi.adapters.ReportAdapter;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.viewmodels.AdminDashBoardViewModel;
+import com.sibi.helpi.utils.AppConstants.reportStatus;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminDashBoardFragment extends Fragment {
+public class AdminDashBoardFragment extends Fragment implements ReportAdapter.OnReportActionListener {
 
     private RecyclerView reportsRecyclerView;
     private RecyclerView postsRecyclerView;
@@ -30,6 +32,12 @@ public class AdminDashBoardFragment extends Fragment {
     private List<Report> reportList;
     private List<ProductPost> postList;
     private AdminDashBoardViewModel adminDashBoardViewModel;
+
+    public AdminDashBoardFragment() {
+        // Required empty public constructor
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +50,7 @@ public class AdminDashBoardFragment extends Fragment {
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize the adapters
-        reportAdapter = new ReportAdapter(new ArrayList<>());
+        reportAdapter = new ReportAdapter(new ArrayList<>(),this);
         productSliderAdapter = new ProductSliderAdapter();
 
         reportsRecyclerView.setAdapter(reportAdapter);
@@ -86,5 +94,28 @@ public class AdminDashBoardFragment extends Fragment {
                 }
             }
         });
+    }
+
+
+    @Override
+    public void onDeleteReport(String reportId) {
+        adminDashBoardViewModel.updateReport(reportId, reportStatus.RESOLVED);
+        // Remove the report from the list
+        reportAdapter.removeReport(reportId);
+
+        // Notify the adapter that the data has changed
+        Toast.makeText(getContext(), "Report resolved", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onRejectReport(String reportId) {
+        adminDashBoardViewModel.updateReport(reportId, reportStatus.REJECTED);
+        // Remove the report from the list
+        reportAdapter.removeReport(reportId);
+        // Notify the adapter that the data has changed
+        Toast.makeText(getContext(), "Report rejected", Toast.LENGTH_SHORT).show();
+
+
     }
 }
