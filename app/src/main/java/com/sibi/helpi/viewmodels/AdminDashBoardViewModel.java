@@ -9,6 +9,8 @@ import com.sibi.helpi.models.Report;
 import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.repositories.ReportsRepository;
+import com.sibi.helpi.utils.AppConstants.reportStatus;
+import com.sibi.helpi.viewmodels.UserViewModel;
 
 import java.util.List;
 
@@ -18,10 +20,13 @@ public class AdminDashBoardViewModel extends ViewModel {
     private final PostRepository postRepository;
     private final ImagesRepository imagesRepository;
 
+    private final UserViewModel userViewModel;
+
     public AdminDashBoardViewModel() {
         reportsRepository = ReportsRepository.getInstance();
         postRepository = PostRepository.getInstance();
         imagesRepository = ImagesRepository.getInstance();
+        userViewModel = new UserViewModel();
     }
 
     public LiveData<List<Report>> getReports() {
@@ -40,6 +45,11 @@ public class AdminDashBoardViewModel extends ViewModel {
 
     public LiveData<List<String>> getProductImages(String productId) {
         return imagesRepository.getProductImages(productId);
+    }
+
+    public void updateReport(String reportId, reportStatus newStatus) {
+        String handlerId = userViewModel.getUserId();
+        reportsRepository.updateReport(reportId, handlerId, newStatus);
     }
 
 

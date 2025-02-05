@@ -28,6 +28,7 @@ public class Report {
         this.status = reportStatus.PENDING;
         this.dateReported = new Date();      //Current date
         this.reporterNotes = "";
+        this.reportId = "";
     }
 
     public Report(String postId, reportReason reason, String reporterId, String reporterNotes) {
@@ -38,6 +39,7 @@ public class Report {
         this.status = reportStatus.PENDING;
         this.dateReported = new Date();      //Current date
         this.reporterNotes = reporterNotes;
+        this.reportId = "";
 
     }
     public reportReason getReason() {
@@ -74,12 +76,14 @@ public class Report {
         return dateReported;
     }
 
-    public String getId() {
+    public String getReportId() {
         return reportId;
     }
-    public void setId(String reportId) {
+    public void setReportId(String reportId) {
         this.reportId = reportId;
     }
+
+
 
 
 
