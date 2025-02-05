@@ -69,21 +69,28 @@ public class ReportsRepository {
 
         String reportId = reportsCollection.document().getId();
         Log.d("Repository", "Generated report ID: " + reportId);
-        report.setId(reportId);
+        report.setReportId(reportId);
 
         saveReportData(report, reportLiveData);
     }
 
     private void saveReportData(Report report, MutableLiveData<Resource<String>> reportLiveData) {
-        reportsCollection.document(report.getId())
+        reportsCollection.document(report.getReportId())
                 .set(report)
                 .addOnSuccessListener(aVoid ->
-                        reportLiveData.setValue(Resource.success(report.getId()))
+                        reportLiveData.setValue(Resource.success(report.getReportId()))
                 )
                 .addOnFailureListener(e ->
                         reportLiveData.setValue(
                                 Resource.error(POST_UPLOAD_FAILED + e.getMessage(), null)
                         )
                 );
+    }
+
+    public void updateReport(String reportId, String handlerId, AppConstants.reportStatus newStatus) {
+        reportsCollection.document(reportId)
+                .update("reportStatus", newStatus, "handlerId", handlerId)
+                .addOnSuccessListener(aVoid -> Log.d("Repository", "Report updated successfully"))
+                .addOnFailureListener(e -> Log.e("Repository", "Failed to update report: " + e.getMessage()));
     }
 }

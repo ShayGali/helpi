@@ -80,7 +80,9 @@ public class RegisterFragment extends Fragment {
                 new ActivityResultContracts.GetContent(),
                 uri -> {
                     if (uri != null) {
-                        Uri destinationUri = Uri.fromFile(new File(requireContext().getCacheDir(), "cropped_image.jpg"));
+//                        String fileName = "cropped_image_ " + System.currentTimeMillis() + ".jpg"; //another option to create a unique file name
+                        String fileName = "cropped_image.jpg";
+                        Uri destinationUri = Uri.fromFile(new File(requireContext().getCacheDir(), fileName));
                         UCrop.of(uri, destinationUri)
                                 .withAspectRatio(1, 1) // Square aspect ratio
                                 .withMaxResultSize(500, 500) // Adjust resolution
@@ -219,7 +221,13 @@ public class RegisterFragment extends Fragment {
             profilePicUri = UCrop.getOutput(data);
             if (profilePicUri != null) {
                 CircleImageView profilePic = requireView().findViewById(R.id.reg_profile_picture);
-                profilePic.setImageURI(profilePicUri); // Show the cropped image
+                profilePic.setImageURI(null); // Clear the image view
+                // refresh the image view to make the image appear
+                profilePic.setImageURI(profilePicUri); // Show the cropped image, to refresh the image view
+
+
+
+
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Throwable cropError = UCrop.getError(data);

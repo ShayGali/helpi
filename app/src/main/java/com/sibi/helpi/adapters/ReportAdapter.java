@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,9 +18,11 @@ import java.util.List;
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {
 
     private final List<Report> reportList;
+    private final OnReportActionListener onReportActionListener;
 
-    public ReportAdapter(List<Report> reportList) {
+    public ReportAdapter(List<Report> reportList, OnReportActionListener onReportActionListener) {
         this.reportList = reportList;
+        this.onReportActionListener = onReportActionListener;
     }
 
     @NonNull
@@ -34,12 +37,8 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         Report report = reportList.get(position);
         holder.reasonTextView.setText(report.getReason().toString());
         holder.descriptionTextView.setText(report.getReporterNotes());
-        holder.deleteButton.setOnClickListener(v -> { //TODO  delete the post and mark the report as resolved
-        }
-        );
-        holder.rejectButton.setOnClickListener(v -> { //TODO  reject the report and mark the report as resolved
-        }
-        );
+        holder.deleteButton.setOnClickListener(v -> onReportActionListener.onDeleteReport(report.getReportId()));
+        holder.rejectButton.setOnClickListener(v -> onReportActionListener.onRejectReport(report.getReportId()));
     }
 
     @Override
@@ -55,6 +54,15 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         this.reportList.addAll(reportList);
         notifyDataSetChanged();
     }
+    public void removeReport(String reportId) {
+        for (Report report : reportList) {
+            if (report.getReportId().equals(reportId)) {
+                reportList.remove(report);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
 
     public static class ReportViewHolder extends RecyclerView.ViewHolder {
         TextView reasonTextView;
@@ -66,8 +74,13 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
             super(itemView);
             reasonTextView = itemView.findViewById(R.id.textView16);
             descriptionTextView = itemView.findViewById(R.id.textView20);
-            deleteButton = itemView.findViewById(R.id.button2);
-            rejectButton = itemView.findViewById(R.id.button3);
+            deleteButton = itemView.findViewById(R.id.deletePostButton);
+            rejectButton = itemView.findViewById(R.id.rejectReportButton);
         }
+    }
+
+    public interface OnReportActionListener {
+        void onDeleteReport(String reportId);
+        void onRejectReport(String reportId);
     }
 }
