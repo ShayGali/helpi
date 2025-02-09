@@ -59,10 +59,10 @@ public class SearchPostableResultFragment extends Fragment {
         LiveData<List<Postable>> postsLiveData = searchProductViewModel.getPosts(category, subcategory, region, productStatus);
 
 
-        postsSliderAdapter = new PostableAdapter(product -> {
-            Bundle productBundle = new Bundle();
-//            productBundle.put
-            Navigation.findNavController(view).navigate(R.id.action_searchPostableResultFragment_to_postablePageFragment, productBundle);
+        postsSliderAdapter = new PostableAdapter(postable -> {
+            Bundle postableBundle = new Bundle();
+            postableBundle.putSerializable("postable", postable);
+            Navigation.findNavController(view).navigate(R.id.action_searchPostableResultFragment_to_postablePageFragment, postableBundle);
         });
 
         productRecyclerView.setAdapter(postsSliderAdapter);
