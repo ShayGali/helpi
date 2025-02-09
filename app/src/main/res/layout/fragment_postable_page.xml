@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".fragments.PostablePageFragment">
 
+    <TextView
+        android:id="@+id/postableTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_marginTop="32dp"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/imageSliderContainer"
         android:layout_width="match_parent"
@@ -16,7 +28,8 @@
         app:layout_constraintDimensionRatio="4:3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/postableTitle"
+        tools:layout_editor_absoluteY="16dp">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/imageSlider"
@@ -27,7 +40,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/productDescription"
+        android:id="@+id/postDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -47,7 +60,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/productDescription" />
+        app:layout_constraintTop_toBottomOf="@id/postDescription" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -84,4 +97,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phoneFab" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
