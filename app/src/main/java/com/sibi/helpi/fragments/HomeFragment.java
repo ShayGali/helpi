@@ -28,6 +28,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
+import com.sibi.helpi.repositories.PostRepository;
+import com.sibi.helpi.viewmodels.ProductViewModel;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -35,6 +37,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private FusedLocationProviderClient fusedLocationClient;
     private UserViewModel userViewModel;
+    private ProductViewModel productViewModel;
     private TextView usernameTextView;
     private ImageView profileImage;
 
@@ -45,6 +48,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        productViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
         userViewModel.getCurrentUser();
     }
 
@@ -63,9 +67,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
-
-
-
         return view;
     }
 

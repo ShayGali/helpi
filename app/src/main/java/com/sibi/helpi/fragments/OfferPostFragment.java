@@ -14,7 +14,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +28,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.sibi.helpi.LocationPickerDialogFragment;
 import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.ServicePost;
@@ -43,8 +47,11 @@ import java.util.ArrayList;
 
 public class OfferPostFragment extends Fragment {
 
-    private OfferPostViewModel offerPostViewModel;
     private static final int PICK_IMAGES_REQUEST = 1;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 2;
+
+
+    private OfferPostViewModel offerPostViewModel;
     private Spinner categorySpinner;
     private Spinner subcategorySpinner;
     private Spinner regionSpinner;
@@ -58,6 +65,7 @@ public class OfferPostFragment extends Fragment {
     private EditText etDescription;
     private FloatingActionButton btnPost;
     private FloatingActionButton btnCancelPost;
+    private LatLng selectedLocation;
 
 
     @Override
@@ -74,6 +82,14 @@ public class OfferPostFragment extends Fragment {
         initializeViews(view);
         setupSpinners();
         setupImagePicker();
+
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            selectedLocation = bundle.getParcelable("selected_location");
+            if (selectedLocation != null) {
+                // display the location name under the region spinner
+
+            }
+        });
 
         return view;
     }
@@ -106,6 +122,21 @@ public class OfferPostFragment extends Fragment {
 
         setSubCategoryBlocker();
         setTypeBlocker();
+
+        regionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == regionSpinner.getCount() - 1) {
+                    // Show LocationPickerDialogFragment
+                    LocationPickerDialogFragment dialog = new LocationPickerDialogFragment();
+                    dialog.show(getParentFragmentManager(), "LocationPickerDialogFragment");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     /**
@@ -246,7 +277,7 @@ public class OfferPostFragment extends Fragment {
             if (validateInput(images)) {
                 Postable post = createConcretePost(userViewModel.getUserId());
                 AppConstants.PostType postType;
-                if(typeSpinner.getSelectedItem().toString().equals(getString(R.string.product))) {
+                if (typeSpinner.getSelectedItem().toString().equals(getString(R.string.product))) {
                     postType = AppConstants.PostType.PRODUCT;
                 } else {
                     postType = AppConstants.PostType.SERVICE;
@@ -269,6 +300,10 @@ public class OfferPostFragment extends Fragment {
         String subCategory = subcategorySpinner.getSelectedItem().toString();
         String region = regionSpinner.getSelectedItem().toString();
         String condition = conditionSpinner.getSelectedItem().toString();
+
+        if (regionSpinner.getSelectedItemPosition() == regionSpinner.getCount() - 1) {
+            region = selectedLocation.toString();
+        }
 
         Postable post;
         if (typeSpinner.getSelectedItem().toString().equals(getString(R.string.product))) {
