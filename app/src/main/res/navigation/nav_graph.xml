@@ -75,6 +75,7 @@
         <action
             android:id="@+id/action_offerPostFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/postablePageFragment"
@@ -90,5 +91,6 @@
             android:id="@+id/action_searchPostableFragment_to_searchPostableResultFragment"
             app:destination="@id/searchPostableResultFragment" />
     </fragment>
+
 
 </navigation>

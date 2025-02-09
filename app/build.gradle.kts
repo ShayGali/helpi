@@ -50,7 +50,7 @@ android {
 
 dependencies {
     implementation(libs.appcompat)
-    implementation ("com.google.android.material:material:1.10.0")
+    implementation("com.google.android.material:material:1.10.0")
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.coordinatorlayout)
@@ -73,6 +73,7 @@ dependencies {
 
     // Maps SDK for Android
     implementation(libs.play.services.maps)
+    implementation(libs.places)
 
     implementation(libs.material)
     implementation(libs.material.v190)
