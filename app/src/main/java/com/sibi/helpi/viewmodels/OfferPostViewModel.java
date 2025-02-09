@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.models.Resource;
+import com.sibi.helpi.utils.AppConstants;
 
 public class OfferPostViewModel extends ViewModel {
     private PostRepository postRepository;
@@ -21,8 +22,8 @@ public class OfferPostViewModel extends ViewModel {
         return postLiveData;
     }
 
-    public void savePost(Postable post, byte[][] images) {
+    public void savePost(Postable post, byte[][] images, AppConstants.PostType postType) {
         postLiveData.setValue(Resource.loading(null));
-        postRepository.savePost(post, images, postLiveData);
+        postRepository.savePost(post, images, postType, postLiveData);
     }
 }

@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/searchProductFragment"
+        android:id="@+id/searchPostableFragment"
         android:icon="@drawable/ic_search_24dp"
         android:title="@string/search"
         android:tooltipText="@string/search"

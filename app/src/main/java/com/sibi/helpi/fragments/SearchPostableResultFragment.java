@@ -1,5 +1,6 @@
 package com.sibi.helpi.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,20 +15,21 @@ import android.view.ViewGroup;
 
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.PostableAdapter;
+import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.viewmodels.SearchProductViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchProductResultFragment extends Fragment {
+public class SearchPostableResultFragment extends Fragment {
 
     private RecyclerView productRecyclerView;
-    private PostableAdapter productSliderAdapter;
-    private List<ProductPost> productPostList;
+    private PostableAdapter postsSliderAdapter;
+    private List<Postable> productPostList;
     private SearchProductViewModel searchProductViewModel;
 
-    public SearchProductResultFragment() {
+    public SearchPostableResultFragment() {
         // Required empty public constructor
     }
 
@@ -36,9 +38,11 @@ public class SearchProductResultFragment extends Fragment {
         super.onCreate(savedInstanceState);
         searchProductViewModel = new SearchProductViewModel();
     }
+
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search_product_result, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_postable_result, container, false);
 
         productRecyclerView = view.findViewById(R.id.productRecycleView);
         productRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -52,27 +56,27 @@ public class SearchProductResultFragment extends Fragment {
         String productStatus = bundle.getString("productStatus"); // the condition of the product
 
         // get the products from the repository
-        LiveData<List<ProductPost>> productsLiveData =  searchProductViewModel.getProducts(category, subcategory, region, productStatus);
+        LiveData<List<Postable>> postsLiveData = searchProductViewModel.getPosts(category, subcategory, region, productStatus);
 
 
-        productSliderAdapter = new PostableAdapter(product -> {
+        postsSliderAdapter = new PostableAdapter(product -> {
             Bundle productBundle = new Bundle();
 //            productBundle.put
-            Navigation.findNavController(view).navigate(R.id.action_searchProductResultFragment_to_productFragment, productBundle);
+            Navigation.findNavController(view).navigate(R.id.action_searchPostableResultFragment_to_postablePageFragment, productBundle);
         });
 
-        productRecyclerView.setAdapter(productSliderAdapter);
+        productRecyclerView.setAdapter(postsSliderAdapter);
 
         // observe the products
-        productsLiveData.observe(getViewLifecycleOwner(), products -> {
+        postsLiveData.observe(getViewLifecycleOwner(), products -> {
             productPostList = new ArrayList<>(products);
-            productSliderAdapter.setPostableList(productPostList);
+            postsSliderAdapter.setPostableList(productPostList);
 
             // Fetch images for each product
-            for (ProductPost productPost : productPostList) {
+            for (Postable productPost : productPostList) {
                 searchProductViewModel.getProductImages(productPost.getId()).observe(getViewLifecycleOwner(), imageUrls -> {
                     productPost.setImageUrls(imageUrls);
-                    productSliderAdapter.notifyDataSetChanged();
+                    postsSliderAdapter.notifyDataSetChanged();
                 });
             }
         });

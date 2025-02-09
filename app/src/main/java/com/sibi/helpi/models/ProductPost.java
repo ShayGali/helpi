@@ -14,8 +14,9 @@ import java.util.List;
  */
 public class ProductPost implements Postable {
     private String id;
-    private String category;
+    private String title;
     private String description;
+    private String category;
     private String subCategory;
     private String region;
     private String condition;
@@ -27,7 +28,8 @@ public class ProductPost implements Postable {
         // Default constructor required for Firebase
     }
 
-    public ProductPost(String description, String category, String subCategory, String region, String condition, String userId) {
+    public ProductPost(String title, String description, String category, String subCategory, String region, String condition, String userId) {
+        this.title = title;
         this.description = description;
         this.category = category;
         this.subCategory = subCategory;
@@ -47,7 +49,12 @@ public class ProductPost implements Postable {
 
     @Override
     public String getTitle() {
-        return "Implement this method";
+        return title;
+
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {

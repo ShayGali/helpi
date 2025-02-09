@@ -51,11 +51,12 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
 
         // Initialize the adapters
         reportAdapter = new ReportAdapter(new ArrayList<>(), this);
+
         productSliderAdapter = new PostableAdapter(postable -> {
             // todo - check want to do with the postable
             Bundle productBundle = new Bundle();
 //            productBundle.put
-            Navigation.findNavController(view).navigate(R.id.action_searchProductResultFragment_to_productFragment, productBundle);
+            Navigation.findNavController(view).navigate(R.id.action_searchPostableResultFragment_to_postablePageFragment, productBundle);
         });
 
         reportsRecyclerView.setAdapter(reportAdapter);

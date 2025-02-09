@@ -16,9 +16,11 @@ public class AppConstants {
         APPROVED("Approved"),
         REJECTED("Rejected");
         private final String statusText;
+
         PostStatus(String statusText) {
             this.statusText = statusText;
         }
+
         public String getStatusText() {
             return statusText;
         }
@@ -36,4 +38,8 @@ public class AppConstants {
         INAPPROPRIATE_CONTENT, SPAM, OTHER
     }
 
+
+    public enum PostType {
+        PRODUCT, SERVICE,ANY
+    }
 }

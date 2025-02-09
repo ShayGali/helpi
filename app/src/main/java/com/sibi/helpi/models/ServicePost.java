@@ -8,6 +8,7 @@ import com.sibi.helpi.utils.AppConstants.PostStatus;
 
 public class ServicePost implements Postable {
     private String id;
+    private String title;
     private String description;
     private String category;
     private String subCategory;
@@ -20,7 +21,8 @@ public class ServicePost implements Postable {
         // Default constructor required for Firebase
     }
 
-    public ServicePost(String description, String category, String subCategory, String region, String userId, String condition) {
+    public ServicePost(String title, String description, String category, String subCategory, String region, String userId, String condition) {
+        this.title = title;
         this.description = description;
         this.category = category;
         this.subCategory = subCategory;

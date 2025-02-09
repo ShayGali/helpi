@@ -21,10 +21,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.sibi.helpi.models.Post;
 import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Resource;
+import com.sibi.helpi.models.ServicePost;
+import com.sibi.helpi.utils.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,34 +60,55 @@ public class PostRepository {
         storageReference = FirebaseStorage.getInstance().getReference().child(STORAGE_POSTS);
     }
 
-    public LiveData<List<ProductPost>> getPosts(@NonNull String category, @NonNull String subcategory, @NonNull String region, @NonNull String productStatus) {
-        MutableLiveData<List<ProductPost>> mutableLiveData = new MutableLiveData<>();
+    public LiveData<List<Postable>> getPosts(@NonNull String category, @NonNull String subcategory, @NonNull String region, @NonNull String productStatus, AppConstants.PostType postType) {
+        MutableLiveData<List<Postable>> mutableLiveData = new MutableLiveData<>();
         postsCollection.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<ProductPost> productPosts = new ArrayList<>();
+                    List<Postable> postableList = new ArrayList<>();
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                        ProductPost productPost = document.toObject(ProductPost.class);
-                        if (productPost != null) {
+
+                        if (document == null) {
+                            continue;
+                        }
+
+                        Long t = document.getLong("type");
+                        if (t == null) {
+                            Log.e("Repository", "Failed to fetch products: type is null");
+                            continue;
+                        }
+
+                        AppConstants.PostType type = AppConstants.PostType.values()[Math.toIntExact(t)];
+                        Postable postable = null;
+                        if (type == AppConstants.PostType.PRODUCT) {
+                            postable = document.toObject(ProductPost.class);
+
+                            if (!productStatus.isEmpty() && !((ProductPost) postable).getCondition().equals(productStatus)) {
+                                continue;
+                            }
+                        } else if (type == AppConstants.PostType.SERVICE) {
+                            postable = document.toObject(ServicePost.class);
+                        } else {
+                            throw new IllegalArgumentException("Unknown type: " + type);
+                        }
+                        if (postable != null) {
                             // filter by fields
-                            if (!category.isEmpty() && !productPost.getCategory().equals(category)) {
+                            if (!category.isEmpty() && !postable.getCategory().equals(category)) {
                                 continue;
                             }
-                            if (!subcategory.isEmpty() && !productPost.getSubCategory().equals(subcategory)) {
+                            if (!subcategory.isEmpty() && !postable.getSubCategory().equals(subcategory)) {
                                 continue;
                             }
-                            if (!region.isEmpty() && !productPost.getRegion().equals(region)) {
+                            if (!region.isEmpty() && !postable.getRegion().equals(region)) {
                                 continue;
                             }
-                            if (!productStatus.isEmpty() && !productPost.getCondition().equals(productStatus)) {
-                                continue;
-                            }
+
 //                            if(productPost.getStatus() != null && productPost.getStatus() != PostStatus.APPROVED ) {
 //                                continue;
 //                            }  works well. TODO: uncomment this line after admin approval is implemented
-                            productPosts.add(productPost);
+                            postableList.add(postable);
                         }
                     }
-                    mutableLiveData.setValue(productPosts);
+                    mutableLiveData.setValue(postableList);
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Repository", "Failed to fetch products: " + e.getMessage());
@@ -96,11 +118,11 @@ public class PostRepository {
         return mutableLiveData;
     }
 
-    public LiveData<List<ProductPost>> getPosts() {
-        return getPosts("", "", "", "");
+    public LiveData<List<Postable>> getPosts() {
+        return getPosts("", "", "", "", AppConstants.PostType.PRODUCT);
     }
 
-    public void savePost(Postable post, byte[][] images, MutableLiveData<Resource<String>> postLiveData) {
+    public void savePost(Postable post, byte[][] images, AppConstants.PostType postType, MutableLiveData<Resource<String>> postLiveData) {
         Log.d("Repository", "Starting product post");
 
         String postId = postsCollection.document().getId();
@@ -108,13 +130,13 @@ public class PostRepository {
         post.setId(postId);
 
         if (images != null && images.length > 0) {
-            saveImgData(post, images, postLiveData);
-        } else{
-            savePostData(post, postLiveData);
+            saveImgData(post, postType, images, postLiveData);
+        } else {
+            savePostData(post, postType, postLiveData);
         }
     }
 
-    private void saveImgData(Postable post, byte[][] images, MutableLiveData<Resource<String>> postLiveData) {
+    private void saveImgData(Postable post, AppConstants.PostType postType, byte[][] images, MutableLiveData<Resource<String>> postLiveData) {
         List<Task<Uri>> uploadTasks = imagesRepository.uploadPostImages(post.getId(), images);
         Tasks.whenAllSuccess(uploadTasks)
                 .addOnSuccessListener(uriList -> {
@@ -123,7 +145,7 @@ public class PostRepository {
                         uriStringList.add(uri.toString());
                     }
                     post.setImageUrls(uriStringList);
-                    savePostData(post, postLiveData);
+                    savePostData(post, postType, postLiveData);
                 })
                 .addOnFailureListener(e ->
                         postLiveData.setValue(
@@ -132,12 +154,22 @@ public class PostRepository {
                 );
     }
 
-    private void savePostData(Postable post, MutableLiveData<Resource<String>> postLiveData) {
+    private void savePostData(Postable post, AppConstants.PostType postType, MutableLiveData<Resource<String>> postLiveData) {
         postsCollection.document(post.getId())
                 .set(post)
-                .addOnSuccessListener(aVoid ->
-                        postLiveData.setValue(Resource.success(post.getId()))
-                )
+                .addOnSuccessListener(aVoid -> {
+                    // Add the postType field separately
+                    postsCollection.document(post.getId())
+                            .update("type", postType.ordinal())
+                            .addOnSuccessListener(aVoid2 ->
+                                    postLiveData.setValue(Resource.success(post.getId()))
+                            )
+                            .addOnFailureListener(e ->
+                                    postLiveData.setValue(
+                                            Resource.error(POST_UPLOAD_FAILED + e.getMessage(), null)
+                                    )
+                            );
+                })
                 .addOnFailureListener(e ->
                         postLiveData.setValue(
                                 Resource.error(POST_UPLOAD_FAILED + e.getMessage(), null)

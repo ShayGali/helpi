@@ -64,7 +64,7 @@ import android.widget.TextView;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
 
-public class ProductPageFragment extends Fragment {
+public class PostablePageFragment extends Fragment {
 
     private
     ViewPager2 productImages;
@@ -76,7 +76,7 @@ public class ProductPageFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_product_page, container, false);
+        View view = inflater.inflate(R.layout.fragment_postable_page, container, false);
 
         productImages = view.findViewById(R.id.imageSlider);
 

@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -32,6 +31,7 @@ import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.ServicePost;
 import com.sibi.helpi.repositories.ImagesRepository;
+import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.viewmodels.OfferPostViewModel;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
@@ -54,9 +54,11 @@ public class OfferPostFragment extends Fragment {
     private ViewPager2 imageSlider;
     private ImageSliderAdapter imageAdapter;
     private ArrayList<Uri> selectedImages;
+    private EditText etTitle;
     private EditText etDescription;
     private FloatingActionButton btnPost;
     private FloatingActionButton btnCancelPost;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public class OfferPostFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_offer_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_offer_postable, container, false);
 
         initializeViews(view);
         setupSpinners();
@@ -87,6 +89,7 @@ public class OfferPostFragment extends Fragment {
         imageSlider = view.findViewById(R.id.imageSlider);
         btnPost = view.findViewById(R.id.btnPostProduct);
         btnCancelPost = view.findViewById(R.id.btnCancelPost);
+        etTitle = view.findViewById(R.id.postTitle);
         etDescription = view.findViewById(R.id.description);
 
         // Initialize ViewPager2 adapter (means to set the adapter to the ViewPager2)
@@ -121,6 +124,7 @@ public class OfferPostFragment extends Fragment {
                     conditionSpinner.setEnabled(true);
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 conditionSpinner.setEnabled(false);
@@ -161,6 +165,7 @@ public class OfferPostFragment extends Fragment {
                     }
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 subcategorySpinner.setEnabled(false);
@@ -240,7 +245,13 @@ public class OfferPostFragment extends Fragment {
             byte[][] images = getImagesData(selectedImages);
             if (validateInput(images)) {
                 Postable post = createConcretePost(userViewModel.getUserId());
-                offerPostViewModel.savePost(post, images);
+                AppConstants.PostType postType;
+                if(typeSpinner.getSelectedItem().toString().equals(getString(R.string.product))) {
+                    postType = AppConstants.PostType.PRODUCT;
+                } else {
+                    postType = AppConstants.PostType.SERVICE;
+                }
+                offerPostViewModel.savePost(post, images, postType);
             }
         });
 
@@ -252,13 +263,21 @@ public class OfferPostFragment extends Fragment {
     }
 
     private Postable createConcretePost(String userId) {
-        Postable post = typeSpinner.getSelectedItem().toString().equalsIgnoreCase("Service") ?
-                new ServicePost(etDescription.getText().toString(), categorySpinner.getSelectedItem().toString(),
-                        subcategorySpinner.getSelectedItem().toString(), regionSpinner.getSelectedItem().toString(),
-                        userId, conditionSpinner.getSelectedItem().toString()) :
-                new ProductPost(etDescription.getText().toString(), categorySpinner.getSelectedItem().toString(),
-                        subcategorySpinner.getSelectedItem().toString(), regionSpinner.getSelectedItem().toString(),
-                        conditionSpinner.getSelectedItem().toString(), userId);
+        String title = etTitle.getText().toString();
+        String description = etDescription.getText().toString();
+        String category = categorySpinner.getSelectedItem().toString();
+        String subCategory = subcategorySpinner.getSelectedItem().toString();
+        String region = regionSpinner.getSelectedItem().toString();
+        String condition = conditionSpinner.getSelectedItem().toString();
+
+        Postable post;
+        if (typeSpinner.getSelectedItem().toString().equals(getString(R.string.product))) {
+            post = new ProductPost(title, description, category, subCategory, region, condition, userId);
+        } else if (typeSpinner.getSelectedItem().toString().equals(getString(R.string.service))) {
+            post = new ServicePost(title, description, category, subCategory, region, userId, condition);
+        } else {
+            throw new RuntimeException("Invalid post type");
+        }
         return post;
     }
 
@@ -278,6 +297,12 @@ public class OfferPostFragment extends Fragment {
     }
 
     private boolean validateInput(byte[][] images) {
+
+        if (typeSpinner.getSelectedItemPosition() == 0) {
+            showToast(getString(R.string.allFieldsRequired));
+            return false;
+        }
+
         if (etDescription.getText().toString().trim().isEmpty()) {
             showToast(getString(R.string.allFieldsRequired));
             return false;
