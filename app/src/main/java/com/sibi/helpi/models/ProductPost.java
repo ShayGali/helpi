@@ -45,6 +45,11 @@ public class ProductPost implements Postable {
         this.id = id;
     }
 
+    @Override
+    public String getTitle() {
+        return "Implement this method";
+    }
+
     public String getDescription() {
         return description;
     }
@@ -109,7 +114,6 @@ public class ProductPost implements Postable {
         this.status = status;
     }
 
-    // toString method:
     @NonNull
     @Override
     public String toString() {

@@ -7,6 +7,7 @@ import java.util.List;
 public interface Postable {
     String getId();
     void setId(String id);
+    String getTitle();
     String getDescription();
     String getCategory();
     String getSubCategory();
@@ -17,4 +18,5 @@ public interface Postable {
     PostStatus getStatus();
     void setStatus(PostStatus status);
     String toString();
+
 }

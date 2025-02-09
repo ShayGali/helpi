@@ -1,9 +1,12 @@
 package com.sibi.helpi.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
+
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 
-public class ServicePost implements Postable{
+public class ServicePost implements Postable {
     private String id;
     private String description;
     private String category;
@@ -89,6 +92,12 @@ public class ServicePost implements Postable{
         this.status = status;
     }
 
+    @Override
+    public String getTitle() {
+        return "Implement this method";
+    }
+
+    @NonNull
     @Override
     public String toString() {
         return "Service{" +
