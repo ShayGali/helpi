@@ -40,54 +40,7 @@
             android:id="@+id/action_registerFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/searchProductFragment"
-        android:name="com.sibi.helpi.fragments.SearchProductFragment"
-        android:label="fragment_search_product"
-        tools:layout="@layout/fragment_search_product" >
-        <action
-            android:id="@+id/action_searchProductFragment_to_searchProductResultFragment"
-            app:destination="@id/searchProductResultFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/offerPostFragment"
-        android:name="com.sibi.helpi.fragments.OfferPostFragment"
-        android:label="fragment_offer_post"
-        tools:layout="@layout/fragment_offer_post" >
-        <action
-            android:id="@+id/action_offerPostFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
 
-    <fragment
-        android:id="@+id/offerServiceFragment"
-        android:name="com.sibi.helpi.fragments.OfferServiceFragment"
-        android:label="fragment_offer_service"
-        tools:layout="@layout/fragment_offer_service" />
-    <fragment
-        android:id="@+id/searchServiceFragment"
-        android:name="com.sibi.helpi.fragments.SearchServiceFragment"
-        android:label="fragment_search_service"
-        tools:layout="@layout/fragment_search_service" >
-        <action
-            android:id="@+id/action_searchServiceFragment_to_searchServiceResultFragment"
-            app:destination="@id/searchServiceResultFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/productFragment"
-        android:name="com.sibi.helpi.fragments.ProductPageFragment"
-        android:label="fragment_product"
-        tools:layout="@layout/fragment_product_page" />
-    <fragment
-        android:id="@+id/searchProductResultFragment"
-        android:name="com.sibi.helpi.fragments.SearchProductResultFragment"
-        android:label="fragment_search_product_result"
-        tools:layout="@layout/fragment_search_product_result" >
-        <action
-            android:id="@+id/action_searchProductResultFragment_to_productFragment"
-            app:destination="@id/productFragment" />
-    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.sibi.helpi.fragments.ProfileFragment"
@@ -101,23 +54,41 @@
             app:destination="@id/loginFragment" />
     </fragment>
     <fragment
-        android:id="@+id/searchServiceResultFragment"
-        android:name="com.sibi.helpi.fragments.SearchServiceResultFragment"
-        android:label="fragment_search_service_result"
-        tools:layout="@layout/fragment_search_service_result" >
-        <action
-            android:id="@+id/action_searchServiceResultFragment_to_servicePageFragment"
-            app:destination="@id/servicePageFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/servicePageFragment"
-        android:name="com.sibi.helpi.fragments.ServicePageFragment"
-        android:label="fragment_service_page"
-        tools:layout="@layout/fragment_service_page" />
-    <fragment
         android:id="@+id/adminDashBoardFragment"
         android:name="com.sibi.helpi.fragments.AdminDashBoardFragment"
         android:label="fragment_admin_dash_board"
         tools:layout="@layout/fragment_admin_dash_board" />
+    <fragment
+        android:id="@+id/searchPostableResultFragment"
+        android:name="com.sibi.helpi.fragments.SearchPostableResultFragment"
+        android:label="fragment_search_postable_result"
+        tools:layout="@layout/fragment_search_postable_result" >
+        <action
+            android:id="@+id/action_searchPostableResultFragment_to_postablePageFragment"
+            app:destination="@id/postablePageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/offerPostFragment"
+        android:name="com.sibi.helpi.fragments.OfferPostFragment"
+        android:label="fragment_offer_postable"
+        tools:layout="@layout/fragment_offer_postable" >
+        <action
+            android:id="@+id/action_offerPostFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postablePageFragment"
+        android:name="com.sibi.helpi.fragments.PostablePageFragment"
+        android:label="fragment_postable_page"
+        tools:layout="@layout/fragment_postable_page" />
+    <fragment
+        android:id="@+id/searchPostableFragment"
+        android:name="com.sibi.helpi.fragments.SearchPostableFragment"
+        android:label="fragment_search_postable"
+        tools:layout="@layout/fragment_search_postable" >
+        <action
+            android:id="@+id/action_searchPostableFragment_to_searchPostableResultFragment"
+            app:destination="@id/searchPostableResultFragment" />
+    </fragment>
 
 </navigation>

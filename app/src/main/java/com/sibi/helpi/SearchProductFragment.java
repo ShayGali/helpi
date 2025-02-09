@@ -31,7 +31,7 @@ public class SearchProductFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search_product, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_postable, container, false);
 
         // Reference to the AutoCompleteTextViews
         categorySpinner = view.findViewById(R.id.categorySpinner);
@@ -60,8 +60,7 @@ public class SearchProductFragment extends Fragment {
 
         // Set the search button click listener
         view.findViewById(R.id.btnSearchProduct).setOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_searchProductFragment_to_searchProductResultFragment)
-        );
+                Navigation.findNavController(view).navigate(R.id.action_searchPostableFragment_to_searchPostableResultFragment));
 
         return view;
     }

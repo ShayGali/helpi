@@ -9,7 +9,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private List<Post> posts;
+    private List<Postable> posts;
     private String profileImgUri;
     private UserType userType;
 
@@ -62,11 +62,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Post> getPosts() {
+    public List<Postable> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<Post> posts) {
+    public void setPosts(List<Postable> posts) {
         this.posts = posts;
     }
 

@@ -118,7 +118,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <TextView
+        <EditText
             android:id="@+id/postTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
