@@ -3,6 +3,7 @@ package com.sibi.helpi.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.sibi.helpi.R;
-import com.sibi.helpi.adapters.ProductSliderAdapter;
+import com.sibi.helpi.adapters.PostableAdapter;
 import com.sibi.helpi.adapters.ReportAdapter;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Report;
@@ -28,7 +29,7 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
     private RecyclerView reportsRecyclerView;
     private RecyclerView postsRecyclerView;
     private ReportAdapter reportAdapter;
-    private ProductSliderAdapter productSliderAdapter;
+    private PostableAdapter productSliderAdapter;
     private List<Report> reportList;
     private List<ProductPost> postList;
     private AdminDashBoardViewModel adminDashBoardViewModel;
@@ -36,7 +37,6 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
     public AdminDashBoardFragment() {
         // Required empty public constructor
     }
-
 
 
     @Override
@@ -50,8 +50,13 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize the adapters
-        reportAdapter = new ReportAdapter(new ArrayList<>(),this);
-        productSliderAdapter = new ProductSliderAdapter();
+        reportAdapter = new ReportAdapter(new ArrayList<>(), this);
+        productSliderAdapter = new PostableAdapter(postable -> {
+            // todo - check want to do with the postable
+            Bundle productBundle = new Bundle();
+//            productBundle.put
+            Navigation.findNavController(view).navigate(R.id.action_searchProductResultFragment_to_productFragment, productBundle);
+        });
 
         reportsRecyclerView.setAdapter(reportAdapter);
         postsRecyclerView.setAdapter(productSliderAdapter);
@@ -83,7 +88,7 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
         adminDashBoardViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
             if (posts != null) {
                 postList = new ArrayList<>(posts);
-                productSliderAdapter.setProductList(postList);
+                productSliderAdapter.setPostableList(postList);
 
                 // Fetch images for each product
                 for (ProductPost productPost : postList) {

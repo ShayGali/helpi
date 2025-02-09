@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sibi.helpi.R;
-import com.sibi.helpi.adapters.ProductSliderAdapter;
+import com.sibi.helpi.adapters.PostableAdapter;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.viewmodels.SearchProductViewModel;
 
@@ -23,7 +23,7 @@ import java.util.List;
 public class SearchProductResultFragment extends Fragment {
 
     private RecyclerView productRecyclerView;
-    private ProductSliderAdapter productSliderAdapter;
+    private PostableAdapter productSliderAdapter;
     private List<ProductPost> productPostList;
     private SearchProductViewModel searchProductViewModel;
 
@@ -55,7 +55,7 @@ public class SearchProductResultFragment extends Fragment {
         LiveData<List<ProductPost>> productsLiveData =  searchProductViewModel.getProducts(category, subcategory, region, productStatus);
 
 
-        productSliderAdapter = new ProductSliderAdapter(product -> {
+        productSliderAdapter = new PostableAdapter(product -> {
             Bundle productBundle = new Bundle();
 //            productBundle.put
             Navigation.findNavController(view).navigate(R.id.action_searchProductResultFragment_to_productFragment, productBundle);
@@ -66,7 +66,7 @@ public class SearchProductResultFragment extends Fragment {
         // observe the products
         productsLiveData.observe(getViewLifecycleOwner(), products -> {
             productPostList = new ArrayList<>(products);
-            productSliderAdapter.setProductList(productPostList);
+            productSliderAdapter.setPostableList(productPostList);
 
             // Fetch images for each product
             for (ProductPost productPost : productPostList) {
