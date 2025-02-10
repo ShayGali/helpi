@@ -87,10 +87,19 @@ public class ReportsRepository {
                 );
     }
 
-    public void updateReport(String reportId, String handlerId, AppConstants.reportStatus newStatus) {
+    public LiveData<Boolean> updateReport(String reportId, String handlerId, AppConstants.reportStatus newStatus) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
         reportsCollection.document(reportId)
                 .update("reportStatus", newStatus, "handlerId", handlerId)
-                .addOnSuccessListener(aVoid -> Log.d("Repository", "Report updated successfully"))
-                .addOnFailureListener(e -> Log.e("Repository", "Failed to update report: " + e.getMessage()));
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Repository", "Report updated successfully");
+                    result.setValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Repository", "Failed to update report: " + e.getMessage());
+                    result.setValue(false);
+                });
+        return result;
     }
+
 }

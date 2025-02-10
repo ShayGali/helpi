@@ -26,7 +26,7 @@ public class AdminDashBoardViewModel extends ViewModel {
         reportsRepository = ReportsRepository.getInstance();
         postRepository = PostRepository.getInstance();
         imagesRepository = ImagesRepository.getInstance();
-        userViewModel = new UserViewModel();
+        userViewModel = new UserViewModel();  // TODO change to singleton
     }
 
     public LiveData<List<Report>> getReports() {
@@ -47,11 +47,10 @@ public class AdminDashBoardViewModel extends ViewModel {
         return imagesRepository.getProductImages(productId);
     }
 
-    public void updateReport(String reportId, reportStatus newStatus) {
+    public LiveData<Boolean> updateReport(String reportId, reportStatus newStatus) {
         String handlerId = userViewModel.getUserId();
-        reportsRepository.updateReport(reportId, handlerId, newStatus);
+        return reportsRepository.updateReport(reportId, handlerId, newStatus);
     }
-
 
 
 
