@@ -102,9 +102,9 @@ public class PostRepository {
                                 continue;
                             }
 
-//                            if(productPost.getStatus() != null && productPost.getStatus() != PostStatus.APPROVED ) {
-//                                continue;
-//                            }  works well. TODO: uncomment this line after admin approval is implemented
+                            if(postable.getStatus() != null && postable.getStatus() != PostStatus.APPROVED ) {
+                                continue;
+                            } // works well. TODO: uncomment this line after admin approval is implemented
                             postableList.add(postable);
                         }
                     }
@@ -259,4 +259,18 @@ public class PostRepository {
         return mutableLiveData;
     }
 
+    public LiveData<Boolean> updatePostStatus(String postId, PostStatus newStatus) {
+        MutableLiveData<Boolean> mutableLiveData = new MutableLiveData<>();
+        postsCollection.document(postId)
+                .update("status", newStatus)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("PostRepository", "Post status updated successfully for postId: " + postId);
+                    mutableLiveData.setValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("PostRepository", "Failed to update post status for postId: " + postId, e);
+                    mutableLiveData.setValue(false);
+                });
+        return mutableLiveData;
+    }
 }

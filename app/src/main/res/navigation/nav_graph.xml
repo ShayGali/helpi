@@ -57,7 +57,11 @@
         android:id="@+id/adminDashBoardFragment"
         android:name="com.sibi.helpi.fragments.AdminDashBoardFragment"
         android:label="fragment_admin_dash_board"
-        tools:layout="@layout/fragment_admin_dash_board" />
+        tools:layout="@layout/fragment_admin_dash_board" >
+        <action
+            android:id="@+id/action_adminDashBoardFragment_to_postablePageFragment"
+            app:destination="@id/postablePageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchPostableResultFragment"
         android:name="com.sibi.helpi.fragments.SearchPostableResultFragment"
@@ -81,7 +85,11 @@
         android:id="@+id/postablePageFragment"
         android:name="com.sibi.helpi.fragments.PostablePageFragment"
         android:label="fragment_postable_page"
-        tools:layout="@layout/fragment_postable_page" />
+        tools:layout="@layout/fragment_postable_page" >
+        <action
+            android:id="@+id/action_postablePageFragment_to_adminDashBoardFragment"
+            app:destination="@id/adminDashBoardFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchPostableFragment"
         android:name="com.sibi.helpi.fragments.SearchPostableFragment"
