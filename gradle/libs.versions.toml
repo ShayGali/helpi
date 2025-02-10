@@ -16,6 +16,7 @@ activity = "1.9.3"
 constraintlayout = "2.2.0"
 materialVersion = "1.12.0"
 coordinatorlayout = "1.2.0"
+mockitoCore = "5.15.2"
 navigationFragmentKtx = "2.8.5"
 navigationUiKtx = "2.8.5"
 places = "4.1.0"
@@ -29,6 +30,8 @@ navigationUi = "2.8.5"
 firebaseDatabase = "21.0.0"
 firebaseFirestore = "25.1.1"
 firebaseStorage = "21.0.1"
+junitJupiter = "5.11.4"
+testng = "6.9.6"
 uiautomator = "2.3.0"
 
 [libraries]
@@ -65,6 +68,8 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
