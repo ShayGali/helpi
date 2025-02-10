@@ -96,7 +96,11 @@ public class ServicePost implements Postable {
 
     @Override
     public String getTitle() {
-        return "Implement this method";
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @NonNull
@@ -104,6 +108,7 @@ public class ServicePost implements Postable {
     public String toString() {
         return "Service{" +
                 "id='" + id + '\'' +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", subCategory='" + subCategory + '\'' +

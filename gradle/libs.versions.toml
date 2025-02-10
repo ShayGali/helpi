@@ -16,6 +16,7 @@ activity = "1.9.3"
 constraintlayout = "2.2.0"
 materialVersion = "1.12.0"
 coordinatorlayout = "1.2.0"
+mockitoCore = "5.15.2"
 navigationFragmentKtx = "2.8.5"
 navigationUiKtx = "2.8.5"
 places = "4.1.0"
@@ -29,6 +30,8 @@ navigationUi = "2.8.5"
 firebaseDatabase = "21.0.0"
 firebaseFirestore = "25.1.1"
 firebaseStorage = "21.0.1"
+junitJupiter = "5.11.4"
+testng = "6.9.6"
 
 [libraries]
 android-image-cropper = { module = "com.theartofdev.edmodo:android-image-cropper", version.ref = "androidImageCropper" }
@@ -50,6 +53,7 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 coordinatorlayout = { group = "androidx.coordinatorlayout", name = "coordinatorlayout", version.ref = "coordinatorlayout" }
 #noinspection SimilarGradleDependency
 material-v190 = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
 places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
@@ -63,6 +67,8 @@ navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
