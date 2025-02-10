@@ -196,7 +196,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layoutDirection="ltr"
-                        android:text="Calander"
+                        android:text="Change Language"
                         android:textColor="@color/textSecondary"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -222,7 +222,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_round_camera" />
+                        app:srcCompat="@drawable/ic_round_share" />
 
                     <ImageView
                         android:id="@+id/arrow3"
@@ -240,7 +240,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layoutDirection="ltr"
-                        android:text="Gallery"
+                        android:text="Share"
                         android:textColor="@color/textSecondary"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -267,7 +267,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_round_share" />
+                        app:srcCompat="@drawable/ic_round_extend_screen" />
 
                     <ImageView
                         android:id="@+id/arrow4"
@@ -285,7 +285,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layoutDirection="ltr"
-                        android:text="Share"
+                        android:text="Logout"
                         android:textColor="@color/textSecondary"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -321,7 +321,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layoutDirection="ltr"
-                        android:text="Logout"
+                        android:text="Delete Account"
                         android:textColor="@color/textSecondary"
                         android:textSize="20sp"
                         android:textStyle="bold"
