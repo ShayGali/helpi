@@ -56,7 +56,7 @@
         <item>Other</item>
     </string-array>
     <string-array name="region">
-        <item>Select Region</item>
+        <item>Select Location</item>
         <item>Tel-Aviv</item>
         <item>Jerusalem</item>
         <item>Haifa</item>
