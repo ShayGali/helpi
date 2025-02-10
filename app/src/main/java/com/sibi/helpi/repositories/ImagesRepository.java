@@ -177,4 +177,8 @@ public class ImagesRepository {
         return imageLiveData;
     }
 
+    public Task<Void> deleteProfileImage(String userUUID) {
+        StorageReference profileImagesRef = profileRef.child(userUUID);
+        return profileImagesRef.delete();
+    }
 }

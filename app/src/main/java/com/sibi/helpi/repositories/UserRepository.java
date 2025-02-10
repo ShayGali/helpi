@@ -81,6 +81,23 @@ public class UserRepository {
                 .continueWithTask(task -> googleSignInClient.signOut());
     }
 
+    public Task<Void> deleteAccount() {
+        // check if the user is signed in
+        if (mAuth.getCurrentUser() == null) {
+            Log.d(TAG, "deleteAccount: No user is currently signed in");
+            return Tasks.forException(new Exception("No user is currently signed in"));
+        }
+        String uuid = getUUID();
+        Task<Void> deleteProfileImageTask = imagesRepository.deleteProfileImage(uuid)
+                .addOnFailureListener(e -> Log.e(TAG, "deleteAccount: Failed to delete profile image", e));
+
+        Task<Void> deleteUserDataTask = userCollection.document(uuid).delete();
+
+        Task<Void> deleteUserAccountTask = mAuth.getCurrentUser().delete();
+
+        return Tasks.whenAll(deleteProfileImageTask, deleteUserDataTask, deleteUserAccountTask);
+    }
+
     public String getUUID() {
         return authService.getCurrentUserId();
     }
@@ -119,4 +136,6 @@ public class UserRepository {
                     return getCurrentUser();
                 });
     }
+
+
 }

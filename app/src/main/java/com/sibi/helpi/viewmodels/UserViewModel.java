@@ -26,16 +26,16 @@ public class UserViewModel extends ViewModel {
         userRepository = new UserRepository();
         imagesRepository = ImagesRepository.getInstance();
         userState = new MutableLiveData<>();
-        userState.setValue(UserState.idle());
+        userState.postValue(UserState.idle());
         isInitialized = false;
     }
 
     public LiveData<UserState> getUserState() {
         if (!isInitialized) {
             try {
-            getCurrentUser();
-            isInitialized = true;
-            }catch (IllegalStateException ignored){
+                getCurrentUser();
+                isInitialized = true;
+            } catch (IllegalStateException ignored) {
             }
         }
         return userState;
@@ -82,14 +82,14 @@ public class UserViewModel extends ViewModel {
     }
 
     public void signOut(GoogleSignInClient googleSignInClient) {
-        userState.setValue(UserState.loading());
+        userState.postValue(UserState.loading());
         userRepository.signOut(googleSignInClient)
-                .addOnSuccessListener(aVoid -> userState.setValue(UserState.success(null)))
-                .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
+                .addOnSuccessListener(aVoid -> userState.postValue(UserState.success(null)))
+                .addOnFailureListener(e -> userState.postValue(UserState.error(e.getMessage())));
     }
 
     public LiveData<String> getProfileImageUri() {
-        if(!isInitialized || Objects.requireNonNull(userState.getValue()).isIdle()){
+        if (!isInitialized || Objects.requireNonNull(userState.getValue()).isIdle()) {
             throw new IllegalStateException("User not initialized - cant get profile image");
         }
 
@@ -104,6 +104,13 @@ public class UserViewModel extends ViewModel {
         userState.setValue(UserState.loading());
         userRepository.signInWithEmail(email, password)
                 .addOnSuccessListener(documentRef -> getCurrentUser())
+                .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
+    }
+
+    public void deleteAccount() {
+        userState.setValue(UserState.loading());
+        userRepository.deleteAccount()
+                .addOnSuccessListener(aVoid -> userState.setValue(UserState.success(null)))
                 .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
     }
 }
