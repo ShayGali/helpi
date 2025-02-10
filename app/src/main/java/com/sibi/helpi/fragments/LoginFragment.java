@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
@@ -22,22 +23,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.sibi.helpi.R;
+import com.sibi.helpi.viewmodels.UserViewModel;
 
 public class LoginFragment extends Fragment {
-    // for google login
+    private static final String TAG = "LoginFragment";
     private static final int RC_SIGN_IN = 123;
     private GoogleSignInClient googleSignInClient;
-
-    // for firebase auth
     private FirebaseAuth mAuth;
     private EditText emailEditText;
     private EditText passwordEditText;
     private Button loginButton;
+    private UserViewModel userViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,12 +47,12 @@ public class LoginFragment extends Fragment {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
@@ -61,16 +60,14 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // check if the user is already signed in
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) { // if the user is already signed in
+        if (currentUser != null) {
             navigateToHome();
         }
 
-        // initialize the views
         emailEditText = view.findViewById(R.id.login_email_input);
         passwordEditText = view.findViewById(R.id.password_input);
-        loginButton = view.findViewById(R.id.login_button); // Corrected ID
+        loginButton = view.findViewById(R.id.login_button);
         loginButton.setOnClickListener(v -> signIn());
 
         Button goToRegisterButton = view.findViewById(R.id.go_to_reg_button);
@@ -78,9 +75,28 @@ public class LoginFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_login_fragment_to_registerFragment)
         );
 
-        View facebookButton = view.findViewById(R.id.facebook_button);
         View googleButton = view.findViewById(R.id.google_button);
         googleButton.setOnClickListener(v -> signInWithGoogle());
+
+        setupObservers();
+    }
+
+    private void setupObservers() {
+        userViewModel.getUserState().observe(getViewLifecycleOwner(), state -> {
+            if (state.isLoading()) {
+                showLoadingIndicator();
+            } else if (state.getError() != null) {
+                hideLoadingIndicator();
+                //TODO - display the error message in TextView
+                Log.w(TAG, "Authentication failed: " + state.getError());
+                Toast.makeText(requireContext(), "Authentication failed: " + state.getError(), Toast.LENGTH_SHORT).show();
+            } else if (state.getUser() != null) {
+                hideLoadingIndicator();
+                Log.d(TAG, "Authentication successful");
+                Toast.makeText(requireContext(), "User signed in successfully", Toast.LENGTH_SHORT).show();
+                navigateToHome();
+            }
+        });
     }
 
     private void signInWithGoogle() {
@@ -97,59 +113,25 @@ public class LoginFragment extends Fragment {
             if (task.isSuccessful()) {
                 GoogleSignInAccount account = task.getResult();
                 if (account != null) {
-                    firebaseAuthWithGoogle(account);
+                    userViewModel.authWithGoogle(account);
                 }
             } else {
-                // Handle error
                 Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
                 Log.w(TAG, "register with google:failure", task.getException());
             }
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
-                        if (isNewUser) {
-                            // Save user to database
-                            // TODO: implement saveUserDatabase method
-//                            saveUserDatabase(account.getGivenName(), account.getFamilyName(), account.getEmail(), "", account.getPhotoUrl());
-                        }
-                        navigateToHome();
-                    } else {
-                        // Handle error
-                        Log.w(TAG, "register with google:failure", task.getException());
-                        Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
     private void signIn() {
-        // get the email and password from the views
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
-        // check if the email and password are not empty
         if (email.isEmpty() || password.isEmpty()) {
-            // show an error message
             Toast.makeText(requireContext(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // sign in the user
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // navigate to the home fragment
-                        navigateToHome();
-                    } else {
-                        // TODO: show an error message
-                        Toast.makeText(requireContext(), "Failed to sign in", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        userViewModel.signInWithEmail(email, password);
     }
 
     private void navigateToHome() {
@@ -157,5 +139,13 @@ public class LoginFragment extends Fragment {
                 .setPopUpTo(R.id.loginFragment, true)
                 .build();
         Navigation.findNavController(requireView()).navigate(R.id.action_login_fragment_to_homeFragment, null, navOptions);
+    }
+
+    private void hideLoadingIndicator() {
+        //TODO: Hide loading indicator
+    }
+
+    private void showLoadingIndicator() {
+        //TODO: Show loading indicator
     }
 }

@@ -100,4 +100,10 @@ public class UserViewModel extends ViewModel {
         return userRepository.getUUID();
     }
 
+    public void signInWithEmail(String email, String password) {
+        userState.setValue(UserState.loading());
+        userRepository.signInWithEmail(email, password)
+                .addOnSuccessListener(documentRef -> getCurrentUser())
+                .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
+    }
 }

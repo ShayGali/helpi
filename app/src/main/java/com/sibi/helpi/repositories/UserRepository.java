@@ -19,12 +19,14 @@ import java.util.Objects;
 public class UserRepository {
     private static final String TAG = "UserRepository";
     public static final String COLLECTION_NAME = "users";
+    private final FirebaseAuth mAuth;
     private final FirebaseAuthService authService;
     private final ImagesRepository imagesRepository;
     private final CollectionReference userCollection;
 
     public UserRepository() {
         authService = new FirebaseAuthService();
+        mAuth = FirebaseAuth.getInstance();
         imagesRepository = ImagesRepository.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         userCollection = db.collection(COLLECTION_NAME);
@@ -105,6 +107,16 @@ public class UserRepository {
 
                     Log.d(TAG, "getCurrentUser: Successfully fetched user data");
                     return user;
+                });
+    }
+
+    public Task<User> signInWithEmail(String email, String password) {
+        return mAuth.signInWithEmailAndPassword(email, password)
+                .continueWithTask(task -> {
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
+                    return getCurrentUser();
                 });
     }
 }
