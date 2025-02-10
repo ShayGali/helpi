@@ -69,14 +69,8 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
-    testImplementation(libs.junit.jupiter)
-    testImplementation(libs.testng)
-    testImplementation(libs.mockito.core)
     implementation(libs.uiautomator)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-
 
     // for firebase
     implementation(platform(libs.firebase.bom))
@@ -101,8 +95,17 @@ dependencies {
     implementation(libs.hdodenhof.circleimageview)
     implementation(libs.ucrop)
 
+    // for testing
+    androidTestImplementation(libs.ext.junit)
+
     // for UI test
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.espresso.core.v351)
+    androidTestImplementation(libs.junit.v115)
+    androidTestImplementation(libs.rules)
+
+    // for mockito
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.testng)
+    testImplementation(libs.mockito.core)
 }

@@ -1,8 +1,10 @@
 [versions]
 agp = "8.7.3"
 androidImageCropper = "2.8.0"
+androidxJunit = "1.1.5"
 circleimageviewVersion = "3.1.0"
 compiler = "4.12.0"
+espressoCoreVersion = "3.5.1"
 firebaseBom = "33.7.0"
 firebaseUiAuth = "8.0.2"
 glide = "4.12.0"
@@ -16,12 +18,14 @@ activity = "1.9.3"
 constraintlayout = "2.2.0"
 materialVersion = "1.12.0"
 coordinatorlayout = "1.2.0"
+mockito = "4.0.0"
 mockitoCore = "5.15.2"
 navigationFragmentKtx = "2.8.5"
 navigationUiKtx = "2.8.5"
 places = "4.1.0"
 playServicesAuth = "21.3.0"
 playServicesMaps = "19.0.0"
+rules = "1.6.1"
 ucrop = "2.2.8"
 ucropVersion = "2.2.10"
 playServicesLocation = "21.3.0"
@@ -37,6 +41,7 @@ uiautomator = "2.3.0"
 [libraries]
 android-image-cropper = { module = "com.theartofdev.edmodo:android-image-cropper", version.ref = "androidImageCropper" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
+espresso-core-v351 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-ui-auth = { module = "com.firebaseui:firebase-ui-auth", version.ref = "firebaseUiAuth" }
@@ -47,6 +52,7 @@ ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitV
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 #noinspection SimilarGradleDependency
+junit-v115 = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -59,6 +65,7 @@ navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.
 places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+rules = { module = "androidx.test:rules", version.ref = "rules" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 ucrop-v2210 = { module = "com.github.yalantis:ucrop", version.ref = "ucropVersion" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
@@ -70,6 +77,7 @@ firebase-storage = { group = "com.google.firebase", name = "firebase-storage", v
 uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 testng = { group = "org.testng", name = "testng", version.ref = "testng" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
