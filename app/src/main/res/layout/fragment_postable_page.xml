@@ -98,5 +98,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phoneFab" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/rejectFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:contentDescription="Reject post"
+        android:src="@drawable/ic_cancel"
+        app:backgroundTint="@color/colorError"
+        app:layout_constraintEnd_toStartOf="@+id/acceptFab"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reportButton" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/acceptFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:contentDescription="Accept post"
+        android:src="@drawable/ic_check_24"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rejectFab"
+        app:layout_constraintTop_toBottomOf="@+id/reportButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
