@@ -11,6 +11,9 @@ import com.sibi.helpi.utils.AppConstants;
 
 import java.util.List;
 
+
+
+// I think this class should be changed to PostableViewModel, because it is used to get posts from the database and change their status.
 public class SearchProductViewModel extends ViewModel {
     private final PostRepository postRepository;
     private final ImagesRepository imagesRepository;
@@ -26,5 +29,9 @@ public class SearchProductViewModel extends ViewModel {
 
     public LiveData<List<String>> getProductImages(String productId) {
         return imagesRepository.getProductImages(productId);
+    }
+
+    public LiveData<Boolean> updatePostStatus(String postId, AppConstants.PostStatus newStatus) {
+        return postRepository.updatePostStatus(postId, newStatus);
     }
 }

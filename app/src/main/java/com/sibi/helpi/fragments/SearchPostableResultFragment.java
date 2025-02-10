@@ -61,6 +61,7 @@ public class SearchPostableResultFragment extends Fragment {
 
         postsSliderAdapter = new PostableAdapter(postable -> {
             Bundle postableBundle = new Bundle();
+            postableBundle.putString("sourcePage", "SearchPostableResultFragment");
             postableBundle.putSerializable("postable", postable);
             Navigation.findNavController(view).navigate(R.id.action_searchPostableResultFragment_to_postablePageFragment, postableBundle);
         });
