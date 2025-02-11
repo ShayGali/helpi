@@ -38,6 +38,7 @@
     <string name="service">Service</string>
     <string name="otherLocationOption">Other</string>
     <string name="select_subcategory">Select a subcategory</string>
+    <string name="no_image_provided">No image provided</string>
 
     <string-array name="categories">
         <item>Select Category</item>

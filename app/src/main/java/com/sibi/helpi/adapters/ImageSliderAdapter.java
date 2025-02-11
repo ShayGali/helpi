@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +32,6 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
         this.imageUrls = new String[0];
     }
 
-
     @NonNull
     @Override
     public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,16 +41,22 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        // Load from URL
-        Glide.with(context)
-                .load(imageUrls[position])
-                .fitCenter()
-                .into(holder.imageView);
+        if (imageUrls.length == 0) {
+            holder.imageView.setVisibility(View.GONE);
+            holder.noImageTextView.setVisibility(View.VISIBLE);
+        } else {
+            holder.imageView.setVisibility(View.VISIBLE);
+            holder.noImageTextView.setVisibility(View.GONE);
+            Glide.with(context)
+                    .load(imageUrls[position])
+                    .fitCenter()
+                    .into(holder.imageView);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return imageUrls.length;
+        return imageUrls.length == 0 ? 1 : imageUrls.length;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -64,10 +70,12 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
 
     static class ImageViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        TextView noImageTextView;
 
         ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.sliderImageView);
+            noImageTextView = itemView.findViewById(R.id.noImageTextView);
         }
     }
 }
