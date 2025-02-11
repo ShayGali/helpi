@@ -19,6 +19,7 @@ import com.sibi.helpi.adapters.PostableAdapter;
 import com.sibi.helpi.adapters.ReportAdapter;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Report;
+import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.viewmodels.AdminDashBoardViewModel;
 import com.sibi.helpi.utils.AppConstants.reportStatus;
 
@@ -54,7 +55,6 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
         reportAdapter = new ReportAdapter(new ArrayList<>(), this);
 
         productSliderAdapter = new PostableAdapter(postable -> {
-            // todo - check want to do with the postable
             Bundle productBundle = new Bundle();
             productBundle.putString("sourcePage", "AdminDashBoardFragment");
             productBundle.putSerializable("postable", postable);
@@ -106,13 +106,22 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
 
 
     @Override
-    public void onDeleteReport(String reportId) {
+    public void onDeleteReport(String reportId) { //
         adminDashBoardViewModel.updateReport(reportId, reportStatus.RESOLVED).observe(getViewLifecycleOwner(), isSuccess -> {
             if (isSuccess) {
                 // Remove the report from the list
-                reportAdapter.removeReport(reportId);
+                Report rep = reportAdapter.removeReport(reportId);
+                String postId;
+                if (rep != null) {
+                    postId = rep.getPostId();
+                } else {
+                    Toast.makeText(getContext(), "Failed to resolve report", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // update the post status to DELETED
+                adminDashBoardViewModel.updatePostStatus(postId, AppConstants.PostStatus.DELETED);
                 // Notify the adapter that the data has changed
-                Toast.makeText(getContext(), "Report resolved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Report resolved, Post deleted", Toast.LENGTH_SHORT).show();
             } else {
                 // Handle the failure case
                 Toast.makeText(getContext(), "Failed to resolve report", Toast.LENGTH_SHORT).show();

@@ -1,15 +1,20 @@
 package com.sibi.helpi.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,8 +22,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
 import com.sibi.helpi.models.Postable;
+import com.sibi.helpi.models.Report;
+import com.sibi.helpi.models.Resource;
+import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.viewmodels.SearchProductViewModel;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
+import com.sibi.helpi.viewmodels.UserViewModel;
 
 public class PostablePageFragment extends Fragment {
 
@@ -32,13 +41,17 @@ public class PostablePageFragment extends Fragment {
     private Postable postable;
 
     private SearchProductViewModel postableViewModel;
+    private UserViewModel userViewModel;
+
+    private Button reportButton;
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        postableViewModel = new SearchProductViewModel(); //TODO change to singleton
+        postableViewModel = new SearchProductViewModel();
+        userViewModel = new UserViewModel();
     }
 
     @Override
@@ -53,6 +66,7 @@ public class PostablePageFragment extends Fragment {
         deliveryPersonName = view.findViewById(R.id.deliveryPersonName);
         acceptButton = view.findViewById(R.id.acceptFab);
         rejectButton = view.findViewById(R.id.rejectFab);
+        reportButton = view.findViewById(R.id.reportButton);
 
         if(getActivity() != null) {
             assert getArguments() != null;
@@ -110,6 +124,11 @@ public class PostablePageFragment extends Fragment {
             // Reject the postable
             rejectPostable(postable);
         });
+
+        reportButton.setOnClickListener(v -> {
+            // Show the report dialog
+            showReportDialog();
+        });
     }
 
     private void acceptPostable(Postable post) {
@@ -146,4 +165,42 @@ public class PostablePageFragment extends Fragment {
             });
         }
     }
+
+    private void showReportDialog() {
+        Dialog dialog = new Dialog(requireContext());
+        dialog.setContentView(R.layout.report_dialog);
+
+        Spinner reportReasonSpinner = dialog.findViewById(R.id.reportReasonSpinner);
+        EditText reportDescriptionEditText = dialog.findViewById(R.id.reportDescriptionEditText);
+        Button submitReportButton = dialog.findViewById(R.id.submitReportButton);
+
+        submitReportButton.setOnClickListener(v -> {
+            String selectedReason = reportReasonSpinner.getSelectedItem().toString();
+            String description = reportDescriptionEditText.getText().toString();
+
+
+            // Handle the report submission here
+            submitReport(selectedReason, description);
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    private void submitReport(String reason, String description) {
+        String reporterId = userViewModel.getUserId();
+        AppConstants.reportReason reasonEnum = AppConstants.reportReason.getReason(reason);
+        Report report = new Report(postable.getId(), reasonEnum, reporterId, description);
+        MutableLiveData<Resource<String>> succeeded = postableViewModel.fileReport(report);
+
+        succeeded.observe(getViewLifecycleOwner(), isSucceeded -> {
+            if(isSucceeded != null) {
+                Toast.makeText(getContext(), "Report filed successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Failed to file report, please try again later", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

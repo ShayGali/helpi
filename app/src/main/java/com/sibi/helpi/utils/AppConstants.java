@@ -11,10 +11,14 @@ public class AppConstants {
     public static final String IMG_UPLOAD_FAILED = "Image upload failed: ";
     public static final String POST_UPLOAD_FAILED = "Post upload failed: ";
 
+    public static final String REPORT_UPLOAD_FAILED = "Report upload failed: ";
+
     public enum PostStatus {
         UNDER_REVIEW("Under Review"),
         APPROVED("Approved"),
-        REJECTED("Rejected");
+        REJECTED("Rejected"),
+
+        DELETED("Deleted");
         private final String statusText;
 
         PostStatus(String statusText) {
@@ -35,7 +39,32 @@ public class AppConstants {
     }
 
     public enum reportReason { //add more reasons
-        INAPPROPRIATE_CONTENT, SPAM, OTHER
+        SPAM("Spam"),
+        INAPPROPRIATE_CONTENT("Inappropriate Content"),
+        OTHER("Other");
+
+        private final String reasonText;
+
+        reportReason(String reasonText) {
+            this.reasonText = reasonText;
+        }
+
+        public String getReasonText() {
+            return reasonText;
+        }
+
+        public static reportReason getReason(String reason) {
+           if(reason.equals("Spam")) {
+               return SPAM;
+           } else if(reason.equals("Inappropriate Content")) {
+               return INAPPROPRIATE_CONTENT;
+           } else {
+               return OTHER;
+           }
+        }
+
+
+
     }
 
 
