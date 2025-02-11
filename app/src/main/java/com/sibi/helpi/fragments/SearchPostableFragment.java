@@ -15,7 +15,7 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.sibi.helpi.R;
-
+//TODO- add option do  not have fillter
 public class SearchPostableFragment extends Fragment {
 
     private AutoCompleteTextView categorySpinner, subcategorySpinner, regionSpinner, productStatusSpinner;
