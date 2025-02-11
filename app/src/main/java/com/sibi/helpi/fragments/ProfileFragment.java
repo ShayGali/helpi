@@ -68,6 +68,11 @@ public class ProfileFragment extends Fragment {
             showLoading();
             userViewModel.signOut(googleSignInClient);
         });
+
+        view.findViewById(R.id.deleteAccountBtn).setOnClickListener(v -> {
+            showLoading();
+            userViewModel.deleteAccount();
+        });
     }
 
     private void setupObservers() {
