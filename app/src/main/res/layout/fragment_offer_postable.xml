@@ -16,77 +16,141 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="Add Post"
-            android:textSize="32dp"
+            android:textSize="32sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Spinner
-            android:id="@+id/spinnerCategories"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:padding="12dp"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
-            android:spinnerMode="dropdown"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-        <Spinner
-            android:id="@+id/spinnerSubCategory"
+        <!-- Post type -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/spinnerPostTypeLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:padding="12dp"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
-            android:spinnerMode="dropdown"
+            android:hint="Post Type"
+            app:boxStrokeWidth="0dp"
+            app:boxBackgroundColor="@color/lightGray"
+            app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerCategories" />
+            app:layout_constraintTop_toBottomOf="@+id/textView12">
 
-        <Spinner
-            android:id="@+id/spinnerRegion"
+            <AutoCompleteTextView
+                android:id="@+id/spinnerPostType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/rounded_background" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Category Selection -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/categoryInputLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:padding="12dp"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
-            android:spinnerMode="dropdown"
+            android:hint="Select Category"
+            app:boxStrokeWidth="0dp"
+            app:boxBackgroundColor="@color/lightGray"
+            app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerSubCategory" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerPostTypeLayout">
 
-        <Spinner
-            android:id="@+id/spinnerPostType"
+            <AutoCompleteTextView
+                android:id="@+id/spinnerCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/rounded_background" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Subcategory Selection -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/subcategoryInputLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:padding="12dp"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
-            android:spinnerMode="dropdown"
+            android:hint="Select Subcategory"
+            app:boxStrokeWidth="0dp"
+            app:boxBackgroundColor="@color/lightGray"
+            app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerRegion"
+            app:layout_constraintTop_toBottomOf="@+id/categoryInputLayout">
 
-            />
+            <AutoCompleteTextView
+                android:id="@+id/spinnerSubCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/rounded_background" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <Spinner
-            android:id="@+id/spinnerProductCondition"
+        <!-- Region Selection -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/regionInputLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:padding="12dp"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
-            android:spinnerMode="dropdown"
+            android:hint="Select Region"
+            app:boxStrokeWidth="0dp"
+            app:boxBackgroundColor="@color/lightGray"
+            app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerPostType" />
+            app:layout_constraintTop_toBottomOf="@+id/subcategoryInputLayout">
+
+            <AutoCompleteTextView
+                android:id="@+id/spinnerRegion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/rounded_background" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Product Status Selection -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/spinnerProductConditionLayout"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Select Product Status"
+            app:boxStrokeWidth="0dp"
+            app:boxBackgroundColor="@color/lightGray"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/regionInputLayout">
+
+            <AutoCompleteTextView
+                android:id="@+id/spinnerProductCondition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:background="@drawable/rounded_background" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnUploadImage"
@@ -96,7 +160,7 @@
             android:text="Upload Images"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerProductCondition" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerProductConditionLayout" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/rvImages"
@@ -172,7 +236,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btnCancelPost"
             app:layout_constraintTop_toBottomOf="@+id/description" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
