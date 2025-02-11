@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="report_reasons">
+        <item>Spam</item>
+        <item>Inappropriate Content</item>
+        <item>Other</item>
+    </string-array>
+</resources>

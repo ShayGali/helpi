@@ -54,14 +54,16 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         this.reportList.addAll(reportList);
         notifyDataSetChanged();
     }
-    public void removeReport(String reportId) {
+    public Report removeReport(String reportId) {
         for (Report report : reportList) {
             if (report.getReportId().equals(reportId)) {
                 reportList.remove(report);
                 notifyDataSetChanged();
-                break;
+                return report;
             }
+
         }
+        return null;
     }
 
     public static class ReportViewHolder extends RecyclerView.ViewHolder {

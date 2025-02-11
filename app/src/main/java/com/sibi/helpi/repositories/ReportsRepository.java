@@ -2,7 +2,7 @@ package com.sibi.helpi.repositories;
 
 import static com.sibi.helpi.utils.AppConstants.COLLECTION_REPORTS;
 import static com.sibi.helpi.utils.AppConstants.POST_UPLOAD_FAILED;
-
+import static com.sibi.helpi.utils.AppConstants.REPORT_UPLOAD_FAILED;
 
 
 import android.util.Log;
@@ -82,7 +82,7 @@ public class ReportsRepository {
                 )
                 .addOnFailureListener(e ->
                         reportLiveData.setValue(
-                                Resource.error(POST_UPLOAD_FAILED + e.getMessage(), null)
+                                Resource.error(REPORT_UPLOAD_FAILED + e.getMessage(), null)
                         )
                 );
     }

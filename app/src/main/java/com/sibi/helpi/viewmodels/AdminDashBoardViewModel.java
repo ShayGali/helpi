@@ -9,6 +9,7 @@ import com.sibi.helpi.models.Report;
 import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.repositories.ReportsRepository;
+import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.utils.AppConstants.reportStatus;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
@@ -50,6 +51,10 @@ public class AdminDashBoardViewModel extends ViewModel {
     public LiveData<Boolean> updateReport(String reportId, reportStatus newStatus) {
         String handlerId = userViewModel.getUserId();
         return reportsRepository.updateReport(reportId, handlerId, newStatus);
+    }
+
+    public LiveData<Boolean> updatePostStatus(String postId, AppConstants.PostStatus newStatus) {
+        return postRepository.updatePostStatus(postId, newStatus);
     }
 
 
