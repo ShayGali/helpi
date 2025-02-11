@@ -1,7 +1,8 @@
 package com.sibi.helpi.models;
 
-import com.sibi.helpi.utils.AppConstants.reportStatus;
+import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.utils.AppConstants.reportReason;
+import com.sibi.helpi.utils.AppConstants.ReportStatus;
 
 import java.util.Date;
 
@@ -16,16 +17,16 @@ public class Report {
     private final Date dateReported; // date of the report
     private String handlerId;
     private String handlerNotes;
-    private reportStatus status;
+    private AppConstants.ReportStatus reportStatus;
     private String reportId;
 
 
 
     public Report() {
         this.postId = "";
-        this.reason = reportReason.SPAM;
+        this.reason = reportReason.OTHER;
         this.reporterId = "";
-        this.status = reportStatus.PENDING;
+        this.reportStatus = ReportStatus.PENDING;
         this.dateReported = new Date();      //Current date
         this.reporterNotes = "";
         this.reportId = "";
@@ -36,7 +37,7 @@ public class Report {
         this.postId = postId;
         this.reason = reason;
         this.reporterId = reporterId;
-        this.status = reportStatus.PENDING;
+        this.reportStatus = ReportStatus.PENDING;
         this.dateReported = new Date();      //Current date
         this.reporterNotes = reporterNotes;
         this.reportId = "";
@@ -48,11 +49,11 @@ public class Report {
     public String getPostId() {
         return postId;
     }
-    public reportStatus getStatus() {
-        return status;
+    public ReportStatus getReportStatus() {
+        return reportStatus;
     }
-    public void setStatus(reportStatus status) {
-        this.status = status;
+    public void setReportStatus(ReportStatus status) {
+        this.reportStatus = status;
     }
     public String getReporterId() {
         return reporterId;

@@ -21,7 +21,7 @@ import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.viewmodels.AdminDashBoardViewModel;
-import com.sibi.helpi.utils.AppConstants.reportStatus;
+import com.sibi.helpi.utils.AppConstants.ReportStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +107,7 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
 
     @Override
     public void onDeleteReport(String reportId) { //
-        adminDashBoardViewModel.updateReport(reportId, reportStatus.RESOLVED).observe(getViewLifecycleOwner(), isSuccess -> {
+        adminDashBoardViewModel.updateReport(reportId, ReportStatus.RESOLVED).observe(getViewLifecycleOwner(), isSuccess -> {
             if (isSuccess) {
                 // Remove the report from the list
                 Report rep = reportAdapter.removeReport(reportId);
@@ -131,7 +131,7 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
 
     @Override
     public void onRejectReport(String reportId) {
-        adminDashBoardViewModel.updateReport(reportId, reportStatus.REJECTED).observe(getViewLifecycleOwner(), isSuccess -> {
+        adminDashBoardViewModel.updateReport(reportId, ReportStatus.REJECTED).observe(getViewLifecycleOwner(), isSuccess -> {
             if (isSuccess) {
                 // Remove the report from the list
                 reportAdapter.removeReport(reportId);

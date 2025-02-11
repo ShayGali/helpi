@@ -34,7 +34,7 @@ public class AppConstants {
         DEFAULT_USER, LOCAL_ADMIN, GLOBAL_ADMIN
     }
 
-    public enum reportStatus {
+    public enum ReportStatus {
         PENDING, RESOLVED, REJECTED
     }
 

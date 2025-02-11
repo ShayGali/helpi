@@ -50,7 +50,7 @@ public class ReportsRepository {
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                         Report report = document.toObject(Report.class);
                         if (report != null) {
-                            if( report.getStatus()!=null && report.getStatus() == AppConstants.reportStatus.PENDING )
+                            if( report.getReportStatus()!=null && report.getReportStatus() == AppConstants.ReportStatus.PENDING )
                                 reports.add(report);
                         }
                     }
@@ -87,7 +87,7 @@ public class ReportsRepository {
                 );
     }
 
-    public LiveData<Boolean> updateReport(String reportId, String handlerId, AppConstants.reportStatus newStatus) {
+    public LiveData<Boolean> updateReport(String reportId, String handlerId, AppConstants.ReportStatus newStatus) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
         reportsCollection.document(reportId)
                 .update("reportStatus", newStatus, "handlerId", handlerId)

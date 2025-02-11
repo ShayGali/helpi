@@ -3,7 +3,7 @@ package com.sibi.helpi.models;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import com.sibi.helpi.utils.AppConstants.reportReason;
-import com.sibi.helpi.utils.AppConstants.reportStatus;
+import com.sibi.helpi.utils.AppConstants.ReportStatus;
 
 import java.util.Date;
 
@@ -16,7 +16,7 @@ public class ReportTest {
         assertEquals(reportReason.SPAM, report.getReason());
         assertEquals("reporterId123", report.getReporterId());
         assertEquals("Notes", report.getReporterNotes());
-        assertEquals(reportStatus.PENDING, report.getStatus());
+        assertEquals(ReportStatus.PENDING, report.getReportStatus());
         assertNotNull(report.getDateReported());
         assertEquals("", report.getReportId());
     }
@@ -25,10 +25,10 @@ public class ReportTest {
     public void reportDefaultInitialization() {
         Report report = new Report();
         assertEquals("", report.getPostId());
-        assertEquals(reportReason.SPAM, report.getReason());
+        assertEquals(reportReason.OTHER, report.getReason());
         assertEquals("", report.getReporterId());
         assertEquals("", report.getReporterNotes());
-        assertEquals(reportStatus.PENDING, report.getStatus());
+        assertEquals(ReportStatus.PENDING, report.getReportStatus());
         assertNotNull(report.getDateReported());
         assertEquals("", report.getReportId());
     }
@@ -36,8 +36,8 @@ public class ReportTest {
     @Test
     public void setStatus() {
         Report report = new Report();
-        report.setStatus(reportStatus.RESOLVED);
-        assertEquals(reportStatus.RESOLVED, report.getStatus());
+        report.setReportStatus(ReportStatus.RESOLVED);
+        assertEquals(ReportStatus.RESOLVED, report.getReportStatus());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class ReportTest {
     @Test
     public void getStatus() {
         Report report = new Report("postId123", reportReason.SPAM, "reporterId123", "Notes");
-        assertEquals(reportStatus.PENDING, report.getStatus());
+        assertEquals(ReportStatus.PENDING, report.getReportStatus());
     }
 
     @Test
