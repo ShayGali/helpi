@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {
 
-    private final List<Report> reportList;
+    private final List<Report> reportList; //TODO- fetch the post of the report
     private final OnReportActionListener onReportActionListener;
 
     public ReportAdapter(List<Report> reportList, OnReportActionListener onReportActionListener) {
@@ -54,6 +54,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         this.reportList.addAll(reportList);
         notifyDataSetChanged();
     }
+
     public Report removeReport(String reportId) {
         for (Report report : reportList) {
             if (report.getReportId().equals(reportId)) {
@@ -83,6 +84,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
 
     public interface OnReportActionListener {
         void onDeleteReport(String reportId);
+
         void onRejectReport(String reportId);
     }
 }
