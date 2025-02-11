@@ -107,6 +107,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                             .load(imageUrl)
                             .into(profileImage);
                 }
+                else {
+                    profileImage.setImageResource(R.drawable.icon_account_circle);
+                }
 
                 if (state.getUser() != null && state.getUser().isAdmin()) {
                     goToAdminDashboardButton.setVisibility(View.VISIBLE);

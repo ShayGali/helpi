@@ -111,6 +111,9 @@ public class ProfileFragment extends Fragment {
                     .load(imageUrl)
                     .into(profileImage);
         }
+        else {
+            profileImage.setImageResource(R.drawable.icon_account_circle);
+        }
     }
 
 }
