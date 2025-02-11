@@ -54,9 +54,14 @@ public class PostableAdapter extends RecyclerView.Adapter<PostableAdapter.Postab
         holder.statusTextView.setText(postable.getStatus().getStatusText());
 
         if (!postable.getImageUrls().isEmpty()) {
+            holder.imageView.setVisibility(View.VISIBLE);
+            holder.noImageTextView.setVisibility(View.GONE);
             Glide.with(holder.itemView.getContext())
                     .load(postable.getImageUrls().get(0))
                     .into(holder.imageView);
+        } else {
+            holder.imageView.setVisibility(View.GONE);
+            holder.noImageTextView.setVisibility(View.VISIBLE);
         }
 
         holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(postable));
@@ -69,6 +74,7 @@ public class PostableAdapter extends RecyclerView.Adapter<PostableAdapter.Postab
 
     public static class PostableViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        TextView noImageTextView;
         TextView titleTextView;
         TextView categoryTextView;
         TextView subCategoryTextView;
@@ -78,6 +84,7 @@ public class PostableAdapter extends RecyclerView.Adapter<PostableAdapter.Postab
         public PostableViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
+            noImageTextView = itemView.findViewById(R.id.noImageTextView);
             titleTextView = itemView.findViewById(R.id.postableTitle);
             categoryTextView = itemView.findViewById(R.id.postableCategory);
             subCategoryTextView = itemView.findViewById(R.id.postableSubCategory);
