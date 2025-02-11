@@ -23,8 +23,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/back_home_btn"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
@@ -42,7 +42,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_white_left_arrow" />
+            app:srcCompat="@drawable/image_arrow_left" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -119,32 +119,32 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="32dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
                     android:layoutDirection="ltr">
 
                     <ImageView
                         android:id="@+id/imageNotifiction"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layoutDirection="ltr"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_round_speaker" />
+                        app:srcCompat="@drawable/image_notifications" />
 
 
                     <ImageView
                         android:id="@+id/arrow1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layoutDirection="ltr"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_small_right_arrow" />
+                        app:srcCompat="@drawable/image_right_arrow" />
 
                     <TextView
                         android:id="@+id/textViewnotification"
@@ -155,40 +155,46 @@
                         android:text="Notifications"
                         android:textColor="@color/textSecondary"
                         android:textSize="20sp"
-                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/imageNotifiction"
                         app:layout_constraintStart_toEndOf="@+id/imageNotifiction"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Separator -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/gray" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="347dp"
-                    android:layout_height="57dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
                     android:layoutDirection="ltr">
 
                     <ImageView
                         android:id="@+id/imageCalander"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layoutDirection="ltr"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_round_calendar" />
+                        app:srcCompat="@drawable/image_language" />
 
                     <ImageView
                         android:id="@+id/arrow2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layoutDirection="ltr"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_small_right_arrow" />
+                        app:srcCompat="@drawable/image_right_arrow" />
 
                     <TextView
                         android:id="@+id/textViewCalander"
@@ -199,85 +205,48 @@
                         android:text="Change Language"
                         android:textColor="@color/textSecondary"
                         android:textSize="20sp"
-                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imageCalander"
                         app:layout_constraintTop_toTopOf="@+id/imageCalander" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <!-- Separator -->
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="16dp"
-                    android:layoutDirection="ltr">
-
-                    <ImageView
-                        android:id="@+id/imageGallery"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layoutDirection="ltr"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_round_share" />
-
-                    <ImageView
-                        android:id="@+id/arrow3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layoutDirection="ltr"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_small_right_arrow" />
-
-                    <TextView
-                        android:id="@+id/textViewGallery"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layoutDirection="ltr"
-                        android:text="Share"
-                        android:textColor="@color/textSecondary"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imageGallery"
-                        app:layout_constraintTop_toTopOf="@+id/imageGallery" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/gray" />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/share_btn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
                     android:layoutDirection="ltr">
 
                     <ImageView
                         android:id="@+id/imageShare"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="2dp"
                         android:layoutDirection="ltr"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_round_extend_screen" />
+                        app:srcCompat="@drawable/image_logout" />
 
                     <ImageView
                         android:id="@+id/arrow4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layoutDirection="ltr"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_small_right_arrow" />
+                        app:srcCompat="@drawable/image_right_arrow" />
 
                     <TextView
                         android:id="@+id/textView4"
@@ -288,32 +257,37 @@
                         android:text="Logout"
                         android:textColor="@color/textSecondary"
                         android:textSize="20sp"
-                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imageShare"
                         app:layout_constraintTop_toTopOf="@+id/imageShare" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
+                <!-- Separator -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/gray" />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/logout_btn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
                     android:layoutDirection="ltr">
 
                     <ImageView
                         android:id="@+id/imageLogout"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
 
                         android:layoutDirection="ltr"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_round_extend_screen" />
+                        app:srcCompat="@drawable/image_delete" />
 
                     <TextView
                         android:id="@+id/textViewLogout"
@@ -324,11 +298,60 @@
                         android:text="Delete Account"
                         android:textColor="@color/textSecondary"
                         android:textSize="20sp"
-                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imageLogout"
                         app:layout_constraintTop_toTopOf="@+id/imageLogout" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Separator -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/colorHint" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layoutDirection="ltr">
+
+                    <ImageView
+                        android:id="@+id/imageGallery"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layoutDirection="ltr"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_round_share" />
+
+                    <ImageView
+                        android:id="@+id/arrow3"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layoutDirection="ltr"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/image_right_arrow" />
+
+                    <TextView
+                        android:id="@+id/textViewGallery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layoutDirection="ltr"
+                        android:text="Share"
+                        android:textColor="@color/textSecondary"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/imageGallery"
+                        app:layout_constraintTop_toTopOf="@+id/imageGallery" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
             </LinearLayout>
