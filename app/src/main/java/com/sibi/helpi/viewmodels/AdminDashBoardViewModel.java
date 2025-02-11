@@ -10,7 +10,7 @@ import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.repositories.ReportsRepository;
 import com.sibi.helpi.utils.AppConstants;
-import com.sibi.helpi.utils.AppConstants.reportStatus;
+import com.sibi.helpi.utils.AppConstants.ReportStatus;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class AdminDashBoardViewModel extends ViewModel {
         return imagesRepository.getProductImages(productId);
     }
 
-    public LiveData<Boolean> updateReport(String reportId, reportStatus newStatus) {
+    public LiveData<Boolean> updateReport(String reportId, ReportStatus newStatus) {
         String handlerId = userViewModel.getUserId();
         return reportsRepository.updateReport(reportId, handlerId, newStatus);
     }
