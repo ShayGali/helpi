@@ -82,6 +82,8 @@ public class UserRepository {
     }
 
     public Task<Void> deleteAccount() {
+        //TODO: delete all user posts
+
         // check if the user is signed in
         if (mAuth.getCurrentUser() == null) {
             Log.d(TAG, "deleteAccount: No user is currently signed in");
