@@ -3,7 +3,6 @@ package com.sibi.helpi.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +30,7 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
     private RecyclerView reportsRecyclerView;
     private RecyclerView postsRecyclerView;
     private ReportAdapter reportAdapter;
-    private PostableAdapter productSliderAdapter;
+    private PostableAdapter postSliderAdapter;
     private List<Report> reportList;
     private List<ProductPost> postList;
     private AdminDashBoardViewModel adminDashBoardViewModel;
@@ -54,7 +53,7 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
         // Initialize the adapters
         reportAdapter = new ReportAdapter(new ArrayList<>(), this);
 
-        productSliderAdapter = new PostableAdapter(postable -> {
+        postSliderAdapter = new PostableAdapter(postable -> {
             Bundle productBundle = new Bundle();
             productBundle.putString("sourcePage", "AdminDashBoardFragment");
             productBundle.putSerializable("postable", postable);
@@ -62,7 +61,7 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
         });
 
         reportsRecyclerView.setAdapter(reportAdapter);
-        postsRecyclerView.setAdapter(productSliderAdapter);
+        postsRecyclerView.setAdapter(postSliderAdapter);
 
         setupViews(view);
         setupObservers();
@@ -91,13 +90,13 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
         adminDashBoardViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
             if (posts != null) {
                 postList = new ArrayList<>(posts);
-                productSliderAdapter.setPostableList(postList);
+                postSliderAdapter.setPostableList(postList);
 
                 // Fetch images for each product
                 for (ProductPost productPost : postList) {
                     adminDashBoardViewModel.getProductImages(productPost.getId()).observe(getViewLifecycleOwner(), imageUrls -> {
                         productPost.setImageUrls(imageUrls);
-                        productSliderAdapter.notifyDataSetChanged();
+                        postSliderAdapter.notifyDataSetChanged();
                     });
                 }
             }
