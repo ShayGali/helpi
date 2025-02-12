@@ -40,21 +40,26 @@ public class AdminDashBoardViewModel extends ViewModel {
 
     //for now we use product posts only
 
-    public LiveData<List<ProductPost>> getPosts() {
+    public LiveData<List<Postable>> getPosts() {
         return postRepository.getUnderReviewPosts();
     }
 
-    public LiveData<List<String>> getProductImages(String productId) {
+    public LiveData<List<String>> getProductImages(String productId) { //TODO change to postImages
         return imagesRepository.getProductImages(productId);
     }
 
-    public LiveData<Boolean> updateReport(String reportId, ReportStatus newStatus) {
+    public LiveData<Boolean> updateReport(String reportId, ReportStatus newStatus, String handlerNotes) {
         String handlerId = userViewModel.getUserId();
-        return reportsRepository.updateReport(reportId, handlerId, newStatus);
+        return reportsRepository.updateReport(reportId, handlerId, handlerNotes, newStatus);
     }
 
     public LiveData<Boolean> updatePostStatus(String postId, AppConstants.PostStatus newStatus) {
         return postRepository.updatePostStatus(postId, newStatus);
+    }
+
+
+    public LiveData<List<Postable>> getPosts(List<String> postIds) {
+        return postRepository.getPosts(postIds);
     }
 
 

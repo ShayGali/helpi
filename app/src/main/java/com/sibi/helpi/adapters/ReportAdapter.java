@@ -1,28 +1,39 @@
 package com.sibi.helpi.adapters;
 
+import static java.security.AccessController.getContext;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.sibi.helpi.R;
+import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.Report;
+import com.sibi.helpi.models.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {
 
-    private final List<Report> reportList; //TODO- fetch the post of the report
-    private final OnReportActionListener onReportActionListener;
+    private final List<Pair<Report, Postable>> reportList; //TODO- fetch the post of the report
 
-    public ReportAdapter(List<Report> reportList, OnReportActionListener onReportActionListener) {
-        this.reportList = reportList;
-        this.onReportActionListener = onReportActionListener;
+    private final OnItemClickListener onItemClickListener;
+
+
+    public ReportAdapter( OnItemClickListener onItemClickListener) {
+        this.reportList = new ArrayList<>();
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -34,11 +45,28 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
 
     @Override
     public void onBindViewHolder(@NonNull ReportViewHolder holder, int position) {
-        Report report = reportList.get(position);
-        holder.reasonTextView.setText(report.getReason().toString());
-        holder.descriptionTextView.setText(report.getReporterNotes());
-        holder.deleteButton.setOnClickListener(v -> onReportActionListener.onDeleteReport(report.getReportId()));
-        holder.rejectButton.setOnClickListener(v -> onReportActionListener.onRejectReport(report.getReportId()));
+        Pair<Report, Postable> report = reportList.get(position);
+        Report report1 = report.getFirst();
+        Postable postable = report.getSecond();
+        holder.reasonTextView.setText(report1.getReason().getReasonText());
+        holder.descriptionTextView.setText(report1.getReporterNotes());
+        holder.postTitleTextView.setText(postable.getTitle());
+        holder.postDescriptionTextView.setText(postable.getDescription());
+        if (!postable.getImageUrls().isEmpty()) {
+            holder.imageView.setVisibility(View.VISIBLE);
+            holder.noImageTextView.setVisibility(View.GONE);
+            Glide.with(holder.itemView.getContext())
+                    .load(postable.getImageUrls().get(0))
+                    .into(holder.imageView);
+        } else {
+            holder.imageView.setVisibility(View.GONE);
+            holder.noImageTextView.setVisibility(View.VISIBLE);
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            onItemClickListener.onItemClick(report);
+        });
+
     }
 
     @Override
@@ -49,42 +77,46 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         return reportList.size();
     }
 
-    public void setReportList(List<Report> reportList) {
+    public void setReportList(List<Pair<Report, Postable>> reportList) {
         this.reportList.clear();
-        this.reportList.addAll(reportList);
+         this.reportList.addAll(reportList);
         notifyDataSetChanged();
+
     }
 
-    public Report removeReport(String reportId) {
-        for (Report report : reportList) {
-            if (report.getReportId().equals(reportId)) {
-                reportList.remove(report);
-                notifyDataSetChanged();
-                return report;
-            }
 
-        }
-        return null;
-    }
+
+
 
     public static class ReportViewHolder extends RecyclerView.ViewHolder {
         TextView reasonTextView;
         TextView descriptionTextView;
-        Button deleteButton;
-        Button rejectButton;
+        TextView postTitleTextView;
+        TextView postDescriptionTextView;
+        ImageView imageView;
+        TextView noImageTextView;
+
+
+
+
+
+
 
         public ReportViewHolder(@NonNull View itemView) {
             super(itemView);
-            reasonTextView = itemView.findViewById(R.id.textView16);
-            descriptionTextView = itemView.findViewById(R.id.textView20);
-            deleteButton = itemView.findViewById(R.id.deletePostButton);
-            rejectButton = itemView.findViewById(R.id.rejectReportButton);
+            reasonTextView = itemView.findViewById(R.id.tvReportReason);
+            descriptionTextView = itemView.findViewById(R.id.tvReportDescription);
+            postTitleTextView = itemView.findViewById(R.id.tvPostTitle);
+            postDescriptionTextView = itemView.findViewById(R.id.tvPostDescription);
+            imageView = itemView.findViewById(R.id.imageViewReport);
+            noImageTextView = itemView.findViewById(R.id.tvNoImage);
+
+
         }
     }
 
-    public interface OnReportActionListener {
-        void onDeleteReport(String reportId);
 
-        void onRejectReport(String reportId);
+    public interface OnItemClickListener {
+        void onItemClick(Pair<Report, Postable> report);
     }
 }
