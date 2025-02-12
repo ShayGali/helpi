@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.PostableAdapter;
 import com.sibi.helpi.adapters.ReportAdapter;
+import com.sibi.helpi.models.Pair;
+import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.utils.AppConstants;
@@ -25,14 +27,12 @@ import com.sibi.helpi.utils.AppConstants.ReportStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminDashBoardFragment extends Fragment implements ReportAdapter.OnReportActionListener {
+public class AdminDashBoardFragment extends Fragment  {
 
-    private RecyclerView reportsRecyclerView;
-    private RecyclerView postsRecyclerView;
     private ReportAdapter reportAdapter;
     private PostableAdapter postSliderAdapter;
     private List<Report> reportList;
-    private List<ProductPost> postList;
+    private List<Postable> postList;
     private AdminDashBoardViewModel adminDashBoardViewModel;
 
     public AdminDashBoardFragment() {
@@ -44,14 +44,19 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_dash_board, container, false);
 
-        reportsRecyclerView = view.findViewById(R.id.reportsRecyclerView);
+        RecyclerView reportsRecyclerView = view.findViewById(R.id.reportsRecyclerView);
         reportsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        postsRecyclerView = view.findViewById(R.id.postsToApproveRecyclerView);
+        RecyclerView postsRecyclerView = view.findViewById(R.id.postsToApproveRecyclerView);
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize the adapters
-        reportAdapter = new ReportAdapter(new ArrayList<>(), this);
+        reportAdapter = new ReportAdapter( pair -> {
+            Bundle reportBundle = new Bundle();
+            reportBundle.putSerializable("report", pair.getFirst());
+            reportBundle.putSerializable("postable", pair.getSecond());
+            Navigation.findNavController(view).navigate(R.id.action_adminDashBoardFragment_to_reportResolveFragment, reportBundle);
+        });
 
         postSliderAdapter = new PostableAdapter(postable -> {
             Bundle productBundle = new Bundle();
@@ -63,7 +68,7 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
         reportsRecyclerView.setAdapter(reportAdapter);
         postsRecyclerView.setAdapter(postSliderAdapter);
 
-        setupViews(view);
+
         setupObservers();
 
         return view;
@@ -75,17 +80,34 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
         adminDashBoardViewModel = new ViewModelProvider(requireActivity()).get(AdminDashBoardViewModel.class);
     }
 
-    public void setupViews(View view) {
-        // Implement view setup if needed
-    }
+
 
     public void setupObservers() {
         adminDashBoardViewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
             if (reports != null) {
-                reportList = reports;
-                reportAdapter.setReportList(reportList);
-            }
+                reportList = new ArrayList<>(reports);
+                List<String> postIds = getPostIds(reportList);
+                adminDashBoardViewModel.getPosts(postIds).observe(getViewLifecycleOwner(), posts -> {
+                    if (posts != null) {
+                        List<Pair<Report, Postable>> reportPostPairs = new ArrayList<>();
+                        for (Report report : reportList) {
+                            for (Postable post : posts) {
+                                if (report.getPostId().equals(post.getId())) {
+                                    reportPostPairs.add(new Pair<>(report, post));
+                                    break;
+                                }
+                            }
+                        }
+                        reportAdapter.setReportList(reportPostPairs);
+                    }
+                });
+
+
+        }
         });
+
+
+
 
         adminDashBoardViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
             if (posts != null) {
@@ -93,7 +115,7 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
                 postSliderAdapter.setPostableList(postList);
 
                 // Fetch images for each product
-                for (ProductPost productPost : postList) {
+                for (Postable productPost : postList) { //TODO - change to postable
                     adminDashBoardViewModel.getProductImages(productPost.getId()).observe(getViewLifecycleOwner(), imageUrls -> {
                         productPost.setImageUrls(imageUrls);
                         postSliderAdapter.notifyDataSetChanged();
@@ -104,44 +126,13 @@ public class AdminDashBoardFragment extends Fragment implements ReportAdapter.On
     }
 
 
-    @Override
-    public void onDeleteReport(String reportId) { //
-        adminDashBoardViewModel.updateReport(reportId, ReportStatus.RESOLVED).observe(getViewLifecycleOwner(), isSuccess -> {
-            if (isSuccess) {
-                // Remove the report from the list
-                Report rep = reportAdapter.removeReport(reportId);
-                String postId;
-                if (rep != null) {
-                    postId = rep.getPostId();
-                } else {
-                    Toast.makeText(getContext(), "Failed to resolve report", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                // update the post status to DELETED
-                adminDashBoardViewModel.updatePostStatus(postId, AppConstants.PostStatus.DELETED);
-                // Notify the adapter that the data has changed
-                Toast.makeText(getContext(), "Report resolved, Post deleted", Toast.LENGTH_SHORT).show();
-            } else {
-                // Handle the failure case
-                Toast.makeText(getContext(), "Failed to resolve report", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    @Override
-    public void onRejectReport(String reportId) {
-        adminDashBoardViewModel.updateReport(reportId, ReportStatus.REJECTED).observe(getViewLifecycleOwner(), isSuccess -> {
-            if (isSuccess) {
-                // Remove the report from the list
-                reportAdapter.removeReport(reportId);
-                // Notify the adapter that the data has changed
-                Toast.makeText(getContext(), "Report rejected", Toast.LENGTH_SHORT).show();
-            } else {
-                // Handle the failure case
-                Toast.makeText(getContext(), "Failed to reject report", Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
+    private List<String> getPostIds(List<Report> reports) {
+        List<String> postIds = new ArrayList<>();
+        for (Report report : reports) {
+            postIds.add(report.getPostId());
+        }
+        return postIds;
     }
 }

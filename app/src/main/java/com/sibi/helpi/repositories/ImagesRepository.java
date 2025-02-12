@@ -103,7 +103,7 @@ public class ImagesRepository {
         return uploadTasks;
     }
 
-    public LiveData<List<String>> getProductImages(String productId) {
+    public LiveData<List<String>> getProductImages(String productId) { //TODO - change to postable
         MutableLiveData<List<String>> imagesLiveData = new MutableLiveData<>();
         StorageReference productImagesRef = postsRef.child(productId);
 

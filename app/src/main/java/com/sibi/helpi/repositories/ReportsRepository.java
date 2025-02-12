@@ -87,10 +87,10 @@ public class ReportsRepository {
                 );
     }
 
-    public LiveData<Boolean> updateReport(String reportId, String handlerId, AppConstants.ReportStatus newStatus) {
+    public LiveData<Boolean> updateReport(String reportId, String handlerId,String handlerNotes, AppConstants.ReportStatus newStatus) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
         reportsCollection.document(reportId)
-                .update("reportStatus", newStatus, "handlerId", handlerId)
+                .update("reportStatus", newStatus, "handlerId", handlerId, "handlerNotes", handlerNotes)
                 .addOnSuccessListener(aVoid -> {
                     Log.d("Repository", "Report updated successfully");
                     result.setValue(true);

@@ -61,6 +61,9 @@
         <action
             android:id="@+id/action_adminDashBoardFragment_to_postablePageFragment"
             app:destination="@id/postablePageFragment" />
+        <action
+            android:id="@+id/action_adminDashBoardFragment_to_reportResolveFragment"
+            app:destination="@id/reportResolveFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchPostableResultFragment"
@@ -99,6 +102,17 @@
             android:id="@+id/action_searchPostableFragment_to_searchPostableResultFragment"
             app:destination="@id/searchPostableResultFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/reportResolveFragment"
+        android:name="com.sibi.helpi.fragments.ReportResolveFragment"
+        android:label="fragment_report_resolve"
+        tools:layout="@layout/fragment_report_resolve" >
+        <action
+            android:id="@+id/action_reportResolveFragment_to_adminDashBoardFragment"
+            app:destination="@id/adminDashBoardFragment" />
+    </fragment>
+
 
 
 </navigation>
