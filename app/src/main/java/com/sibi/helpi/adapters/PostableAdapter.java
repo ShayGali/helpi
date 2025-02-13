@@ -20,7 +20,7 @@ import java.util.List;
 public class PostableAdapter extends RecyclerView.Adapter<PostableAdapter.PostableViewHolder> {
 
     private List<? extends Postable> postableList;
-    private OnItemClickListener onItemClickListener;
+    private final OnItemClickListener onItemClickListener;
 
     @SuppressLint("NotifyDataSetChanged")
     public void setPostableList(List<? extends Postable> postableList) {

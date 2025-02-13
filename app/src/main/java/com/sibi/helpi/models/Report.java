@@ -4,10 +4,11 @@ import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.utils.AppConstants.reportReason;
 import com.sibi.helpi.utils.AppConstants.ReportStatus;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
-public class Report {
+public class Report implements Serializable {
 
 
     private final String postId;

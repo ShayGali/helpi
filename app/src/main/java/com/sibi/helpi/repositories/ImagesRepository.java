@@ -80,7 +80,7 @@ public class ImagesRepository {
      * @param productId the UUID of the product
      * @return a LiveData object that will complete with a list of image URLs
      */
-    public LiveData<List<String>> getProductImages(String productId) {
+    public LiveData<List<String>> getProductImages(String productId) { //TODO - change to postable
         MutableLiveData<List<String>> imagesLiveData = new MutableLiveData<>();
         StorageReference productImagesRef = postsRef.child(productId);
 
