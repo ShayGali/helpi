@@ -49,34 +49,6 @@ public class ImagesRepository {
     }
 
 
-    // products
-    private Task<Uri> uploadProductImage(String productUUID, byte[] data) {
-        // Create the complete reference path first
-        StorageReference productImagesRef = postsRef
-                .child(productUUID)
-                .child(System.currentTimeMillis() + ".jpg");
-
-        // Start upload with the correct reference
-        UploadTask uploadTask = productImagesRef.putBytes(data);
-
-        // Return a Task that will complete with the download URL
-        return uploadTask
-                .continueWithTask(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.e("ImagesRepository", "Failed to upload image: " + task.getException());
-                        throw Objects.requireNonNull(task.getException());
-                    }
-                    // Get the download URL
-                    return productImagesRef.getDownloadUrl();
-                })
-                .addOnSuccessListener(uri -> {
-                    Log.d("ImagesRepository", "Image uploaded successfully. URL: " + uri.toString());
-                })
-                .addOnFailureListener(exception -> {
-                    Log.e("ImagesRepository", "Failed to upload image: " + exception);
-                });
-    }
-
     public List<Task<Uri>> uploadPostImages(String productId, byte[][] images) {
         // check if the images are not null
         if (images == null) {
@@ -98,11 +70,16 @@ public class ImagesRepository {
 
         List<Task<Uri>> uploadTasks = new ArrayList<>();
         for (byte[] imageData : images) {
-            uploadTasks.add(uploadProductImage(productId, imageData));
+            uploadTasks.add(uploadPostImage(productId, imageData));
         }
         return uploadTasks;
     }
 
+    /**
+     * Fetches the images of a product from the storage
+     * @param productId the UUID of the product
+     * @return a LiveData object that will complete with a list of image URLs
+     */
     public LiveData<List<String>> getProductImages(String productId) {
         MutableLiveData<List<String>> imagesLiveData = new MutableLiveData<>();
         StorageReference productImagesRef = postsRef.child(productId);
@@ -127,34 +104,14 @@ public class ImagesRepository {
         return imagesLiveData;
     }
 
-    // profile
-    public Task<Uri> uploadProfileImage(String userUUID, byte[] data) {
-        // Create the complete reference path first
-        StorageReference profileImagesRef = profileRef
-                .child(userUUID)
-                .child(System.currentTimeMillis() + ".jpg");
 
-        // Start upload with the correct reference
-        UploadTask uploadTask = profileImagesRef.putBytes(data);
 
-        // Return a Task that will complete with the download URL
-        return uploadTask
-                .continueWithTask(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.e("ImagesRepository", "Failed to upload image: " + task.getException());
-                        throw Objects.requireNonNull(task.getException());
-                    }
-                    // Get the download URL
-                    return profileImagesRef.getDownloadUrl();
-                })
-                .addOnSuccessListener(uri -> {
-                    Log.d("ImagesRepository", "Image uploaded successfully. URL: " + uri.toString());
-                })
-                .addOnFailureListener(exception -> {
-                    Log.e("ImagesRepository", "Failed to upload image: " + exception);
-                });
-    }
 
+    /**
+     * Fetches the profile image of a user from the storage
+     * @param userUUID the UUID of the user
+     * @return a LiveData object that will complete with the image URL
+     */
     public LiveData<String> getProfileImage(String userUUID) {
         MutableLiveData<String> imageLiveData = new MutableLiveData<>();
         StorageReference profileImagesRef = profileRef.child(userUUID);
@@ -181,4 +138,51 @@ public class ImagesRepository {
         StorageReference profileImagesRef = profileRef.child(userUUID);
         return profileImagesRef.delete();
     }
+
+    /**
+     * Deletes the images of a product from the storage
+     * @param userUUID the UUID of the user
+     * @param data the image data as a byte array
+     * @return a Task that will complete with the download URL of the uploaded image
+     */
+    public Task<Uri> uploadProfileImage(String userUUID, byte[] data) {
+        return uploadImage(profileRef, userUUID, data);
+    }
+
+
+    /**
+     * Uploads a single image to the storage
+     * @param productUUID the UUID of the product
+     * @param data the image data as a byte array
+     * @return a Task that will complete with the download URL of the uploaded image
+     */
+    private Task<Uri> uploadPostImage(String productUUID, byte[] data) {
+        return uploadImage(postsRef, productUUID, data);
+    }
+
+
+    private Task<Uri> uploadImage(StorageReference baseRef, String folderId, byte[] data) {
+        // Create a child reference with the folder ID and a timestamped file name
+        StorageReference imageRef = baseRef.child(folderId)
+                .child(System.currentTimeMillis() + ".jpg");
+
+        UploadTask uploadTask = imageRef.putBytes(data);
+
+        return uploadTask
+                .continueWithTask(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e("ImagesRepository", "Failed to upload image: " + task.getException());
+                        throw Objects.requireNonNull(task.getException());
+                    }
+                    // Get the download URL
+                    return imageRef.getDownloadUrl();
+                })
+                .addOnSuccessListener(uri -> {
+                    Log.d("ImagesRepository", "Image uploaded successfully. URL: " + uri.toString());
+                })
+                .addOnFailureListener(exception -> {
+                    Log.e("ImagesRepository", "Failed to upload image: " + exception);
+                });
+    }
+
 }
