@@ -11,7 +11,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -77,6 +79,7 @@ public class ImagesRepository {
 
     /**
      * Fetches the images of a product from the storage
+     *
      * @param productId the UUID of the product
      * @return a LiveData object that will complete with a list of image URLs
      */
@@ -105,10 +108,9 @@ public class ImagesRepository {
     }
 
 
-
-
     /**
      * Fetches the profile image of a user from the storage
+     *
      * @param userUUID the UUID of the user
      * @return a LiveData object that will complete with the image URL
      */
@@ -134,15 +136,43 @@ public class ImagesRepository {
         return imageLiveData;
     }
 
+    /**
+     * Deletes the profile image of a user from the storage. if the image is not found, it is treated as already deleted.
+     *
+     * @param userUUID
+     * @return
+     */
     public Task<Void> deleteProfileImage(String userUUID) {
         StorageReference profileImagesRef = profileRef.child(userUUID);
-        return profileImagesRef.delete();
+        Task<Void> deleteTask = profileImagesRef.delete();
+
+        TaskCompletionSource<Void> taskCompletionSource = new TaskCompletionSource<>();
+
+        deleteTask.addOnSuccessListener(aVoid -> {
+            // Successfully deleted
+            taskCompletionSource.setResult(null);
+        }).addOnFailureListener(exception -> {
+            if (exception instanceof StorageException) {
+                StorageException storageException = (StorageException) exception;
+                if (storageException.getErrorCode() == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                    Log.w("ImagesRepository", "Profile image not found; treating as deleted.");
+                    taskCompletionSource.setResult(null);
+                    return;
+                }
+            }
+            // For other errors, pass the exception along.
+            taskCompletionSource.setException(exception);
+        });
+
+        return taskCompletionSource.getTask();
     }
+
 
     /**
      * Deletes the images of a product from the storage
+     *
      * @param userUUID the UUID of the user
-     * @param data the image data as a byte array
+     * @param data     the image data as a byte array
      * @return a Task that will complete with the download URL of the uploaded image
      */
     public Task<Uri> uploadProfileImage(String userUUID, byte[] data) {
@@ -152,8 +182,9 @@ public class ImagesRepository {
 
     /**
      * Uploads a single image to the storage
+     *
      * @param productUUID the UUID of the product
-     * @param data the image data as a byte array
+     * @param data        the image data as a byte array
      * @return a Task that will complete with the download URL of the uploaded image
      */
     private Task<Uri> uploadPostImage(String productUUID, byte[] data) {
