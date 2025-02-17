@@ -27,6 +27,14 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * This test class tests the full user flow from registration to login and logout.
+ * It start from the login screen, navigates to registration, and make a full registration process.
+ * Then it navigates to the profile screen, logs out, logs back in, and verifies the successful login.
+ * In the end, it cleans up the test user.
+ */
+
 @RunWith(AndroidJUnit4.class)
 public class FullUserFlowTest {
 

@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {
 
-    private final List<Pair<Report, Postable>> reportList; //TODO- fetch the post of the report
+    private final List<Pair<Report, Postable>> reportList;
 
     private final OnItemClickListener onItemClickListener;
 

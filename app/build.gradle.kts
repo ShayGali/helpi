@@ -48,15 +48,29 @@ android {
     }
 
     testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
         packagingOptions {
             jniLibs {
                 useLegacyPackaging = true
             }
         }
+        unitTests.all {
+            it.jvmArgs(
+                "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+                "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED",
+                "--add-opens", "java.base/java.lang.invoke=ALL-UNNAMED",
+                "--add-opens", "java.base/java.util=ALL-UNNAMED",
+                "--add-opens", "java.base/java.util.concurrent=ALL-UNNAMED"
+            )
+        }
     }
 }
 
+
 dependencies {
+    // App dependencies
     implementation(libs.appcompat)
     implementation("com.google.android.material:material:1.10.0")
     implementation(libs.activity)
@@ -69,43 +83,40 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
-    implementation(libs.uiautomator)
-    testImplementation(libs.junit)
 
-    // for firebase
+    // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.ui.auth)
 
-    // Maps SDK for Android
+    // Maps SDK
     implementation(libs.play.services.maps)
     implementation(libs.places)
 
-    implementation(libs.material)
-    implementation(libs.material.v190)
-
-    // navigation
+    // Navigation
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
 
+    // Image loading
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
 
-    // for image crop
+    // Image crop
     implementation(libs.hdodenhof.circleimageview)
     implementation(libs.ucrop)
 
-    // for testing
+    // Testing
+    testImplementation("junit:junit:4.13.2") // Explicit JUnit 4
     androidTestImplementation(libs.ext.junit)
 
-    // for UI test
+    // UI Testing
     androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(libs.espresso.core.v351)
-    androidTestImplementation(libs.junit.v115)
     androidTestImplementation(libs.rules)
 
-    // for mockito
-    testImplementation(libs.junit.jupiter)
-    testImplementation(libs.testng)
-    testImplementation(libs.mockito.core)
+    // Mockito and PowerMock
+    testImplementation("org.mockito:mockito-core:3.12.4")
+    testImplementation("org.powermock:powermock-module-junit4:2.0.9")
+    testImplementation("org.powermock:powermock-api-mockito2:2.0.9")
+    testImplementation("androidx.arch.core:core-testing:2.2.0") // For LiveData testing
+    testImplementation("net.java.dev.jna:jna:5.12.1") // Required for Mockito inline mocking on Java 17+
 }

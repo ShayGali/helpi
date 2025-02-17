@@ -4,6 +4,8 @@ androidImageCropper = "2.8.0"
 androidxJunit = "1.1.5"
 circleimageviewVersion = "3.1.0"
 compiler = "4.12.0"
+coreTesting = "2.2.0"
+coreTestingVersion = "2.1.0"
 espressoCoreVersion = "3.5.1"
 firebaseBom = "33.7.0"
 firebaseUiAuth = "8.0.2"
@@ -19,7 +21,8 @@ constraintlayout = "2.2.0"
 materialVersion = "1.12.0"
 coordinatorlayout = "1.2.0"
 mockito = "4.0.0"
-mockitoCore = "5.15.2"
+powermock = "2.0.9"
+mockitoInline = "4.0.0"
 navigationFragmentKtx = "2.8.5"
 navigationUiKtx = "2.8.5"
 places = "4.1.0"
@@ -37,10 +40,13 @@ firebaseStorage = "21.0.1"
 junitJupiter = "5.11.4"
 testng = "6.9.6"
 uiautomator = "2.3.0"
+junitJupiterVersion = "5.8.1"
 
 [libraries]
 android-image-cropper = { module = "com.theartofdev.edmodo:android-image-cropper", version.ref = "androidImageCropper" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
+core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
+core-testing-v210 = { module = "androidx.arch.core:core-testing", version.ref = "coreTestingVersion" }
 espresso-core-v351 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -60,11 +66,14 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 coordinatorlayout = { group = "androidx.coordinatorlayout", name = "coordinatorlayout", version.ref = "coordinatorlayout" }
 #noinspection SimilarGradleDependency
 material-v190 = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
 navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
 places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+powermock-api-mockito2 = { module = "org.powermock:powermock-api-mockito2", version.ref = "powermock" }
+powermock-module-junit4 = { module = "org.powermock:powermock-module-junit4", version.ref = "powermock" }
 rules = { module = "androidx.test:rules", version.ref = "rules" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 ucrop-v2210 = { module = "com.github.yalantis:ucrop", version.ref = "ucropVersion" }
@@ -78,6 +87,7 @@ uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", versi
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

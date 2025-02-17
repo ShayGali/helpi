@@ -11,6 +11,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * This test class tests the navigation between the fragments in the MainActivity.
+ * It tests the navigation to the home fragment, search postable fragment, and offer post fragment.
+ */
+
 @RunWith(AndroidJUnit4.class)
 public class MainActivityNavigationTest {
 
