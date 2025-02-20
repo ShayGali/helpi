@@ -54,6 +54,7 @@ public class RegisterFragment extends Fragment {
     EditText fNameEditText;
     EditText lNameEditText;
     EditText emailEditText;
+    EditText phoneEditText;
     EditText passwordEditText;
     Button registerButton;
     Button chooseProfilePicButton;
@@ -130,6 +131,7 @@ public class RegisterFragment extends Fragment {
         fNameEditText = view.findViewById(R.id.first_name_input_reg);
         lNameEditText = view.findViewById(R.id.last_name_input_reg);
         emailEditText = view.findViewById(R.id.email);
+        phoneEditText = view.findViewById(R.id.phone_input);
         passwordEditText = view.findViewById(R.id.password_input);
         registerButton = view.findViewById(R.id.register_button);
         chooseProfilePicButton = view.findViewById(R.id.choose_picture_button);
@@ -146,6 +148,7 @@ public class RegisterFragment extends Fragment {
             String fName = fNameEditText.getText().toString();
             String lName = lNameEditText.getText().toString();
             String email = emailEditText.getText().toString();
+            String phone = phoneEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
             EditText firstToFocus = null;
@@ -175,7 +178,7 @@ public class RegisterFragment extends Fragment {
             }
 
             // Create user with email and password
-            User user = new User(email, fName, lName, "", null);
+            User user = new User(email, fName, lName, phone, null);
             byte[] profileImg = getProfileImage();
 
             userViewModel.registerUser(user, password, profileImg);
@@ -224,8 +227,6 @@ public class RegisterFragment extends Fragment {
                 profilePic.setImageURI(null); // Clear the image view
                 // refresh the image view to make the image appear
                 profilePic.setImageURI(profilePicUri); // Show the cropped image, to refresh the image view
-
-
 
 
             }
