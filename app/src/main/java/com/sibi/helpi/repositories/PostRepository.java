@@ -69,7 +69,6 @@ public class PostRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Postable> postableList = new ArrayList<>();
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-
                         if (document == null) {
                             continue;
                         }
@@ -82,33 +81,49 @@ public class PostRepository {
 
                         AppConstants.PostType type = AppConstants.PostType.values()[Math.toIntExact(t)];
                         Postable postable = null;
-                        if (type == AppConstants.PostType.PRODUCT) {
-                            postable = document.toObject(ProductPost.class);
+                        try {
+                            if (type == AppConstants.PostType.PRODUCT) {
+                                postable = document.toObject(ProductPost.class);
 
-                            if (!productStatus.isEmpty() && !((ProductPost) postable).getCondition().equals(productStatus)) {
-                                continue;
-                            }
-                        } else if (type == AppConstants.PostType.SERVICE) {
-                            postable = document.toObject(ServicePost.class);
-                        } else {
-                            throw new IllegalArgumentException("Unknown type: " + type);
-                        }
-                        if (postable != null) {
-                            // filter by fields
-                            if (!category.isEmpty() && !postable.getCategory().equals(category)) {
-                                continue;
-                            }
-                            if (!subcategory.isEmpty() && !postable.getSubCategory().equals(subcategory)) {
-                                continue;
-                            }
-                            if (!region.isEmpty() && !postable.getRegion().equals(region)) {
+                                // Check product status only if it's a product post and status filter is not empty
+                                if (!productStatus.isEmpty() && postable != null) {
+                                    String condition = ((ProductPost) postable).getCondition();
+                                    if (condition == null || !condition.equals(productStatus)) {
+                                        continue;
+                                    }
+                                }
+                            } else if (type == AppConstants.PostType.SERVICE) {
+                                postable = document.toObject(ServicePost.class);
+                            } else {
+                                Log.w("Repository", "Unknown post type: " + type);
                                 continue;
                             }
 
-                            if(postable.getStatus() != null && postable.getStatus() != PostStatus.APPROVED ) {
-                                continue;
-                            } // works well. TODO: uncomment this line after admin approval is implemented
-                            postableList.add(postable);
+                            if (postable != null) {
+                                // Apply filters only if they are not empty and the corresponding field exists
+                                if (!category.isEmpty() &&
+                                        (postable.getCategory() == null || !postable.getCategory().equals(category))) {
+                                    continue;
+                                }
+                                if (!subcategory.isEmpty() &&
+                                        (postable.getSubCategory() == null || !postable.getSubCategory().equals(subcategory))) {
+                                    continue;
+                                }
+                                if (!region.isEmpty() &&
+                                        (postable.getRegion() == null || !postable.getRegion().equals(region))) {
+                                    continue;
+                                }
+
+                                // Check post status
+                                if (postable.getStatus() == null || postable.getStatus() != PostStatus.APPROVED) {
+                                    continue;
+                                }
+
+                                postableList.add(postable);
+                            }
+                        } catch (Exception e) {
+                            Log.e("Repository", "Error processing document: " + document.getId(), e);
+                            continue;
                         }
                     }
                     mutableLiveData.setValue(postableList);

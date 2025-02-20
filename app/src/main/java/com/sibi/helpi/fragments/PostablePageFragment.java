@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class PostablePageFragment extends Fragment {
 
     private FloatingActionButton emailFab;
     private ChatViewModel chatViewModel;
+    private Dialog loadingDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,6 +140,7 @@ public class PostablePageFragment extends Fragment {
                 String otherUserId = postable.getUserId();
                 // Ensure we're not trying to chat with ourselves
                 if (!otherUserId.equals(userViewModel.getCurrentUserId())) {
+                    showLoadingDialog(); // Add a loading indicator
                     navigateToChat(otherUserId);
                 } else {
                     Toast.makeText(getContext(), "Cannot chat with yourself", Toast.LENGTH_SHORT).show();
@@ -154,21 +157,56 @@ public class PostablePageFragment extends Fragment {
                 .observe(getViewLifecycleOwner(), user -> {
                     if (user != null) {
                         String partnerName = user.getFullName();
-                        // Create chat with partner name
-                        chatViewModel.createNewChat(currentUserId, otherUserId, partnerName);
 
-                        // Only observe chat creation after we have user data
+                        // Check if chat exists first
                         chatViewModel.getChatByParticipants(currentUserId, otherUserId)
                                 .observe(getViewLifecycleOwner(), chat -> {
+                                    hideLoadingDialog(); // Hide loading indicator
+
                                     if (chat != null) {
+                                        // Navigate to existing chat
                                         Bundle args = new Bundle();
                                         args.putString("chatId", chat.getChatId());
                                         Navigation.findNavController(requireView())
                                                 .navigate(R.id.action_postablePageFragment_to_chatMessagesFragment, args);
+                                    } else {
+                                        // Create new chat and navigate
+                                        chatViewModel.createNewChat(currentUserId, otherUserId, partnerName);
+
+                                        // Wait briefly for chat creation
+                                        new Handler().postDelayed(() -> {
+                                            chatViewModel.getChatByParticipants(currentUserId, otherUserId)
+                                                    .observe(getViewLifecycleOwner(), newChat -> {
+                                                        if (newChat != null) {
+                                                            Bundle args = new Bundle();
+                                                            args.putString("chatId", newChat.getChatId());
+                                                            Navigation.findNavController(requireView())
+                                                                    .navigate(R.id.action_postablePageFragment_to_chatMessagesFragment, args);
+                                                        }
+                                                    });
+                                        }, 500); // Half second delay to ensure chat is created
                                     }
                                 });
+                    } else {
+                        hideLoadingDialog();
+                        Toast.makeText(getContext(), "Could not find user information", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void showLoadingDialog() {
+        if (getContext() != null) {
+            loadingDialog = new Dialog(getContext());
+            loadingDialog.setContentView(R.layout.dialog_loading);
+            loadingDialog.setCancelable(false);
+            loadingDialog.show();
+        }
+    }
+
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
     }
 
     private void acceptPostable(Postable post) {
