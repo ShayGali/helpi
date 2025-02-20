@@ -52,6 +52,9 @@
         <action
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_chatListFragment"
+            app:destination="@id/chatListFragment" />
     </fragment>
     <fragment
         android:id="@+id/adminDashBoardFragment"
@@ -92,6 +95,9 @@
         <action
             android:id="@+id/action_postablePageFragment_to_adminDashBoardFragment"
             app:destination="@id/adminDashBoardFragment" />
+        <action
+            android:id="@+id/action_postablePageFragment_to_chatMessagesFragment"
+            app:destination="@id/chatMessagesFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchPostableFragment"
@@ -112,7 +118,18 @@
             android:id="@+id/action_reportResolveFragment_to_adminDashBoardFragment"
             app:destination="@id/adminDashBoardFragment" />
     </fragment>
-
+    <fragment
+        android:id="@+id/chatListFragment"
+        android:name="com.sibi.helpi.fragments.ChatListFragment"
+        android:label="ChatListFragment" >
+        <action
+            android:id="@+id/action_chatListFragment_to_chatMessagesFragment"
+            app:destination="@id/chatMessagesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatMessagesFragment"
+        android:name="com.sibi.helpi.fragments.ChatMessagesFragment"
+        android:label="ChatMessagesFragment" />
 
 
 </navigation>

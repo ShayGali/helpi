@@ -3,6 +3,9 @@ package com.sibi.helpi.repositories;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.Task;
@@ -139,5 +142,29 @@ public class UserRepository {
                 });
     }
 
+    public Task<User> getUserById(String userId) {
+        return userCollection.document(userId).get()
+                .continueWith(task -> {
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
+                    return task.getResult().toObject(User.class);
+                });
+    }
+
+    public LiveData<User> getUserByIdLiveData(String userId) {
+        MutableLiveData<User> userLiveData = new MutableLiveData<>();
+        userCollection.document(userId).addSnapshotListener((documentSnapshot, e) -> {
+            if (e != null) {
+                Log.e(TAG, "getCurrentUserLiveData: Error", e);
+                return;
+            }
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                User user = documentSnapshot.toObject(User.class);
+                userLiveData.postValue(user);
+            }
+        });
+        return userLiveData;
+    }
 
 }

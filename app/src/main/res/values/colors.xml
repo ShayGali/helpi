@@ -30,6 +30,11 @@
     <color name="primaryColor">#3D8BFF</color>
     <color name="lightGray">#D3D3D3</color>
 
+    <color name="message_user_background">#2196F3</color>
+    <color name="message_partner_background">#EEEEEE</color>
+    <color name="unread_badge_background">#FF4081</color>
+    <color name="chat_send_button">#2196F3</color>
+
 
 
 

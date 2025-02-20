@@ -12,6 +12,7 @@ public class User {
     private List<Postable> posts;
     private String profileImgUri;
     private UserType userType;
+    private String fcmToken;
 
     public User() {
     }
@@ -88,5 +89,16 @@ public class User {
 
     public boolean isAdmin() {
         return userType == UserType.LOCAL_ADMIN || userType == UserType.GLOBAL_ADMIN;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 }

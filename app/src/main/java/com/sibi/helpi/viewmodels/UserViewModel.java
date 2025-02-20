@@ -13,6 +13,7 @@ import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.UserRepository;
 import com.sibi.helpi.stats.UserState;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class UserViewModel extends ViewModel {
@@ -21,13 +22,22 @@ public class UserViewModel extends ViewModel {
     private boolean isInitialized;
     private final UserRepository userRepository;
     private final ImagesRepository imagesRepository;
+    private static UserViewModel instance;
+    private final MutableLiveData<Boolean> hasUnreadMessages = new MutableLiveData<>(false);
 
-    public UserViewModel() {
+    private UserViewModel() {
         userRepository = new UserRepository();
         imagesRepository = ImagesRepository.getInstance();
         userState = new MutableLiveData<>();
         userState.postValue(UserState.idle());
         isInitialized = false;
+    }
+
+    public static synchronized UserViewModel getInstance() {
+        if (instance == null) {
+            instance = new UserViewModel();
+        }
+        return instance;
     }
 
     public LiveData<UserState> getUserState() {
@@ -84,7 +94,10 @@ public class UserViewModel extends ViewModel {
     public void signOut(GoogleSignInClient googleSignInClient) {
         userState.postValue(UserState.loading());
         userRepository.signOut(googleSignInClient)
-                .addOnSuccessListener(aVoid -> userState.postValue(UserState.success(null)))
+                .addOnSuccessListener(aVoid -> {
+                    userState.postValue(UserState.success(null));
+                    instance = null;
+                })
                 .addOnFailureListener(e -> userState.postValue(UserState.error(e.getMessage())));
     }
 
@@ -96,7 +109,7 @@ public class UserViewModel extends ViewModel {
         return imagesRepository.getProfileImage(userRepository.getUUID());
     }
 
-    public String getUserId() {
+    public String getCurrentUserId() {
         return userRepository.getUUID();
     }
 
@@ -110,7 +123,15 @@ public class UserViewModel extends ViewModel {
     public void deleteAccount() {
         userState.setValue(UserState.loading());
         userRepository.deleteAccount()
-                .addOnSuccessListener(aVoid -> userState.setValue(UserState.success(null)))
+                .addOnSuccessListener(aVoid -> {
+                    userState.setValue(UserState.success(null));
+                    instance = null;
+                })
                 .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
     }
+
+    public LiveData<User> getUserByIdLiveData(String userId) {
+        return userRepository.getUserByIdLiveData(userId);
+    }
+
 }

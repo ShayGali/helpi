@@ -10,6 +10,8 @@ public class AppConstants {
     public static final String COLLECTION_USERS = "users";
     public static final String IMG_UPLOAD_FAILED = "Image upload failed: ";
     public static final String POST_UPLOAD_FAILED = "Post upload failed: ";
+    public static final String CHATS_COLLECTION = "chats";
+    public static final String MESSAGES_COLLECTION = "messages";
 
     public static final String REPORT_UPLOAD_FAILED = "Report upload failed: ";
 
