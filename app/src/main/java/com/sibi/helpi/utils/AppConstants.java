@@ -15,6 +15,10 @@ public class AppConstants {
 
     public static final String REPORT_UPLOAD_FAILED = "Report upload failed: ";
 
+    public static final String PREFS_NAME = "MyPrefs";
+    public static final String LANGUAGE_KEY = "language";
+
+
     public enum PostStatus {
         UNDER_REVIEW("Under Review"),
         APPROVED("Approved"),
@@ -56,21 +60,20 @@ public class AppConstants {
         }
 
         public static reportReason getReason(String reason) {
-           if(reason.equals("Spam")) {
-               return SPAM;
-           } else if(reason.equals("Inappropriate Content")) {
-               return INAPPROPRIATE_CONTENT;
-           } else {
-               return OTHER;
-           }
+            if (reason.equals("Spam")) {
+                return SPAM;
+            } else if (reason.equals("Inappropriate Content")) {
+                return INAPPROPRIATE_CONTENT;
+            } else {
+                return OTHER;
+            }
         }
-
 
 
     }
 
 
     public enum PostType {
-        PRODUCT, SERVICE,ANY
+        PRODUCT, SERVICE, ANY
     }
 }

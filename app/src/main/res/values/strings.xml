@@ -108,4 +108,20 @@
     <string-array name="other_subcategories">
         <item>Other</item>
     </string-array>
+
+    <string name="english">English</string>
+    <string name="hebrew">Hebrew</string>
+    <string name="profile">Profile</string>
+    <string name="user_name">User Name</string>
+    <string name="user_email">User Email</string>
+    <string name="notifications">Notifications</string>
+    <string name="change_language">Change Language</string>
+    <string name="logout">Logout</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="share">Share</string>
+
+    <string-array name="languages">
+        <item>@string/english</item>
+        <item>@string/hebrew</item>
+    </string-array>
 </resources>

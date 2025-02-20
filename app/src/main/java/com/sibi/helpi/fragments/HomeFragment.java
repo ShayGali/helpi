@@ -32,9 +32,7 @@ import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.viewmodels.ProductViewModel;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
-    private MapView mapView;
-    private GoogleMap googleMap;
+public class HomeFragment extends Fragment{
     private FusedLocationProviderClient fusedLocationClient;
     private UserViewModel userViewModel;
     private ProductViewModel productViewModel;
@@ -64,9 +62,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         setupViews(view);
         setupObservers();
 
-        mapView = view.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
         return view;
     }
 
@@ -125,45 +120,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        this.googleMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-            return;
-        }
-        googleMap.setMyLocationEnabled(true);
-        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-            if (location != null) {
-                LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15));
-            }
-        });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
 
     private void showLoading() {
         MainActivity activity = (MainActivity) requireActivity();

@@ -1,5 +1,10 @@
 package com.sibi.helpi.fragments;
 
+import static com.sibi.helpi.utils.LocaleHelper.setLocale;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +28,8 @@ import com.sibi.helpi.viewmodels.ChatViewModel;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
 public class ProfileFragment extends Fragment {
+    private static final String PREFS_NAME = "MyPrefs";
+    private static final String LANGUAGE_KEY = "language";
     private UserViewModel userViewModel;
     private ChatViewModel chatViewModel;
     private GoogleSignInClient googleSignInClient;
@@ -83,6 +90,54 @@ public class ProfileFragment extends Fragment {
             showLoading();
             userViewModel.deleteAccount();
         });
+
+        View changeLanguageBtn = view.findViewById(R.id.changeLanguageBtn);
+
+        changeLanguageBtn.setOnClickListener(v -> {
+            // open language dialog
+            String[] languages = getResources().getStringArray(R.array.languages);
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+            builder.setSingleChoiceItems(languages, -1, (dialog, which) -> {
+                String selectedLanguage = languages[which];
+                setLanguage(selectedLanguage);
+                getActivity().recreate();
+                dialog.dismiss();
+            });
+            builder.create().show();
+        });
+    }
+
+    private void setLanguage(String selectedLanguage) {
+        String languageCode;
+        switch (selectedLanguage) {
+            case "Hebrew":
+            case "עברית":
+                languageCode = "he";
+                break;
+            case "English":
+            case "אנגלית":
+                languageCode = "en";
+                break;
+            default:
+                languageCode = "en";
+                break;
+        }
+
+        // Save the selected language to SharedPreferences
+        SharedPreferences preferences = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(LANGUAGE_KEY, languageCode);
+        editor.apply();
+
+        // Update the app locale
+        setLocale(requireContext(), languageCode);
+
+        // Force restart the entire app
+        Intent intent = new Intent(requireContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        requireActivity().finish();
     }
 
     private void setupObservers() {
@@ -131,8 +186,7 @@ public class ProfileFragment extends Fragment {
             Glide.with(requireContext())
                     .load(imageUrl)
                     .into(profileImage);
-        }
-        else {
+        } else {
             profileImage.setImageResource(R.drawable.icon_account_circle);
         }
     }

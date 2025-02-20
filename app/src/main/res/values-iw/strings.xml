@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="welcome_message">ברוך הבא ל- helpi!</string>
     <string name="login">התחברות</string>
@@ -29,7 +30,7 @@
     <string name="uploadingPost">מעלה פוסט</string>
     <string name="postedSuccessfully">הפוסט הועלה בהצלחה</string>
     <string name="errorPosting">העלאת הפוסט נכשלה</string>
-
+    <string name="select_location">בחר מיקום</string>
     <string-array name="categories">
         <item>בחר קטגוריה</item>
         <item>אלקטרוניקה</item>
@@ -67,4 +68,24 @@
         <item>חדש</item>
         <item>משומש</item>
     </string-array>
+    <string name="dont_have_an_account_yet">עדיין אין לך חשבון?</string>
+    <string name="now">עכשיו!</string>
+    <string name="or">או</string>
+    <string name="or_login_with">או התחבר עם</string>
+    <string name="product">מוצר</string>
+    <string name="service">שירות</string>
+    <string name="otherLocationOption">אחר</string>
+    <string name="select_subcategory">בחר תת קטגוריה</string>
+    <string name="no_image_provided">אין תמונה</string>
+    <string name="phone">פלאפון</string>
+    <string name="english">אנגלית</string>
+    <string name="hebrew">עברית</string>
+    <string name="profile">פרופיל</string>
+    <string name="user_name">שם משתמש</string>
+    <string name="user_email">אימייל</string>
+    <string name="notifications">התראות</string>
+    <string name="change_language">שנה שפה</string>
+    <string name="logout">התנתק</string>
+    <string name="delete_account">מחק חשבון</string>
+    <string name="share">שתף</string>
 </resources>

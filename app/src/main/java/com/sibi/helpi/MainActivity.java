@@ -1,17 +1,18 @@
 package com.sibi.helpi;
+import static com.sibi.helpi.utils.AppConstants.PREFS_NAME;
+import static com.sibi.helpi.utils.AppConstants.LANGUAGE_KEY;
+import static com.sibi.helpi.utils.LocaleHelper.setLocale;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import android.content.SharedPreferences;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
@@ -23,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Apply saved language before setting content view
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String savedLanguage = preferences.getString(LANGUAGE_KEY, "en");
+        setLocale(this, savedLanguage);
         setContentView(R.layout.activity_main);
 
         FirebaseApp.initializeApp(this);
