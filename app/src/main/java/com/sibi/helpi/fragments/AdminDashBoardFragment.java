@@ -1,5 +1,6 @@
 package com.sibi.helpi.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,9 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.sibi.helpi.R;
@@ -18,14 +26,13 @@ import com.sibi.helpi.adapters.PostableAdapter;
 import com.sibi.helpi.adapters.ReportAdapter;
 import com.sibi.helpi.models.Pair;
 import com.sibi.helpi.models.Postable;
-import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.viewmodels.AdminDashBoardViewModel;
-import com.sibi.helpi.utils.AppConstants.ReportStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AdminDashBoardFragment extends Fragment  {
 
@@ -34,6 +41,8 @@ public class AdminDashBoardFragment extends Fragment  {
     private List<Report> reportList;
     private List<Postable> postList;
     private AdminDashBoardViewModel adminDashBoardViewModel;
+
+    private Button addAdminButton;
 
     public AdminDashBoardFragment() {
         // Required empty public constructor
@@ -70,6 +79,7 @@ public class AdminDashBoardFragment extends Fragment  {
 
 
         setupObservers();
+        setupButtons(view);
 
         return view;
     }
@@ -135,4 +145,89 @@ public class AdminDashBoardFragment extends Fragment  {
         }
         return postIds;
     }
+
+    private void setupButtons(View view) {
+        addAdminButton = view.findViewById(R.id.addAdminButton);
+      addAdminButton.setOnClickListener(v -> openDialog());
+    }
+
+
+    private void openDialog() {
+        Dialog dialog = new Dialog(requireContext());
+        dialog.setContentView(R.layout.dialog_add_admin);
+
+
+
+        // Initialize views
+        EditText emailEditText = dialog.findViewById(R.id.newAdminEmailEditText);
+        RadioGroup radioGroup = dialog.findViewById(R.id.adminTypeRadioGroup);
+        Button okAddAdminButton = dialog.findViewById(R.id.okButtonNewAdmin);
+
+        // Disable the button initially
+        okAddAdminButton.setEnabled(false);
+
+        // Add text change listener to the email EditText
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validateInput(emailEditText, radioGroup, okAddAdminButton);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        // Add checked change listener to the RadioGroup
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            validateInput(emailEditText, radioGroup, okAddAdminButton);
+        });
+
+        // Set click listener for the OK button
+        okAddAdminButton.setOnClickListener(v -> {
+            AppConstants.UserType adminType = radioGroup.getCheckedRadioButtonId() == R.id.globalAdminRadioButton
+                    ? AppConstants.UserType.GLOBAL_ADMIN
+                    : AppConstants.UserType.LOCAL_ADMIN;
+            onOkAddAdminButton(emailEditText.getText().toString(), adminType);
+            dialog.dismiss();
+        });
+
+
+        // Adjust the dialog size
+        Window window = dialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+            layoutParams.copyFrom(window.getAttributes());
+            layoutParams.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.9); // 90% of screen width
+            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT; // Wrap content for height
+            window.setAttributes(layoutParams);
+        }
+
+        dialog.show();
+    }
+
+    // Helper method to validate input and enable/disable the button
+    private void validateInput(EditText emailEditText, RadioGroup radioGroup, Button okButton) {
+        String email = emailEditText.getText().toString().trim();
+        boolean isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        boolean isRadioSelected = radioGroup.getCheckedRadioButtonId() != -1;
+
+        okButton.setEnabled(isEmailValid && isRadioSelected);
+    }
+
+    private void onOkAddAdminButton(String email, AppConstants.UserType adminType) {
+        adminDashBoardViewModel.addAdmin(email, adminType).observe(getViewLifecycleOwner(), isSuccess -> {
+            if (isSuccess) {
+                Toast.makeText(requireContext(), "Admin added successfully", Toast.LENGTH_SHORT).show();
+
+            } else {
+             Toast.makeText(requireContext(), "Failed to add admin, are you sure the email is correct?", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+
 }

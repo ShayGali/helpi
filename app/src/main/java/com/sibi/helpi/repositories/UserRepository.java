@@ -14,7 +14,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.sibi.helpi.models.User;
+import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.utils.FirebaseAuthService;
 
 import java.util.Objects;
@@ -167,4 +170,41 @@ public class UserRepository {
         return userLiveData;
     }
 
+    public LiveData<Boolean> addAdmin(String email, AppConstants.UserType userType) {
+
+        MutableLiveData<Boolean> successLiveData = new MutableLiveData<>();
+        // Query the "users" collection for a document with the specified email
+        userCollection.whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            // Assuming email is unique, get the first document
+                            QueryDocumentSnapshot document = (QueryDocumentSnapshot) querySnapshot.getDocuments().get(0);
+                            String documentId = document.getId();
+
+                            // Get a reference to the document
+                            DocumentReference userRef = userCollection.document(documentId);
+
+                            // Update the desired field
+                            userRef.update("userType", userType)
+                                    .addOnSuccessListener(aVoid -> successLiveData.postValue(true))
+                                    .addOnFailureListener(e -> {
+                                        Log.e(TAG, "addAdmin: Failed to update user type", e);
+                                        successLiveData.postValue(false);
+                                    });
+                        } else {
+                            Log.d(TAG, "addAdmin: No user found with email: " + email);
+                            successLiveData.postValue(false);
+
+
+                        }
+                    } else {
+                        Log.e(TAG, "addAdmin: Failed to query users collection", task.getException());
+                        successLiveData.postValue(false);
+                        }
+                });
+        return successLiveData;
+    }
 }
