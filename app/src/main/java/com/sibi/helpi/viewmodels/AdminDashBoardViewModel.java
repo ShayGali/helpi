@@ -60,6 +60,10 @@ public class AdminDashBoardViewModel extends ViewModel {
         return postRepository.getPosts(postIds);
     }
 
+    public LiveData<Boolean> addAdmin(String email, AppConstants.UserType adminType) {
+       return userViewModel.addAdmin(email, adminType);
+    }
+
 
 
 
