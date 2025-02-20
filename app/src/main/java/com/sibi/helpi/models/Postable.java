@@ -1,5 +1,6 @@
 package com.sibi.helpi.models;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ public interface Postable extends Serializable {
 
     String getSubCategory();
 
-    String getRegion();
+    MyLatLng getLocation();
 
     String getUserId();
 

@@ -93,6 +93,7 @@ public class PostRepository {
                         } else {
                             throw new IllegalArgumentException("Unknown type: " + type);
                         }
+                        Log.d("Repository", "Postable: " + postable);
                         if (postable != null) {
                             // filter by fields
                             if (!category.isEmpty() && !postable.getCategory().equals(category)) {
@@ -101,13 +102,15 @@ public class PostRepository {
                             if (!subcategory.isEmpty() && !postable.getSubCategory().equals(subcategory)) {
                                 continue;
                             }
-                            if (!region.isEmpty() && !postable.getRegion().equals(region)) {
-                                continue;
-                            }
+                            //TODO
+//                            if (!region.isEmpty() && !postable.getRegion().equals(region)) {
+//                                continue;
+//                            }
 
                             if(postable.getStatus() != null && postable.getStatus() != PostStatus.APPROVED ) {
                                 continue;
-                            } // works well. TODO: uncomment this line after admin approval is implemented
+                            }
+
                             postableList.add(postable);
                         }
                     }

@@ -1,6 +1,5 @@
 package com.sibi.helpi.models;
 
-import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class ServicePost implements Postable {
     private String description;
     private String category;
     private String subCategory;
-    private String region;
+    private MyLatLng location;
     private String userId;
     private PostStatus status;
     private List<String> imageUrls;
@@ -21,12 +20,12 @@ public class ServicePost implements Postable {
         // Default constructor required for Firebase
     }
 
-    public ServicePost(String title, String description, String category, String subCategory, String region, String userId, String condition) {
+    public ServicePost(String title, String description, String category, String subCategory, MyLatLng location, String userId, String condition) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.subCategory = subCategory;
-        this.region = region;
+        this.location = location;
         this.userId = userId;
     }
 
@@ -62,12 +61,12 @@ public class ServicePost implements Postable {
         this.subCategory = subCategory;
     }
 
-    public String getRegion() {
-        return region;
+    public MyLatLng getLocation() {
+        return location;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setLocation(MyLatLng location) {
+        this.location = location;
     }
 
     public String getUserId() {
@@ -103,19 +102,19 @@ public class ServicePost implements Postable {
         this.title = title;
     }
 
-    @NonNull
     @Override
     public String toString() {
-        return "Service{" +
+        return "ServicePost{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", subCategory='" + subCategory + '\'' +
-                ", region='" + region + '\'' +
+                ", location=" + location +
                 ", userId='" + userId + '\'' +
+                ", status=" + status +
                 ", imageUrls=" + imageUrls +
-                ", postStatus=" + status.getStatusText() +
                 '}';
     }
 }
+

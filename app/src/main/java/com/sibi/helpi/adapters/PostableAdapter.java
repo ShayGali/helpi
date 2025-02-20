@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.Postable;
+import com.sibi.helpi.utils.LocationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class PostableAdapter extends RecyclerView.Adapter<PostableAdapter.Postab
         holder.titleTextView.setText(postable.getTitle());
         holder.categoryTextView.setText(postable.getCategory());
         holder.subCategoryTextView.setText(postable.getSubCategory());
-        holder.regionTextView.setText(postable.getRegion());
+        holder.regionTextView.setText(LocationUtil.getCityFromLocation(holder.regionTextView.getContext(), postable.getLocation()));
         holder.statusTextView.setText(postable.getStatus().getStatusText());
 
         if (!postable.getImageUrls().isEmpty()) {

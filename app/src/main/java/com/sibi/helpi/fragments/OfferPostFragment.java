@@ -32,11 +32,13 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.sibi.helpi.LocationPickerDialogFragment;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
+import com.sibi.helpi.models.MyLatLng;
 import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.ServicePost;
 import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.utils.AppConstants;
+import com.sibi.helpi.utils.LocationUtil;
 import com.sibi.helpi.viewmodels.OfferPostViewModel;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
@@ -47,7 +49,6 @@ import java.util.ArrayList;
 public class OfferPostFragment extends Fragment {
 
     private static final int PICK_IMAGES_REQUEST = 1;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 2;
 
     private OfferPostViewModel offerPostViewModel;
     private AutoCompleteTextView categorySpinner;
@@ -65,7 +66,7 @@ public class OfferPostFragment extends Fragment {
     private EditText etDescription;
     private FloatingActionButton btnPost;
     private FloatingActionButton btnCancelPost;
-    private LatLng selectedLocation;
+    private MyLatLng selectedLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,7 @@ public class OfferPostFragment extends Fragment {
             selectedLocation = bundle.getParcelable("selected_location");
             if (selectedLocation != null) {
                 // display the location name under the region spinner
+                regionSpinner.setText(LocationUtil.getLocationNameFromLocation(requireContext(), selectedLocation));
             }
         });
 
@@ -114,27 +116,20 @@ public class OfferPostFragment extends Fragment {
         spinnerPostTypeLayout = view.findViewById(R.id.spinnerPostTypeLayout);
         spinnerProductConditionLayout = view.findViewById(R.id.spinnerProductConditionLayout);
 
+
     }
 
     private void setupSpinners() {
-        String[] categories = getResources().getStringArray(R.array.categories);
-        String[] regions = getResources().getStringArray(R.array.region);
-        String[] productStatus = getResources().getStringArray(R.array.product_condition);
-        String[] types = getResources().getStringArray(R.array.type);
-
         setupAutoCompleteTextView(categorySpinner, categoryInputLayout, getResources().getStringArray(R.array.categories));
-        setupAutoCompleteTextView(regionSpinner, regionInputLayout, getResources().getStringArray(R.array.region));
         setupAutoCompleteTextView(typeSpinner, spinnerPostTypeLayout, getResources().getStringArray(R.array.type));
         setupAutoCompleteTextView(conditionSpinner, spinnerProductConditionLayout, getResources().getStringArray(R.array.product_condition));
 
         setSubCategoryBlocker();
         setTypeBlocker();
 
-        regionSpinner.setOnItemClickListener((parent, view, position, id) -> {
-            if (position == regionSpinner.getAdapter().getCount() - 1) {
-                LocationPickerDialogFragment dialog = new LocationPickerDialogFragment();
-                dialog.show(getParentFragmentManager(), "LocationPickerDialogFragment");
-            }
+        regionSpinner.setOnClickListener(v -> {
+            LocationPickerDialogFragment dialog = new LocationPickerDialogFragment();
+            dialog.show(getParentFragmentManager(), "LocationPickerDialogFragment");
         });
     }
 
@@ -263,22 +258,18 @@ public class OfferPostFragment extends Fragment {
         String description = etDescription.getText().toString();
         String category = categorySpinner.getText().toString();
         String subCategory = subcategorySpinner.getText().toString();
-        String region = regionSpinner.getText().toString();
         String condition = conditionSpinner.getText().toString();
 
         // Check if a location is needed and prevent a crash
-        if (region.equals(getString(R.string.otherLocationOption))) {
-            if (selectedLocation == null) {
-                showToast("Please select a location.");
-                return null; // Avoid crashing by returning null
-            }
-            region = selectedLocation.toString(); // Safe to call now
+        if (selectedLocation == null) {
+            showToast("Please select a location.");
+            return null; // Avoid crashing by returning null
         }
 
         if (typeSpinner.getText().toString().equals(getString(R.string.product))) {
-            return new ProductPost(title, description, category, subCategory, region, condition, userId);
+            return new ProductPost(title, description, category, subCategory, selectedLocation, condition, userId);
         } else if (typeSpinner.getText().toString().equals(getString(R.string.service))) {
-            return new ServicePost(title, description, category, subCategory, region, userId, condition);
+            return new ServicePost(title, description, category, subCategory, selectedLocation, userId, condition);
         } else {
             showToast("Invalid post type selected.");
             return null;
@@ -320,7 +311,7 @@ public class OfferPostFragment extends Fragment {
             showToast(getString(R.string.allFieldsRequired));
             return false;
         }
-        if (regionSpinner.getText().toString().isEmpty()) {
+        if (selectedLocation == null) {
             showToast(getString(R.string.allFieldsRequired));
             return false;
         }
@@ -372,7 +363,7 @@ public class OfferPostFragment extends Fragment {
         imageAdapter.setImages(selectedImages);
         categorySpinner.setText("");
         subcategorySpinner.setText("");
-        regionSpinner.setText("");
+        selectedLocation = null;
         conditionSpinner.setText("");
     }
 }

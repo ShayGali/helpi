@@ -18,22 +18,23 @@ public class ProductPost implements Postable {
     private String description;
     private String category;
     private String subCategory;
-    private String region;
+    private MyLatLng location;
     private String condition;
     private String userId;
     private PostStatus status;
     private List<String> imageUrls;
 
+
     public ProductPost() {
         // Default constructor required for Firebase
     }
 
-    public ProductPost(String title, String description, String category, String subCategory, String region, String condition, String userId) {
+    public ProductPost(String title, String description, String category, String subCategory, MyLatLng location, String condition, String userId) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.subCategory = subCategory;
-        this.region = region;
+        this.location = location;
         this.condition = condition;
         this.userId = userId;
         this.status = PostStatus.UNDER_REVIEW;
@@ -81,12 +82,12 @@ public class ProductPost implements Postable {
         this.subCategory = subCategory;
     }
 
-    public String getRegion() {
-        return region;
+    public MyLatLng getLocation() {
+        return location;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setLocation(MyLatLng location) {
+        this.location = location;
     }
 
     public String getCondition() {
@@ -124,17 +125,17 @@ public class ProductPost implements Postable {
     @NonNull
     @Override
     public String toString() {
-        return "Product{" +
+        return "ProductPost{" +
                 "id='" + id + '\'' +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", subCategory='" + subCategory + '\'' +
-                ", region='" + region + '\'' +
+                ", location=" + location +
                 ", condition='" + condition + '\'' +
                 ", userId='" + userId + '\'' +
-                ", postStatus=" + status.getStatusText() +
+                ", status=" + status +
+                ", imageUrls=" + imageUrls +
                 '}';
     }
-
-
 }

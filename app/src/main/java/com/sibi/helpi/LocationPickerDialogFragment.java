@@ -29,6 +29,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.sibi.helpi.models.MyLatLng;
 
 import java.util.Arrays;
 
@@ -39,7 +40,7 @@ public class LocationPickerDialogFragment extends DialogFragment implements OnMa
     private MapView mapView;
     private FusedLocationProviderClient fusedLocationClient;
     private Marker currentMarker;
-    private LatLng selectedLocation;
+    private MyLatLng selectedLocation;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class LocationPickerDialogFragment extends DialogFragment implements OnMa
                         } else {
                             currentMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(place.getName()));
                         }
-                        selectedLocation = latLng;
+                        selectedLocation = new MyLatLng(latLng.latitude, latLng.longitude);
                     }
                 }
 
@@ -131,7 +132,7 @@ public class LocationPickerDialogFragment extends DialogFragment implements OnMa
                     LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
                     currentMarker = mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
-                    selectedLocation = currentLocation;
+                    selectedLocation = new MyLatLng(currentLocation.latitude, currentLocation.longitude);
                 }
             });
         } else {
@@ -145,7 +146,7 @@ public class LocationPickerDialogFragment extends DialogFragment implements OnMa
             } else {
                 currentMarker = mMap.addMarker(new MarkerOptions().position(center).title("Selected Location"));
             }
-            selectedLocation = center;
+            selectedLocation = new MyLatLng(center.latitude, center.longitude);
         });
     }
 

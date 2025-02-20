@@ -1,6 +1,8 @@
 package com.sibi.helpi.models;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -21,7 +23,7 @@ public class ServicePostTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        servicePost = new ServicePost("Title", "Description", "Category", "SubCategory", "Region", "User123", "New");
+        servicePost = new ServicePost("Title", "Description", "Category", "SubCategory", new LatLng(0, 0), "User123", "New");
     }
 
     @Test
@@ -33,8 +35,6 @@ public class ServicePostTest {
         assertEquals("Region", servicePost.getRegion());
         assertEquals("User123", servicePost.getUserId());
     }
-
-
 
 
     @Test
