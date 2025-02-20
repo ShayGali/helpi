@@ -1,6 +1,10 @@
 package com.sibi.helpi.models;
 
+import com.sibi.helpi.viewmodels.UserViewModel;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a chat between two users.
@@ -11,8 +15,9 @@ public class Chat {
     private String lastMessage;
     private long timestamp;
     private String chatPartnerName;
-    private String profileImageUrl; // Add this for partner's profile image
-    private int unreadCount;        // Add this for unread messages count
+    private String profileImageUrl;
+    private int unreadCount;
+    private Map<String, Integer> unreadCounts = new HashMap<>();
 
     public Chat() {}
 
@@ -75,10 +80,6 @@ public class Chat {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public int getUnreadCount() {
-        return unreadCount;
-    }
-
     public void setUnreadCount(int unreadCount) {
         this.unreadCount = unreadCount;
     }
@@ -88,5 +89,17 @@ public class Chat {
         // You can implement your own time formatting logic here
         // For example: "Today", "Yesterday", or "MM/dd/yyyy"
         return String.valueOf(timestamp);
+    }
+
+    public Map<String, Integer> getUnreadCounts() {
+        return unreadCounts;
+    }
+    public void setUnreadCounts(Map<String, Integer> unreadCounts) {
+        this.unreadCounts = unreadCounts;
+    }
+
+    public int getUnreadCount() {
+        String currentUserId = UserViewModel.getInstance().getCurrentUserId();
+        return unreadCounts.getOrDefault(currentUserId, 0);
     }
 }

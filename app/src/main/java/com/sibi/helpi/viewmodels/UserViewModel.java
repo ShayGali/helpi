@@ -107,7 +107,7 @@ public class UserViewModel extends ViewModel {
         return imagesRepository.getProfileImage(userRepository.getUUID());
     }
 
-    public String getUserId() {
+    public String getCurrentUserId() {
         return userRepository.getUUID();
     }
 
@@ -126,5 +126,9 @@ public class UserViewModel extends ViewModel {
                     instance = null;
                 })
                 .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
+    }
+
+    public LiveData<User> getUserByIdLiveData(String userId) {
+        return userRepository.getUserByIdLiveData(userId);
     }
 }

@@ -4,14 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.sibi.helpi.models.Postable;
-import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.repositories.ReportsRepository;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.utils.AppConstants.ReportStatus;
-import com.sibi.helpi.viewmodels.UserViewModel;
 
 import java.util.List;
 
@@ -49,7 +47,7 @@ public class AdminDashBoardViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> updateReport(String reportId, ReportStatus newStatus, String handlerNotes) {
-        String handlerId = userViewModel.getUserId();
+        String handlerId = userViewModel.getCurrentUserId();
         return reportsRepository.updateReport(reportId, handlerId, handlerNotes, newStatus);
     }
 

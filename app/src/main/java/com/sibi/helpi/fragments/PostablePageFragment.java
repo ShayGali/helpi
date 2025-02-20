@@ -31,6 +31,8 @@ import com.sibi.helpi.viewmodels.SearchProductViewModel;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
+import java.util.Objects;
+
 public class PostablePageFragment extends Fragment {
 
     private ViewPager2 productImages;
@@ -56,7 +58,7 @@ public class PostablePageFragment extends Fragment {
         postableViewModel = new SearchProductViewModel();
         userViewModel = UserViewModel.getInstance();
 
-        String currentUserId = userViewModel.getUserId();
+        String currentUserId = userViewModel.getCurrentUserId();
         chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
     }
 
@@ -135,7 +137,7 @@ public class PostablePageFragment extends Fragment {
             if (postable != null) {
                 String otherUserId = postable.getUserId();
                 // Ensure we're not trying to chat with ourselves
-                if (!otherUserId.equals(userViewModel.getUserId())) {
+                if (!otherUserId.equals(userViewModel.getCurrentUserId())) {
                     navigateToChat(otherUserId);
                 } else {
                     Toast.makeText(getContext(), "Cannot chat with yourself", Toast.LENGTH_SHORT).show();
@@ -145,19 +147,26 @@ public class PostablePageFragment extends Fragment {
     }
 
     private void navigateToChat(String otherUserId) {
-        // First, create or get existing chat
-        String currentUserId = userViewModel.getUserId();
-        chatViewModel.createNewChat(currentUserId, otherUserId, ""); // Empty name for now, can be updated later
+        String currentUserId = userViewModel.getCurrentUserId();
 
-        // Observe the chat creation/retrieval
-        chatViewModel.getChatByParticipants(currentUserId, otherUserId)
-                .observe(getViewLifecycleOwner(), chat -> {
-                    if (chat != null) {
-                        // Navigate to chat with the chat ID
-                        Bundle args = new Bundle();
-                        args.putString("chatId", chat.getChatId());
-                        Navigation.findNavController(requireView())
-                                .navigate(R.id.action_postablePageFragment_to_chatMessagesFragment, args);
+        // First get user data
+        userViewModel.getUserByIdLiveData(otherUserId)
+                .observe(getViewLifecycleOwner(), user -> {
+                    if (user != null) {
+                        String partnerName = user.getFullName();
+                        // Create chat with partner name
+                        chatViewModel.createNewChat(currentUserId, otherUserId, partnerName);
+
+                        // Only observe chat creation after we have user data
+                        chatViewModel.getChatByParticipants(currentUserId, otherUserId)
+                                .observe(getViewLifecycleOwner(), chat -> {
+                                    if (chat != null) {
+                                        Bundle args = new Bundle();
+                                        args.putString("chatId", chat.getChatId());
+                                        Navigation.findNavController(requireView())
+                                                .navigate(R.id.action_postablePageFragment_to_chatMessagesFragment, args);
+                                    }
+                                });
                     }
                 });
     }
@@ -217,7 +226,7 @@ public class PostablePageFragment extends Fragment {
     }
 
     private void submitReport(String reason, String description) {
-        String reporterId = userViewModel.getUserId();
+        String reporterId = userViewModel.getCurrentUserId();
         AppConstants.reportReason reasonEnum = AppConstants.reportReason.getReason(reason);
         Report report = new Report(postable.getId(), reasonEnum, reporterId, description);
         MutableLiveData<Resource<String>> succeeded = postableViewModel.fileReport(report);

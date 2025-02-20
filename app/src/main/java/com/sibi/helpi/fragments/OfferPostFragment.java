@@ -242,7 +242,7 @@ public class OfferPostFragment extends Fragment {
         btnPost.setOnClickListener(v -> {
             byte[][] images = getImagesData(selectedImages);
             if (validateInput(images)) {
-                Postable post = createConcretePost(userViewModel.getUserId());
+                Postable post = createConcretePost(userViewModel.getCurrentUserId());
                 AppConstants.PostType postType;
                 if (typeSpinner.getText().toString().equals(getString(R.string.product))) {
                     postType = AppConstants.PostType.PRODUCT;

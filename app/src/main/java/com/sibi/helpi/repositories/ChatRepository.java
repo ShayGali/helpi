@@ -3,6 +3,8 @@ package com.sibi.helpi.repositories;
 import static com.sibi.helpi.utils.AppConstants.CHATS_COLLECTION;
 import static com.sibi.helpi.utils.AppConstants.MESSAGES_COLLECTION;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -108,7 +110,7 @@ public class ChatRepository {
                                 .add(message)
                                 .addOnSuccessListener(ref -> {
                                     updateChatLastMessage(chatId, messageText);
-                                    incrementUnreadCount(chatId, receiverId);
+                                    incrementUnreadCountForReceiver(chatId, currentUserId, receiverId);
                                 });
                     }
                 });
@@ -116,29 +118,27 @@ public class ChatRepository {
 
     // Create a new chat
     public void createNewChat(String currentUserId, String otherUserId, String otherUserName) {
-        // TODO: Check if chat already exists
         List<String> participants = new ArrayList<>();
         participants.add(currentUserId);
         participants.add(otherUserId);
 
+        // Initialize with empty unread counts map for the new structure
+        Map<String, Integer> unreadCounts = new HashMap<>();
+        unreadCounts.put(currentUserId, 0);
+        unreadCounts.put(otherUserId, 0);
+
         Chat newChat = new Chat();
         newChat.setParticipants(participants);
         newChat.setTimestamp(System.currentTimeMillis());
-        newChat.setChatPartnerName(otherUserName);
         newChat.setLastMessage("");
-        newChat.setUnreadCount(0);
+        newChat.setUnreadCounts(unreadCounts);  // Using new unread counts structure
 
         db.collection(CHATS_COLLECTION)
-                .add(newChat);
-
-//        // TODO: use this instead after fixing the function below
-//        db.collection(CHATS_COLLECTION)
-//                .add(newChat)
-//                .addOnSuccessListener(documentReference -> {
-//                    String chatId = documentReference.getId();
-//                    // Update chat partner info after chat creation
-//                    updateChatPartnerInfo(chatId, currentUserId, otherUserId);
-//                });
+                .add(newChat)
+                .addOnSuccessListener(documentReference -> {
+                    String chatId = documentReference.getId();
+                    updateChatPartnerInfo(chatId, currentUserId, otherUserId);
+                });
     }
 
     // Update last message in chat
@@ -153,10 +153,23 @@ public class ChatRepository {
     }
 
     // Mark messages as read
-    public void markChatAsRead(String chatId) {
+    public void markMessagesAsRead(String chatId, String userId) {
         db.collection(CHATS_COLLECTION)
                 .document(chatId)
-                .update("unreadCount", 0);
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    Map<String, Integer> unreadCounts = new HashMap<>();
+                    if (documentSnapshot.contains("unreadCounts")) {
+                        unreadCounts = (Map<String, Integer>) documentSnapshot.get("unreadCounts");
+                    }
+                    // Clear unread count for current user
+                    unreadCounts.put(userId, 0);
+
+                    // Update in Firestore
+                    db.collection(CHATS_COLLECTION)
+                            .document(chatId)
+                            .update("unreadCounts", unreadCounts);
+                });
     }
 
     // Get single chat by ID
@@ -213,10 +226,33 @@ public class ChatRepository {
         return chatLiveData;
     }
 
-    private void incrementUnreadCount(String chatId, String receiverId) {
+    private void incrementUnreadCountForReceiver(String chatId, String senderId, String receiverId) {
         db.collection(CHATS_COLLECTION)
                 .document(chatId)
-                .update("unreadCount", com.google.firebase.firestore.FieldValue.increment(1));
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    Map<String, Object> unreadCounts = new HashMap<>();
+                    if (documentSnapshot.contains("unreadCounts")) {
+                        // Cast to Map<String, Object> first
+                        unreadCounts = (Map<String, Object>) documentSnapshot.get("unreadCounts");
+                    }
+                    // Get current count and handle Long to Integer conversion
+                    Object currentCountObj = unreadCounts.getOrDefault(receiverId, 0L);
+                    long currentCount = 0;
+                    if (currentCountObj instanceof Long) {
+                        currentCount = (Long) currentCountObj;
+                    } else if (currentCountObj instanceof Integer) {
+                        currentCount = ((Integer) currentCountObj).longValue();
+                    }
+
+                    // Update the count
+                    unreadCounts.put(receiverId, currentCount + 1);
+
+                    // Update in Firestore
+                    db.collection(CHATS_COLLECTION)
+                            .document(chatId)
+                            .update("unreadCounts", unreadCounts);
+                });
     }
 //    private void updateChatPartnerInfo(String chatId, String userId, String partnerId) {
 //        UserRepository userRepo = new UserRepository();
@@ -232,4 +268,25 @@ public class ChatRepository {
 //            }
 //        });
 //    }
+private void updateChatPartnerInfo(String chatId, String userId, String partnerId) {
+    UserRepository userRepo = new UserRepository();
+    userRepo.getUserById(partnerId)
+            .addOnSuccessListener(user -> {
+                if (user != null) {
+                    Map<String, Object> updates = new HashMap<>();
+                    updates.put("chatPartnerName", user.getFullName());
+                    updates.put("profileImageUrl", user.getProfileImgUri());
+
+                    db.collection(CHATS_COLLECTION)
+                            .document(chatId)
+                            .update(updates)
+                            .addOnSuccessListener(aVoid ->
+                                    Log.d("ChatRepository", "Successfully updated chat partner info"))
+                            .addOnFailureListener(e ->
+                                    Log.e("ChatRepository", "Failed to update chat partner info", e));
+                }
+            })
+            .addOnFailureListener(e ->
+                    Log.e("ChatRepository", "Failed to get user info", e));
+}
 }

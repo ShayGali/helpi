@@ -74,6 +74,6 @@ public class Message {
 
     public boolean isUser() {
         UserViewModel userViewModel = UserViewModel.getInstance();
-        return senderId.equals(userViewModel.getUserId());
+        return senderId.equals(userViewModel.getCurrentUserId());
     }
 }

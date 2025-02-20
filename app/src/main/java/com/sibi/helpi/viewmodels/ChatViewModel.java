@@ -35,8 +35,8 @@ public class ChatViewModel extends ViewModel {
         chatRepository.createNewChat(currentUserId, otherUserId, otherUserName);
     }
 
-    public void markChatAsRead(String chatId) {
-        chatRepository.markChatAsRead(chatId);
+    public void markMessagesAsRead(String chatId, String userId) {
+        chatRepository.markMessagesAsRead(chatId, userId);
     }
 
     public LiveData<Chat> getChatById(String chatId) {
