@@ -165,7 +165,7 @@
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/last_name_input_reg_wrap"
+            app:layout_constraintTop_toBottomOf="@+id/email_input_reg_wrap"
             app:layout_constraintWidth_percent="0.8">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -196,7 +196,7 @@
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_input_reg_wrap"
+            app:layout_constraintTop_toBottomOf="@+id/phone_input_reg_wrap"
             app:layout_constraintWidth_percent="0.8">
 
             <com.google.android.material.textfield.TextInputEditText
