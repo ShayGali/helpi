@@ -27,7 +27,7 @@ public class AdminDashBoardViewModel extends ViewModel {
         reportsRepository = ReportsRepository.getInstance();
         postRepository = PostRepository.getInstance();
         imagesRepository = ImagesRepository.getInstance();
-        userViewModel = new UserViewModel();  // TODO change to singleton
+        userViewModel = UserViewModel.getInstance();
     }
 
     public LiveData<List<Report>> getReports() {

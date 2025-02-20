@@ -59,7 +59,7 @@ public class UserViewModelTest {
         PowerMockito.mockStatic(Looper.class);
         when(Looper.getMainLooper()).thenReturn(mock(Looper.class));
 
-        userViewModel = new UserViewModel();
+        userViewModel = UserViewModel.getInstance();
     }
 
     @After

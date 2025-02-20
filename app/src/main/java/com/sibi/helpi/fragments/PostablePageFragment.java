@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -25,6 +26,7 @@ import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.models.Resource;
 import com.sibi.helpi.utils.AppConstants;
+import com.sibi.helpi.viewmodels.ChatViewModel;
 import com.sibi.helpi.viewmodels.SearchProductViewModel;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 import com.sibi.helpi.viewmodels.UserViewModel;
@@ -45,20 +47,22 @@ public class PostablePageFragment extends Fragment {
 
     private Button reportButton;
 
-
+    private FloatingActionButton emailFab;
+    private ChatViewModel chatViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         postableViewModel = new SearchProductViewModel();
-        userViewModel = new UserViewModel();
+        userViewModel = UserViewModel.getInstance();
+
+        String currentUserId = userViewModel.getUserId();
+        chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_postable_page, container, false);
-
-
 
         productImages = view.findViewById(R.id.imageSlider);
         productTitle = view.findViewById(R.id.postableTitle);
@@ -80,8 +84,6 @@ public class PostablePageFragment extends Fragment {
             }
 
         }
-
-
 
         if (getArguments() != null) {
 
@@ -107,9 +109,8 @@ public class PostablePageFragment extends Fragment {
                 productImages.setAdapter(adapter);
             }
         }
+        emailFab = view.findViewById(R.id.emailFab);
         setupButtons();
-
-
 
         return view;
     }
@@ -129,6 +130,36 @@ public class PostablePageFragment extends Fragment {
             // Show the report dialog
             showReportDialog();
         });
+
+        emailFab.setOnClickListener(v -> {
+            if (postable != null) {
+                String otherUserId = postable.getUserId();
+                // Ensure we're not trying to chat with ourselves
+                if (!otherUserId.equals(userViewModel.getUserId())) {
+                    navigateToChat(otherUserId);
+                } else {
+                    Toast.makeText(getContext(), "Cannot chat with yourself", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void navigateToChat(String otherUserId) {
+        // First, create or get existing chat
+        String currentUserId = userViewModel.getUserId();
+        chatViewModel.createNewChat(currentUserId, otherUserId, ""); // Empty name for now, can be updated later
+
+        // Observe the chat creation/retrieval
+        chatViewModel.getChatByParticipants(currentUserId, otherUserId)
+                .observe(getViewLifecycleOwner(), chat -> {
+                    if (chat != null) {
+                        // Navigate to chat with the chat ID
+                        Bundle args = new Bundle();
+                        args.putString("chatId", chat.getChatId());
+                        Navigation.findNavController(requireView())
+                                .navigate(R.id.action_postablePageFragment_to_chatMessagesFragment, args);
+                    }
+                });
     }
 
     private void acceptPostable(Postable post) {
@@ -140,9 +171,6 @@ public class PostablePageFragment extends Fragment {
                     Toast.makeText(getContext(), "Post accepted", Toast.LENGTH_SHORT).show();
                     // if the post is accepted, navigate back to the admin dashboard
                     Navigation.findNavController(getView()).navigate(R.id.action_postablePageFragment_to_adminDashBoardFragment);
-
-
-
                 } else {
                     Toast.makeText(getContext(), "Failed to accept post, please try again later", Toast.LENGTH_SHORT).show();
                 }

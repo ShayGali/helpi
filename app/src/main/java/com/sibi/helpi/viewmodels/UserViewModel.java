@@ -21,13 +21,21 @@ public class UserViewModel extends ViewModel {
     private boolean isInitialized;
     private final UserRepository userRepository;
     private final ImagesRepository imagesRepository;
+    private static UserViewModel instance;
 
-    public UserViewModel() {
+    private UserViewModel() {
         userRepository = new UserRepository();
         imagesRepository = ImagesRepository.getInstance();
         userState = new MutableLiveData<>();
         userState.postValue(UserState.idle());
         isInitialized = false;
+    }
+
+    public static synchronized UserViewModel getInstance() {
+        if (instance == null) {
+            instance = new UserViewModel();
+        }
+        return instance;
     }
 
     public LiveData<UserState> getUserState() {
@@ -84,7 +92,10 @@ public class UserViewModel extends ViewModel {
     public void signOut(GoogleSignInClient googleSignInClient) {
         userState.postValue(UserState.loading());
         userRepository.signOut(googleSignInClient)
-                .addOnSuccessListener(aVoid -> userState.postValue(UserState.success(null)))
+                .addOnSuccessListener(aVoid -> {
+                    userState.postValue(UserState.success(null));
+                    instance = null;
+                })
                 .addOnFailureListener(e -> userState.postValue(UserState.error(e.getMessage())));
     }
 
@@ -110,7 +121,10 @@ public class UserViewModel extends ViewModel {
     public void deleteAccount() {
         userState.setValue(UserState.loading());
         userRepository.deleteAccount()
-                .addOnSuccessListener(aVoid -> userState.setValue(UserState.success(null)))
+                .addOnSuccessListener(aVoid -> {
+                    userState.setValue(UserState.success(null));
+                    instance = null;
+                })
                 .addOnFailureListener(e -> userState.setValue(UserState.error(e.getMessage())));
     }
 }

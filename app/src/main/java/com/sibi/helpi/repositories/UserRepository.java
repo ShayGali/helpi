@@ -138,6 +138,4 @@ public class UserRepository {
                     return getCurrentUser();
                 });
     }
-
-
 }

@@ -63,6 +63,11 @@ public class ProfileFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_homeFragment)
         );
 
+        // Chats button
+        view.findViewById(R.id.chat_list_btn).setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_chatListFragment)
+        );
+
         // Logout button
         view.findViewById(R.id.logout_btn).setOnClickListener(v -> {
             showLoading();
