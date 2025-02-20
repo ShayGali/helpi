@@ -60,6 +60,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/envelope_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layoutDirection="ltr"
@@ -68,6 +69,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_envelope" />
+
+        <View
+            android:id="@+id/unread_dot"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/notification_dot"
+            android:visibility="gone"
+            app:layout_constraintCircle="@id/envelope_icon"
+            app:layout_constraintCircleAngle="45"
+            app:layout_constraintCircleRadius="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

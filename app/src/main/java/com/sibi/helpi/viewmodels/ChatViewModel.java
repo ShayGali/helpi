@@ -13,7 +13,7 @@ public class ChatViewModel extends ViewModel {
     private LiveData<List<Message>> messagesLiveData;
 
     public ChatViewModel() {
-        chatRepository = new ChatRepository();
+        chatRepository = ChatRepository.getInstance();
     }
 
     public LiveData<List<Chat>> getChatsList(String currentUserId) {
@@ -45,5 +45,9 @@ public class ChatViewModel extends ViewModel {
 
     public LiveData<Chat> getChatByParticipants(String userId1, String userId2) {
         return chatRepository.getChatByParticipants(userId1, userId2);
+    }
+
+    public LiveData<Boolean> getHasUnreadMessages(String userId) {
+        return chatRepository.observeUnreadMessages(userId);
     }
 }

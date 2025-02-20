@@ -22,9 +22,19 @@ import java.util.List;
 import java.util.Map;
 
 public class ChatRepository {
+    private static ChatRepository instance;
     private final FirebaseFirestore db;
-    public ChatRepository() {
+    private final MutableLiveData<Boolean> hasUnreadMessagesLiveData = new MutableLiveData<>(false);
+
+    private ChatRepository() {
         this.db = FirebaseFirestore.getInstance();
+    }
+
+    public static synchronized ChatRepository getInstance() {
+        if (instance == null) {
+            instance = new ChatRepository();
+        }
+        return instance;
     }
 
     // Get all chats for current user
@@ -158,17 +168,23 @@ public class ChatRepository {
                 .document(chatId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    Map<String, Integer> unreadCounts = new HashMap<>();
+                    Map<String, Object> unreadCounts = new HashMap<>();
                     if (documentSnapshot.contains("unreadCounts")) {
-                        unreadCounts = (Map<String, Integer>) documentSnapshot.get("unreadCounts");
+                        unreadCounts = (Map<String, Object>) documentSnapshot.get("unreadCounts");
                     }
-                    // Clear unread count for current user
-                    unreadCounts.put(userId, 0);
+                    // Set unread count to 0 for current user
+                    unreadCounts.put(userId, 0L);
 
-                    // Update in Firestore
+                    // Update Firestore
                     db.collection(CHATS_COLLECTION)
                             .document(chatId)
-                            .update("unreadCounts", unreadCounts);
+                            .update("unreadCounts", unreadCounts)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("ChatRepository", "Successfully marked messages as read");
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("ChatRepository", "Failed to mark messages as read", e);
+                            });
                 });
     }
 
@@ -231,12 +247,13 @@ public class ChatRepository {
                 .document(chatId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
+                    // Get existing unread counts or create new map
                     Map<String, Object> unreadCounts = new HashMap<>();
                     if (documentSnapshot.contains("unreadCounts")) {
-                        // Cast to Map<String, Object> first
                         unreadCounts = (Map<String, Object>) documentSnapshot.get("unreadCounts");
                     }
-                    // Get current count and handle Long to Integer conversion
+
+                    // Get current count as Long
                     Object currentCountObj = unreadCounts.getOrDefault(receiverId, 0L);
                     long currentCount = 0;
                     if (currentCountObj instanceof Long) {
@@ -245,10 +262,11 @@ public class ChatRepository {
                         currentCount = ((Integer) currentCountObj).longValue();
                     }
 
-                    // Update the count
+                    // Increment unread count for receiver ONLY
                     unreadCounts.put(receiverId, currentCount + 1);
+                    // Make sure sender's count stays at 0
+                    unreadCounts.put(senderId, 0L);
 
-                    // Update in Firestore
                     db.collection(CHATS_COLLECTION)
                             .document(chatId)
                             .update("unreadCounts", unreadCounts);
@@ -268,25 +286,52 @@ public class ChatRepository {
 //            }
 //        });
 //    }
-private void updateChatPartnerInfo(String chatId, String userId, String partnerId) {
-    UserRepository userRepo = new UserRepository();
-    userRepo.getUserById(partnerId)
-            .addOnSuccessListener(user -> {
-                if (user != null) {
-                    Map<String, Object> updates = new HashMap<>();
-                    updates.put("chatPartnerName", user.getFullName());
-                    updates.put("profileImageUrl", user.getProfileImgUri());
+    private void updateChatPartnerInfo(String chatId, String userId, String partnerId) {
+        UserRepository userRepo = new UserRepository();
+        userRepo.getUserById(partnerId)
+                .addOnSuccessListener(user -> {
+                    if (user != null) {
+                        Map<String, Object> updates = new HashMap<>();
+                        updates.put("chatPartnerName", user.getFullName());
+                        updates.put("profileImageUrl", user.getProfileImgUri());
 
-                    db.collection(CHATS_COLLECTION)
-                            .document(chatId)
-                            .update(updates)
-                            .addOnSuccessListener(aVoid ->
-                                    Log.d("ChatRepository", "Successfully updated chat partner info"))
-                            .addOnFailureListener(e ->
-                                    Log.e("ChatRepository", "Failed to update chat partner info", e));
-                }
-            })
-            .addOnFailureListener(e ->
-                    Log.e("ChatRepository", "Failed to get user info", e));
-}
+                        db.collection(CHATS_COLLECTION)
+                                .document(chatId)
+                                .update(updates)
+                                .addOnSuccessListener(aVoid ->
+                                        Log.d("ChatRepository", "Successfully updated chat partner info"))
+                                .addOnFailureListener(e ->
+                                        Log.e("ChatRepository", "Failed to update chat partner info", e));
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Log.e("ChatRepository", "Failed to get user info", e));
+    }
+
+    public LiveData<Boolean> observeUnreadMessages(String userId) {
+        db.collection(CHATS_COLLECTION)
+                .whereArrayContains("participants", userId)
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        return;
+                    }
+
+                    boolean hasUnread = false;
+                    if (value != null) {
+                        for (QueryDocumentSnapshot doc : value) {
+                            Map<String, Object> unreadCounts = (Map<String, Object>) doc.get("unreadCounts");
+                            if (unreadCounts != null) {
+                                Object userCount = unreadCounts.get(userId);
+                                if (userCount instanceof Long && (Long) userCount > 0) {
+                                    hasUnread = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    hasUnreadMessagesLiveData.setValue(hasUnread);
+                });
+
+        return hasUnreadMessagesLiveData;
+    }
 }

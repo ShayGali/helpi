@@ -13,6 +13,7 @@ import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.UserRepository;
 import com.sibi.helpi.stats.UserState;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class UserViewModel extends ViewModel {
@@ -22,6 +23,7 @@ public class UserViewModel extends ViewModel {
     private final UserRepository userRepository;
     private final ImagesRepository imagesRepository;
     private static UserViewModel instance;
+    private final MutableLiveData<Boolean> hasUnreadMessages = new MutableLiveData<>(false);
 
     private UserViewModel() {
         userRepository = new UserRepository();
@@ -131,4 +133,5 @@ public class UserViewModel extends ViewModel {
     public LiveData<User> getUserByIdLiveData(String userId) {
         return userRepository.getUserByIdLiveData(userId);
     }
+
 }

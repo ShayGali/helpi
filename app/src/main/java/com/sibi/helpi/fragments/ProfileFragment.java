@@ -19,21 +19,25 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.User;
+import com.sibi.helpi.viewmodels.ChatViewModel;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
 public class ProfileFragment extends Fragment {
     private UserViewModel userViewModel;
+    private ChatViewModel chatViewModel;
     private GoogleSignInClient googleSignInClient;
 
     // Views
     private TextView usernameTextView;
     private TextView emailTextView;
     private ImageView profileImage;
+    private View unreadDot;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
 
         // Initialize Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
@@ -55,6 +59,7 @@ public class ProfileFragment extends Fragment {
         usernameTextView = view.findViewById(R.id.username_profile_fragment);
         emailTextView = view.findViewById(R.id.email_profile_fragment);
         profileImage = view.findViewById(R.id.profile_img_profile_frag);
+        unreadDot = view.findViewById(R.id.unread_dot);
     }
 
     private void setupClickListeners(View view) {
@@ -96,6 +101,12 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        chatViewModel.getHasUnreadMessages(userViewModel.getCurrentUserId())
+                .observe(getViewLifecycleOwner(), hasUnread -> {
+                    if (unreadDot != null) {
+                        unreadDot.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
+                    }
+                });
     }
 
     private void showLoading() {
