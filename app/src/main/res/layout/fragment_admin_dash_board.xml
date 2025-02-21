@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <TextView
             android:id="@+id/textView17"
             android:layout_width="wrap_content"
@@ -24,6 +23,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Add new Admin Button -->
+
+        <Button
+            android:id="@+id/addAdminButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/quantum_bluegrey500"
+            android:text="Add new Admin"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
         <TextView
             android:id="@+id/textView18"
             android:layout_width="wrap_content"
@@ -33,7 +46,7 @@
             android:text="@string/reports"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+            app:layout_constraintTop_toBottomOf="@+id/addAdminButton" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reportsRecyclerView"
@@ -70,7 +83,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView19" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

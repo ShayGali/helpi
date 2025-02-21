@@ -12,6 +12,7 @@ import com.sibi.helpi.models.User;
 import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.UserRepository;
 import com.sibi.helpi.stats.UserState;
+import com.sibi.helpi.utils.AppConstants;
 
 import java.util.Map;
 import java.util.Objects;
@@ -132,6 +133,10 @@ public class UserViewModel extends ViewModel {
 
     public LiveData<User> getUserByIdLiveData(String userId) {
         return userRepository.getUserByIdLiveData(userId);
+    }
+
+    public LiveData<Boolean> addAdmin(String email, AppConstants.UserType userType) {
+         return userRepository.addAdmin(email, userType);
     }
 
 }
