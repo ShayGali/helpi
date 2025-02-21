@@ -2,6 +2,7 @@ package com.sibi.helpi.models;
 
 import com.sibi.helpi.viewmodels.UserViewModel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,23 +12,26 @@ import java.util.Map;
  */
 public class Chat {
     private String chatId;
-    private List<String> participants;
-    private String lastMessage;
+    private List<String> participants = new ArrayList<>();
+    private String lastMessage = "";
     private long timestamp;
-    private String chatPartnerName;
-    private String profileImageUrl;
+    private Map<String, String> partnerNames = new HashMap<>();
+    private String profileImageUrl = "";
     private int unreadCount;
     private Map<String, Integer> unreadCounts = new HashMap<>();
 
-    public Chat() {}
+    public Chat() {
+        this.participants = new ArrayList<>();
+        this.partnerNames = new HashMap<>();
+        this.unreadCounts = new HashMap<>();
+    }
 
     public Chat(String chatId, List<String> participants, String lastMessage,
-                long timestamp, String chatPartnerName, String profileImageUrl, int unreadCount) {
+                long timestamp, String profileImageUrl, int unreadCount) {
         this.chatId = chatId;
         this.participants = participants;
         this.lastMessage = lastMessage;
         this.timestamp = timestamp;
-        this.chatPartnerName = chatPartnerName;
         this.profileImageUrl = profileImageUrl;
         this.unreadCount = unreadCount;
     }
@@ -64,12 +68,20 @@ public class Chat {
         this.timestamp = timestamp;
     }
 
-    public String getChatPartnerName() {
-        return chatPartnerName;
+    public Map<String, String> getPartnerNames() {
+        return partnerNames != null ? partnerNames : new HashMap<>();
     }
 
-    public void setChatPartnerName(String chatPartnerName) {
-        this.chatPartnerName = chatPartnerName;
+    public void setPartnerNames(Map<String, String> partnerNames) {
+        this.partnerNames = partnerNames != null ? partnerNames : new HashMap<>();
+    }
+
+    public String getChatPartnerName() {
+        String currentUserId = UserViewModel.getInstance().getCurrentUserId();
+        if (partnerNames != null && currentUserId != null) {
+            return partnerNames.getOrDefault(currentUserId, "Chat Partner");
+        }
+        return "Chat Partner";
     }
 
     public String getProfileImageUrl() {

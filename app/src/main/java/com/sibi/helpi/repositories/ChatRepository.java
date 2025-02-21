@@ -3,9 +3,14 @@ package com.sibi.helpi.repositories;
 import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.*;
 import com.sibi.helpi.models.Chat;
 import com.sibi.helpi.models.Message;
+import com.sibi.helpi.models.User;
+
 import java.util.*;
 
 public class ChatRepository {
@@ -136,33 +141,33 @@ public class ChatRepository {
     }
 
     // Create a new chat
-    public void createNewChat(String currentUserId, String otherUserId, String otherUserName) {
-        Log.d(TAG, "Creating new chat between: " + currentUserId + " and " + otherUserId);
-
-        List<String> participants = Arrays.asList(currentUserId, otherUserId);
-        Map<String, Integer> unreadCounts = new HashMap<>();
-        unreadCounts.put(currentUserId, 0);
-        unreadCounts.put(otherUserId, 0);
-
-        Chat newChat = new Chat();
-        newChat.setParticipants(participants);
-        newChat.setTimestamp(System.currentTimeMillis());
-        newChat.setLastMessage("");
-        newChat.setUnreadCounts(unreadCounts);
-        newChat.setChatPartnerName(otherUserName);  // Set this immediately
-
-        DatabaseReference newChatRef = db.child(CHATS_REF).push();
-        String chatId = newChatRef.getKey();
-        newChat.setChatId(chatId);  // Set the ID
-
-        newChatRef.setValue(newChat)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Successfully created chat with ID: " + chatId);
-                    updateChatPartnerInfo(chatId, currentUserId, otherUserId);
-                })
-                .addOnFailureListener(e ->
-                        Log.e(TAG, "Failed to create chat", e));
-    }
+//    public void createNewChat(String currentUserId, String otherUserId, String otherUserName) {
+//        Log.d(TAG, "Creating new chat between: " + currentUserId + " and " + otherUserId);
+//
+//        List<String> participants = Arrays.asList(currentUserId, otherUserId);
+//        Map<String, Integer> unreadCounts = new HashMap<>();
+//        unreadCounts.put(currentUserId, 0);
+//        unreadCounts.put(otherUserId, 0);
+//
+//        Chat newChat = new Chat();
+//        newChat.setParticipants(participants);
+//        newChat.setTimestamp(System.currentTimeMillis());
+//        newChat.setLastMessage("");
+//        newChat.setUnreadCounts(unreadCounts);
+//        newChat.setChatPartnerName(otherUserName);  // Set this immediately
+//
+//        DatabaseReference newChatRef = db.child(CHATS_REF).push();
+//        String chatId = newChatRef.getKey();
+//        newChat.setChatId(chatId);  // Set the ID
+//
+//        newChatRef.setValue(newChat)
+//                .addOnSuccessListener(aVoid -> {
+//                    Log.d(TAG, "Successfully created chat with ID: " + chatId);
+//                    updateChatPartnerInfo(chatId, currentUserId, otherUserId);
+//                })
+//                .addOnFailureListener(e ->
+//                        Log.e(TAG, "Failed to create chat", e));
+//    }
 
     // Mark messages as read
     public void markMessagesAsRead(String chatId, String userId) {
@@ -206,54 +211,65 @@ public class ChatRepository {
         MutableLiveData<Chat> chatLiveData = new MutableLiveData<>();
         Log.d("ChatRepository", "Searching for chat between users: " + userId1 + " and " + userId2);
 
-        // First try to find chats where userId1 is first participant
+        // Listen to all chats
         db.child(CHATS_REF)
-                .orderByChild("participants/0")
-                .equalTo(userId1)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.d("ChatRepository", "Checking first query with " + dataSnapshot.getChildrenCount() + " results");
+                        Chat existingChat = null;
 
-                        // Check in first query results
-                        Chat existingChat = findChatInSnapshot(dataSnapshot, userId1, userId2);
+                        // Check all chats for these participants
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Chat chat = snapshot.getValue(Chat.class);
+                            if (chat != null && chat.getParticipants() != null &&
+                                    chat.getParticipants().contains(userId1) &&
+                                    chat.getParticipants().contains(userId2)) {
+                                chat.setChatId(snapshot.getKey());
+                                existingChat = chat;
+                                break;
+                            }
+                        }
 
                         if (existingChat != null) {
-                            Log.d("ChatRepository", "Found chat in first query with ID: " + existingChat.getChatId());
+                            Log.d("ChatRepository", "Found existing chat with ID: " + existingChat.getChatId());
                             chatLiveData.setValue(existingChat);
                         } else {
-                            // If not found, try the second query
-                            db.child(CHATS_REF)
-                                    .orderByChild("participants/0")
-                                    .equalTo(userId2)
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            Log.d("ChatRepository", "Checking second query with " + dataSnapshot.getChildrenCount() + " results");
+                            Log.d("ChatRepository", "No existing chat found, creating new one");
 
-                                            Chat existingChat = findChatInSnapshot(dataSnapshot, userId1, userId2);
+                            // Create new chat
+                            List<String> participants = Arrays.asList(userId1, userId2);
+                            Map<String, Integer> unreadCounts = new HashMap<>();
+                            unreadCounts.put(userId1, 0);
+                            unreadCounts.put(userId2, 0);
 
-                                            if (existingChat != null) {
-                                                Log.d("ChatRepository", "Found chat in second query with ID: " + existingChat.getChatId());
-                                                chatLiveData.setValue(existingChat);
-                                            } else {
-                                                Log.d("ChatRepository", "No existing chat found, creating new one");
-                                                createNewChat(userId1, userId2, "");
-                                            }
-                                        }
+                            Chat newChat = new Chat();
+                            newChat.setParticipants(participants);
+                            newChat.setTimestamp(System.currentTimeMillis());
+                            newChat.setLastMessage("");
+                            newChat.setUnreadCounts(unreadCounts);
 
-                                        @Override
-                                        public void onCancelled(DatabaseError error) {
-                                            Log.e("ChatRepository", "Error in second query: " + error.getMessage());
-                                            chatLiveData.setValue(null);
-                                        }
+                            DatabaseReference newChatRef = db.child(CHATS_REF).push();
+                            String chatId = newChatRef.getKey();
+                            newChat.setChatId(chatId);
+
+                            newChatRef.setValue(newChat)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d("ChatRepository", "Successfully created new chat with ID: " + chatId);
+                                        // Important: Update LiveData with the new chat
+                                        chatLiveData.setValue(newChat);
+                                        // Update additional info
+                                        updateChatPartnerInfo(chatId, userId1, userId2);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("ChatRepository", "Failed to create chat", e);
+                                        chatLiveData.setValue(null);
                                     });
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError error) {
-                        Log.e("ChatRepository", "Error in first query: " + error.getMessage());
+                        Log.e("ChatRepository", "Error getting chats", error.toException());
                         chatLiveData.setValue(null);
                     }
                 });
@@ -304,14 +320,24 @@ public class ChatRepository {
         });
     }
 
-    private void updateChatPartnerInfo(String chatId, String userId, String partnerId) {
+    private void updateChatPartnerInfo(String chatId, String userId1, String userId2) {
         UserRepository userRepo = new UserRepository();
-        userRepo.getUserById(partnerId)
-                .addOnSuccessListener(user -> {
-                    if (user != null) {
+
+        // Get both users' information
+        Task<User> user1Task = userRepo.getUserById(userId1);
+        Task<User> user2Task = userRepo.getUserById(userId2);
+
+        Tasks.whenAllSuccess(user1Task, user2Task)
+                .addOnSuccessListener(users -> {
+                    User user1 = (User) users.get(0);
+                    User user2 = (User) users.get(1);
+
+                    if (user1 != null && user2 != null) {
                         Map<String, Object> updates = new HashMap<>();
-                        updates.put("chatPartnerName", user.getFullName());
-                        updates.put("profileImageUrl", user.getProfileImgUri());
+                        // For user1, show user2's name and vice versa
+                        updates.put("partnerNames/" + userId1, user2.getFullName());
+                        updates.put("partnerNames/" + userId2, user1.getFullName());
+                        updates.put("profileImageUrl", user2.getProfileImgUri());
 
                         db.child(CHATS_REF)
                                 .child(chatId)
@@ -321,7 +347,9 @@ public class ChatRepository {
                                 .addOnFailureListener(e ->
                                         Log.e("ChatRepository", "Failed to update chat partner info", e));
                     }
-                });
+                })
+                .addOnFailureListener(e ->
+                        Log.e("ChatRepository", "Failed to get user information", e));
     }
 
     public LiveData<Boolean> observeUnreadMessages(String userId) {

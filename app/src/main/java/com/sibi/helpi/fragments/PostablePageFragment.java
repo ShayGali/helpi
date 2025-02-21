@@ -153,16 +153,11 @@ public class PostablePageFragment extends Fragment {
     private void navigateToChat(String otherUserId) {
         String currentUserId = userViewModel.getCurrentUserId();
 
-        // First get user data
         userViewModel.getUserByIdLiveData(otherUserId)
                 .observe(getViewLifecycleOwner(), user -> {
                     if (user != null) {
                         String partnerName = user.getFullName();
 
-                        // Create new chat
-                        chatViewModel.createNewChat(currentUserId, otherUserId, partnerName);
-
-                        // Listen for chat between these users
                         chatViewModel.getChatByParticipants(currentUserId, otherUserId)
                                 .observe(getViewLifecycleOwner(), chat -> {
                                     if (chat != null && chat.getChatId() != null) {

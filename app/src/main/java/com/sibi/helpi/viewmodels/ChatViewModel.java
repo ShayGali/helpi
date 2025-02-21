@@ -31,9 +31,9 @@ public class ChatViewModel extends ViewModel {
         chatRepository.sendMessage(currentUSerId, chatId, messageText);
     }
 
-    public void createNewChat(String currentUserId, String otherUserId, String otherUserName) {
-        chatRepository.createNewChat(currentUserId, otherUserId, otherUserName);
-    }
+//    public void createNewChat(String currentUserId, String otherUserId, String otherUserName) {
+//        chatRepository.createNewChat(currentUserId, otherUserId, otherUserName);
+//    }
 
     public void markMessagesAsRead(String chatId, String userId) {
         chatRepository.markMessagesAsRead(chatId, userId);
@@ -43,7 +43,7 @@ public class ChatViewModel extends ViewModel {
         return chatRepository.getChatById(chatId);
     }
 
-    public LiveData<Chat> getChatByParticipants(String userId1, String userId2) {
+    public LiveData<Chat>   getChatByParticipants(String userId1, String userId2) {
         return chatRepository.getChatByParticipants(userId1, userId2);
     }
 
