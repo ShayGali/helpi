@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -200,8 +201,11 @@ public class AdminDashBoardFragment extends Fragment  {
             AppConstants.UserType adminType = radioGroup.getCheckedRadioButtonId() == R.id.globalAdminRadioButton
                     ? AppConstants.UserType.GLOBAL_ADMIN
                     : AppConstants.UserType.LOCAL_ADMIN;
-            onOkAddAdminButton(emailEditText.getText().toString(), adminType);
-            dialog.dismiss();
+
+            onOkAddAdminButton(emailEditText.getText().toString().trim(), adminType, dialog, emailEditText);
+
+
+
         });
 
 
@@ -225,15 +229,22 @@ public class AdminDashBoardFragment extends Fragment  {
         boolean isRadioSelected = radioGroup.getCheckedRadioButtonId() != -1;
 
         okButton.setEnabled(isEmailValid && isRadioSelected);
+
+        // add errors if email is not valid
+        if (!isEmailValid) {
+            emailEditText.setError("Invalid email");
+        } else {
+            emailEditText.setError(null);
+        }
     }
 
-    private void onOkAddAdminButton(String email, AppConstants.UserType adminType) {
-        adminDashBoardViewModel.addAdmin(email, adminType).observe(getViewLifecycleOwner(), isSuccess -> {
-            if (isSuccess) {
+    private void onOkAddAdminButton(String email, AppConstants.UserType adminType, Dialog dialog, EditText emailEditText) {
+        adminDashBoardViewModel.addAdmin(email, adminType).observe(getViewLifecycleOwner(), success -> {
+            if (success) {
                 Toast.makeText(requireContext(), "Admin added successfully", Toast.LENGTH_SHORT).show();
-
+                dialog.dismiss();
             } else {
-             Toast.makeText(requireContext(), "Failed to add admin, are you sure the email is correct?", Toast.LENGTH_LONG).show();
+                emailEditText.setError("User not found");
             }
         });
     }
