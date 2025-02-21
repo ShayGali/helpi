@@ -32,7 +32,7 @@ import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.viewmodels.ProductViewModel;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationClient;
     private UserViewModel userViewModel;
     private ProductViewModel productViewModel;
@@ -85,15 +85,15 @@ public class HomeFragment extends Fragment{
             } else if (state.getError() != null) {
                 hideLoading();
                 Log.e("HomeFragment", "State: Error - " + state.getError());
-                usernameTextView.setText("Welcome, Guest");
+                usernameTextView.setText(R.string.welcome_guest);
                 // Optionally show error to user
                 // Toast.makeText(requireContext(), state.getError(), Toast.LENGTH_SHORT).show();
             } else if (state.getUser() != null) {
                 hideLoading();
                 Log.d("HomeFragment", "State: Success - User: " + state.getUser().getEmail());
-                String name = "Hi, " + state.getUser().getFirstName() +
+                String helloMsg = getString(R.string.hi) + ", " + state.getUser().getFirstName() +
                         " " + state.getUser().getLastName() + "!";
-                usernameTextView.setText(name);
+                usernameTextView.setText(helloMsg);
 
                 String imageUrl = state.getUser().getProfileImgUri();
                 Log.d("HomeFragment", "Profile image URL: " + imageUrl);
@@ -101,8 +101,7 @@ public class HomeFragment extends Fragment{
                     Glide.with(this)
                             .load(imageUrl)
                             .into(profileImage);
-                }
-                else {
+                } else {
                     profileImage.setImageResource(R.drawable.icon_account_circle);
                 }
 
@@ -115,7 +114,7 @@ public class HomeFragment extends Fragment{
             } else {
                 hideLoading();
                 Log.w("HomeFragment", "State: Unknown - neither loading, error, nor user");
-                usernameTextView.setText("Welcome, Guest");
+                usernameTextView.setText(R.string.welcome_guest);
             }
         });
     }

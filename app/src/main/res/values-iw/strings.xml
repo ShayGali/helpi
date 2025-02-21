@@ -7,13 +7,12 @@
     <string name="hello_blank_fragment">שלום פרגמנט ריק</string>
     <string name="social_login">-----------------------התחברות דרך רשת חברתית-----------------------</string>
     <string name="navigation">ניווט</string>
-    <string name="search">חיפוש\nnמוצר</string>
-    <string name="search_service">חיפוש\nnשירות</string>
-    <string name="offer_service">הצע\nnשירות</string>
-    <string name="add_post">הצע\nnמוצר</string>
+    <string name="search">חיפוש</string>
+    <string name="add_post">הצע מוצר</string>
     <string name="first_name">שם פרטי</string>
     <string name="last_name">שם משפחה</string>
     <string name="My_User">המשתמש שלי</string>
+    <string name="hi">שלום</string>
     <string name="Report_a_problem">דווח על בעיה</string>
     <string name="Contact_Us">צור קשר</string>
     <string name="My_Chats">השיחות שלי</string>
@@ -30,6 +29,8 @@
     <string name="postedSuccessfully">הפוסט הועלה בהצלחה</string>
     <string name="errorPosting">העלאת הפוסט נכשלה</string>
     <string name="select_location">בחר מיקום</string>
+    <string name="city_not_found">העיר לא נמצאה</string>
+    <string name="location_not_found">המיקום לא נמצא</string>
     <string-array name="categories">
         <item>בחר קטגוריה</item>
         <item>אלקטרוניקה</item>

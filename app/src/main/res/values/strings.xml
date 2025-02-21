@@ -7,8 +7,6 @@
     <string name="social_login">-----------------------Social Login-----------------------</string>
     <string name="navigation">Navigation</string>
     <string name="search">Search</string>
-    <string name="search_service">Service</string>
-    <string name="offer_service">Service</string>
     <string name="add_post">Post</string>
     <string name="register">Register</string>
     <string name="first_name">First Name</string>
@@ -40,7 +38,7 @@
     <string name="no_image_provided">No image provided</string>
     <string name="phone">Phone</string>
     <string name="select_location">Select Location</string>
-
+    <string name="city_not_found">City not found</string>
     <string-array name="categories">
         <item>Select Category</item>
         <item>Electronics</item>
@@ -137,6 +135,9 @@
     <string name="enter_your_notes">Enter your notes</string>
     <string name="reject_report">Reject Report</string>
     <string name="delete_post">Delete Post</string>
+    <string name="location_not_found">Location not found</string>
+    <string name="welcome_guest">\"Welcome, Guest\"</string>
+    <string name="hi">hi</string>
 
     <string-array name="languages">
         <item>@string/english</item>
