@@ -29,6 +29,7 @@ import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.viewmodels.AdminDashBoardViewModel;
+import com.sibi.helpi.viewmodels.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class AdminDashBoardFragment extends Fragment  {
     private List<Report> reportList;
     private List<Postable> postList;
     private AdminDashBoardViewModel adminDashBoardViewModel;
+    private UserViewModel userViewModel;
 
     private Button addAdminButton;
 
@@ -76,10 +78,18 @@ public class AdminDashBoardFragment extends Fragment  {
 
         reportsRecyclerView.setAdapter(reportAdapter);
         postsRecyclerView.setAdapter(postSliderAdapter);
+        addAdminButton = view.findViewById(R.id.addAdminButton);
+
+       userViewModel.getUserState().observe(getViewLifecycleOwner(), state -> {
+            if (state.getUser() != null && !state.getUser().isGlobalAdmin()) {
+                addAdminButton.setVisibility(View.GONE);
+            }
+        });
+
 
 
         setupObservers();
-        setupButtons(view);
+        setupButtons();
 
         return view;
     }
@@ -88,6 +98,7 @@ public class AdminDashBoardFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adminDashBoardViewModel = new ViewModelProvider(requireActivity()).get(AdminDashBoardViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
     }
 
 
@@ -146,9 +157,8 @@ public class AdminDashBoardFragment extends Fragment  {
         return postIds;
     }
 
-    private void setupButtons(View view) {
-        addAdminButton = view.findViewById(R.id.addAdminButton);
-      addAdminButton.setOnClickListener(v -> openDialog());
+    private void setupButtons() {
+        addAdminButton.setOnClickListener(v -> openDialog());
     }
 
 
