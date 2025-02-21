@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -158,33 +159,24 @@ public class PostablePageFragment extends Fragment {
                     if (user != null) {
                         String partnerName = user.getFullName();
 
-                        // Check if chat exists first
+                        // Create new chat
+                        chatViewModel.createNewChat(currentUserId, otherUserId, partnerName);
+
+                        // Listen for chat between these users
                         chatViewModel.getChatByParticipants(currentUserId, otherUserId)
                                 .observe(getViewLifecycleOwner(), chat -> {
-                                    hideLoadingDialog(); // Hide loading indicator
-
-                                    if (chat != null) {
-                                        // Navigate to existing chat
+                                    if (chat != null && chat.getChatId() != null) {
+                                        hideLoadingDialog();
+                                        // Navigate to chat screen
                                         Bundle args = new Bundle();
                                         args.putString("chatId", chat.getChatId());
-                                        Navigation.findNavController(requireView())
-                                                .navigate(R.id.action_postablePageFragment_to_chatMessagesFragment, args);
-                                    } else {
-                                        // Create new chat and navigate
-                                        chatViewModel.createNewChat(currentUserId, otherUserId, partnerName);
-
-                                        // Wait briefly for chat creation
-                                        new Handler().postDelayed(() -> {
-                                            chatViewModel.getChatByParticipants(currentUserId, otherUserId)
-                                                    .observe(getViewLifecycleOwner(), newChat -> {
-                                                        if (newChat != null) {
-                                                            Bundle args = new Bundle();
-                                                            args.putString("chatId", newChat.getChatId());
-                                                            Navigation.findNavController(requireView())
-                                                                    .navigate(R.id.action_postablePageFragment_to_chatMessagesFragment, args);
-                                                        }
-                                                    });
-                                        }, 500); // Half second delay to ensure chat is created
+                                        try {
+                                            Navigation.findNavController(requireView())
+                                                    .navigate(R.id.action_postablePageFragment_to_chatMessagesFragment, args);
+                                        } catch (Exception e) {
+                                            Log.e("PostablePageFragment", "Navigation failed", e);
+                                            Toast.makeText(getContext(), "Failed to open chat", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 });
                     } else {

@@ -9,6 +9,7 @@ import com.sibi.helpi.models.Message;
 import java.util.*;
 
 public class ChatRepository {
+    private static final String TAG = "ChatRepository";
     private static ChatRepository instance;
     private final DatabaseReference db;
     private final MutableLiveData<Boolean> hasUnreadMessagesLiveData = new MutableLiveData<>(false);
@@ -16,7 +17,9 @@ public class ChatRepository {
     private static final String MESSAGES_REF = "messages";
 
     private ChatRepository() {
-        this.db = FirebaseDatabase.getInstance().getReference();
+        String databaseUrl = "https://helpi-90503-default-rtdb.europe-west1.firebasedatabase.app";
+        FirebaseDatabase database = FirebaseDatabase.getInstance(databaseUrl);
+        this.db = database.getReference();
     }
 
     public static synchronized ChatRepository getInstance() {
@@ -134,8 +137,9 @@ public class ChatRepository {
 
     // Create a new chat
     public void createNewChat(String currentUserId, String otherUserId, String otherUserName) {
-        List<String> participants = Arrays.asList(currentUserId, otherUserId);
+        Log.d(TAG, "Creating new chat between: " + currentUserId + " and " + otherUserId);
 
+        List<String> participants = Arrays.asList(currentUserId, otherUserId);
         Map<String, Integer> unreadCounts = new HashMap<>();
         unreadCounts.put(currentUserId, 0);
         unreadCounts.put(otherUserId, 0);
@@ -145,11 +149,19 @@ public class ChatRepository {
         newChat.setTimestamp(System.currentTimeMillis());
         newChat.setLastMessage("");
         newChat.setUnreadCounts(unreadCounts);
+        newChat.setChatPartnerName(otherUserName);  // Set this immediately
 
         DatabaseReference newChatRef = db.child(CHATS_REF).push();
+        String chatId = newChatRef.getKey();
+        newChat.setChatId(chatId);  // Set the ID
+
         newChatRef.setValue(newChat)
-                .addOnSuccessListener(aVoid ->
-                        updateChatPartnerInfo(newChatRef.getKey(), currentUserId, otherUserId));
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Successfully created chat with ID: " + chatId);
+                    updateChatPartnerInfo(chatId, currentUserId, otherUserId);
+                })
+                .addOnFailureListener(e ->
+                        Log.e(TAG, "Failed to create chat", e));
     }
 
     // Mark messages as read
@@ -192,37 +204,77 @@ public class ChatRepository {
 
     public LiveData<Chat> getChatByParticipants(String userId1, String userId2) {
         MutableLiveData<Chat> chatLiveData = new MutableLiveData<>();
+        Log.d("ChatRepository", "Searching for chat between users: " + userId1 + " and " + userId2);
 
+        // First try to find chats where userId1 is first participant
         db.child(CHATS_REF)
                 .orderByChild("participants/0")
                 .equalTo(userId1)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Chat existingChat = null;
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Chat chat = snapshot.getValue(Chat.class);
-                            if (chat != null && chat.getParticipants().contains(userId2)) {
-                                chat.setChatId(snapshot.getKey());
-                                existingChat = chat;
-                                break;
-                            }
-                        }
+                        Log.d("ChatRepository", "Checking first query with " + dataSnapshot.getChildrenCount() + " results");
+
+                        // Check in first query results
+                        Chat existingChat = findChatInSnapshot(dataSnapshot, userId1, userId2);
 
                         if (existingChat != null) {
+                            Log.d("ChatRepository", "Found chat in first query with ID: " + existingChat.getChatId());
                             chatLiveData.setValue(existingChat);
                         } else {
-                            createNewChat(userId1, userId2, "");
+                            // If not found, try the second query
+                            db.child(CHATS_REF)
+                                    .orderByChild("participants/0")
+                                    .equalTo(userId2)
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            Log.d("ChatRepository", "Checking second query with " + dataSnapshot.getChildrenCount() + " results");
+
+                                            Chat existingChat = findChatInSnapshot(dataSnapshot, userId1, userId2);
+
+                                            if (existingChat != null) {
+                                                Log.d("ChatRepository", "Found chat in second query with ID: " + existingChat.getChatId());
+                                                chatLiveData.setValue(existingChat);
+                                            } else {
+                                                Log.d("ChatRepository", "No existing chat found, creating new one");
+                                                createNewChat(userId1, userId2, "");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError error) {
+                                            Log.e("ChatRepository", "Error in second query: " + error.getMessage());
+                                            chatLiveData.setValue(null);
+                                        }
+                                    });
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError error) {
-                        Log.e("ChatRepository", "Error getting chat by participants", error.toException());
+                        Log.e("ChatRepository", "Error in first query: " + error.getMessage());
+                        chatLiveData.setValue(null);
                     }
                 });
 
         return chatLiveData;
+    }
+
+    private Chat findChatInSnapshot(DataSnapshot dataSnapshot, String userId1, String userId2) {
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            Chat chat = snapshot.getValue(Chat.class);
+            if (chat != null) {
+                List<String> participants = chat.getParticipants();
+                if (participants != null &&
+                        participants.contains(userId1) &&
+                        participants.contains(userId2)) {
+                    chat.setChatId(snapshot.getKey());
+                    return chat;
+                }
+            }
+        }
+        return null;
     }
 
     private void incrementUnreadCountForReceiver(String chatId, String senderId, String receiverId) {

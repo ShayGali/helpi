@@ -1,6 +1,7 @@
 package com.sibi.helpi;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
@@ -25,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseApp.initializeApp(this);
+        initializeFirebase();
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
@@ -38,13 +43,45 @@ public class MainActivity extends AppCompatActivity {
 
         // Hide BottomNavigationView for specific fragments
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.loginFragment || destination.getId() == R.id.registerFragment) {
+            if (destination.getId() == R.id.loginFragment
+                    || destination.getId() == R.id.registerFragment
+                    || destination.getId() == R.id.chatMessagesFragment) {
                 bottomNavigationView.setVisibility(View.GONE);
             } else {
                 bottomNavigationView.setVisibility(View.VISIBLE);
             }
         });
+    }
 
+    private void initializeFirebase() {
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this);
+
+        // Enable Firestore offline persistence
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+        FirebaseFirestore.getInstance().setFirestoreSettings(settings);
+
+        // Initialize Realtime Database with correct URL
+        try {
+
+            String databaseUrl = "https://helpi-90503-default-rtdb.europe-west1.firebasedatabase.app";
+            FirebaseDatabase database = FirebaseDatabase.getInstance(databaseUrl);
+            database.setPersistenceEnabled(true);
+
+            // Test connection
+            database.getReference().child("test").setValue("test_connection")
+                    .addOnSuccessListener(aVoid ->
+                            Log.d("MainActivity", "Successfully connected to Realtime Database")
+                    )
+                    .addOnFailureListener(e ->
+                            Log.e("MainActivity", "Failed to connect to Realtime Database", e)
+                    );
+
+        } catch (Exception e) {
+            Log.e("MainActivity", "Error initializing Firebase", e);
+        }
 
 
     }
