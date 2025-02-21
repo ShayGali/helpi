@@ -30,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
+import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.User;
 import com.sibi.helpi.viewmodels.UserViewModel;
@@ -252,10 +253,12 @@ public class RegisterFragment extends Fragment {
     }
 
     private void hideLoadingIndicator() {
-        //TODO: Hide loading indicator
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.hideProgressBar();
     }
 
     private void showLoadingIndicator() {
-        //TODO: Show loading indicator
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.hideProgressBar();
     }
 }
