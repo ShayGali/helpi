@@ -109,10 +109,11 @@ public class PostRepository {
                                         (postable.getSubCategory() == null || !postable.getSubCategory().equals(subcategory))) {
                                     continue;
                                 }
-                                if (!region.isEmpty() &&
-                                        (postable.getRegion() == null || !postable.getRegion().equals(region))) {
-                                    continue;
-                                }
+                                // TODO: fix it
+//                                if (!region.isEmpty() &&
+//                                        (postable.getRegion() == null || !postable.getRegion().equals(region))) {
+//                                    continue;
+//                                }
                             if (!productStatus.isEmpty() && !((ProductPost) postable).getCondition().equals(productStatus)) {
                                 continue;
                             }
@@ -144,12 +145,13 @@ public class PostRepository {
                             }
                         } catch (Exception e) {
                             Log.e("Repository", "Error processing document: " + document.getId(), e);
+                            // TODO: handle this error
                             continue;
-                            if(postable.getStatus() != null && postable.getStatus() != PostStatus.APPROVED ) {
-                                continue;
-                            }
+//                            if(postable.getStatus() != null && postable.getStatus() != PostStatus.APPROVED ) {
+//                                continue;
+//                            }
 
-                            postableList.add(postable);
+//                            postableList.add(postable);
                         }
                     }
                     mutableLiveData.setValue(postableList);
