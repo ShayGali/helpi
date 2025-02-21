@@ -175,58 +175,6 @@ public class UserRepository {
         return userLiveData;
     }
 
-//    public Task<Boolean> addAdmin(String email, AppConstants.UserType userType) {
-//        return getUsersByField("email", email)
-//                .continueWithTask(task -> {
-//                    if (!task.isSuccessful()) {
-//                        throw Objects.requireNonNull(task.getException());
-//                    }
-//
-//                    List<Pair<User, String>> users = task.getResult();
-//                    if (users == null || users.isEmpty()) {
-//                        Log.d(TAG, "addAdmin: No user found with email: " + email);
-//                        return Tasks.forResult(false); // Return false if user not found
-//                    }
-//
-//                    String UID = users.get(0).getSecond();
-//                    return updateUserField(UID, "userType", userType);
-//                });
-//    }
-
-
-
-//    private LiveData<List<Pair<User,String>>> getUsersByField(String field, String expectedValue) {
-//        MutableLiveData<List<Pair<User,String>>> usersLiveData = new MutableLiveData<>();
-//
-//        // Query the "users" collection for documents where the specified field matches the expected value
-//        userCollection.whereEqualTo(field, expectedValue)
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        QuerySnapshot querySnapshot = task.getResult();
-//                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-//                            // Retrieve all matching documents
-//                            List<DocumentSnapshot> users = querySnapshot.getDocuments();
-//                            List<Pair<User,String>> usersList = users.stream()
-//                                    .map(documentSnapshot -> {
-//                                        User user = documentSnapshot.toObject(User.class);
-//                                        return new Pair<>(user, documentSnapshot.getId());
-//                                    })
-//                                    .collect(Collectors.toList());
-//                            usersLiveData.postValue(usersList);
-//                            Log.d(TAG, "getUsersByField: Found " + usersList.size() + " users with " + field + " = " + expectedValue);
-//                        } else {
-//                            Log.d(TAG, "getUsersByField: No users found with " + field + " = " + expectedValue);
-//                            usersLiveData.postValue(Collections.emptyList()); // Return an empty list
-//                        }
-//                    } else {
-//                        Log.e(TAG, "getUsersByField: Failed to query users collection", task.getException());
-//                        usersLiveData.postValue(null); // Indicate failure with null
-//                    }
-//                });
-//
-//        return usersLiveData;
-//    }
 
     private Task<List<Pair<User, String>>> getUsersByField(String field, String expectedValue) {
         return userCollection.whereEqualTo(field, expectedValue)
@@ -256,25 +204,11 @@ public class UserRepository {
 
 
 
-//    private LiveData<Boolean> updateUserField(String userId, String field, Object value) {
-//        MutableLiveData<Boolean> successLiveData = new MutableLiveData<>();
-//        // Get a reference to the document
-//        DocumentReference userRef = userCollection.document(userId);
-//
-//        // Update the desired field
-//        userRef.update(field, value)
-//                .addOnSuccessListener(aVoid -> successLiveData.postValue(true))
-//                .addOnFailureListener(e -> {
-//                    Log.e(TAG, "updateUserField: Failed to update field", e);
-//                    successLiveData.postValue(false);
-//                });
-//
-//        return successLiveData;
-//    }
+
 
     private Task<Boolean> updateUserField(String userId, String field, Object value) {
         return userCollection.document(userId).update(field, value)
-                .continueWith(task -> task.isSuccessful());
+                .continueWith(Task::isSuccessful);
     }
 
     public Task<Boolean> addAdmin(String email, AppConstants.UserType userType) {
