@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.sibi.helpi.R;
 import com.sibi.helpi.models.MyLatLng;
 
 import java.io.IOException;
@@ -13,6 +14,9 @@ import java.util.Locale;
 
 public class LocationUtil {
     public static String getCityFromLocation(Context context, MyLatLng location) {
+        if(location == null) {
+            return context.getString(R.string.city_not_found);
+        }
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -22,10 +26,16 @@ public class LocationUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "City not found";
+        return context.getString(R.string.city_not_found);
     }
 
     public static String getLocationNameFromLocation(Context context, MyLatLng location) {
+
+        if (location == null)
+        {
+            return context.getString(R.string.location_not_found);
+        }
+
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -35,6 +45,6 @@ public class LocationUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "Location not found";
+        return context.getString(R.string.location_not_found);
     }
 }
