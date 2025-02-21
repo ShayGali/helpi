@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.Task;
 import com.sibi.helpi.models.User;
 import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.UserRepository;
@@ -136,7 +137,31 @@ public class UserViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> addAdmin(String email, AppConstants.UserType userType) {
-         return userRepository.addAdmin(email, userType);
+        MutableLiveData<Boolean> successLiveData = new MutableLiveData<>();
+
+        userRepository.addAdmin(email, userType)
+                .addOnSuccessListener(isSuccessfullyAdded -> {
+                    if (isSuccessfullyAdded) {
+                        successLiveData.postValue(true);
+                        userState.setValue(UserState.success(null));
+                    } else {
+                        successLiveData.postValue(false);
+                        userState.setValue(UserState.error("Failed to add admin"));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    successLiveData.postValue(false);
+                    userState.setValue(UserState.error("Error: " + e.getMessage()));
+                });
+
+        return successLiveData;
     }
+
+
+
+
+
+
+
 
 }

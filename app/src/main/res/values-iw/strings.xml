@@ -12,6 +12,7 @@
     <string name="first_name">שם פרטי</string>
     <string name="last_name">שם משפחה</string>
     <string name="My_User">המשתמש שלי</string>
+    <string name="welcome_guest">\"שלום, אורח\"</string>
     <string name="hi">שלום</string>
     <string name="Report_a_problem">דווח על בעיה</string>
     <string name="Contact_Us">צור קשר</string>
@@ -107,4 +108,9 @@
     <string name="enter_your_notes">הכנס את ההערות שלך</string>
     <string name="reject_report">דחה דיווח</string>
     <string name="delete_post">מחק את הפוסט</string>
+    <string name="add_new_admin">הוסף מנהל חדש</string>
+    <string name="local_admin">מנהל מקומי</string>
+    <string name="global_admin">מנהל כללי</string>
+    <string name="enter_the_email_address_of_the_user_you_want_to_promote">הכנס את כתובת המייל של המשתמש אותו תרצה לקדם</string>
+    <string name="ok">אישור</string>
 </resources>
