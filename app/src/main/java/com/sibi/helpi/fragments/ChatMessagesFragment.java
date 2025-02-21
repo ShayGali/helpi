@@ -20,6 +20,7 @@ import com.sibi.helpi.viewmodels.ChatViewModel;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatMessagesFragment extends Fragment {
     private ChatViewModel chatViewModel;
@@ -70,26 +71,43 @@ public class ChatMessagesFragment extends Fragment {
         // Get partner name from chat
         chatViewModel.getChatById(chatId).observe(getViewLifecycleOwner(), chat -> {
             if (chat != null) {
+                // First try to use chatPartnerName
                 String partnerName = chat.getChatPartnerName();
                 if (partnerName != null && !partnerName.isEmpty()) {
                     partnerNameText.setText(partnerName);
-                } else {
-                    // Fallback if name not in chat
-                    String partnerId = chat.getParticipants().stream()
-                            .filter(id -> !id.equals(UserViewModel.getInstance().getCurrentUserId()))
-                            .findFirst()
-                            .orElse("");
-
-                    if (!partnerId.isEmpty()) {
-                        UserViewModel userViewModel = UserViewModel.getInstance();
-                        userViewModel.getUserByIdLiveData(partnerId)
-                                .observe(getViewLifecycleOwner(), user -> {
-                                    if (user != null) {
-                                        partnerNameText.setText(user.getFullName());
-                                    }
-                                });
-                    }
+                    return;
                 }
+
+                // If no chatPartnerName, try to get it from participants
+                List<String> participants = chat.getParticipants();
+                if (participants != null && !participants.isEmpty()) {
+                    try {
+                        String currentUserId = UserViewModel.getInstance().getCurrentUserId();
+                        String partnerId = participants.stream()
+                                .filter(id -> id != null && !id.equals(currentUserId))
+                                .findFirst()
+                                .orElse(null);
+
+                        if (partnerId != null) {
+                            UserViewModel userViewModel = UserViewModel.getInstance();
+                            userViewModel.getUserByIdLiveData(partnerId)
+                                    .observe(getViewLifecycleOwner(), user -> {
+                                        if (user != null) {
+                                            String name = user.getFullName();
+                                            partnerNameText.setText(name != null ? name : "Chat Partner");
+                                        }
+                                    });
+                        } else {
+                            partnerNameText.setText("Chat Partner");
+                        }
+                    } catch (Exception e) {
+                        partnerNameText.setText("Chat Partner");
+                    }
+                } else {
+                    partnerNameText.setText("Chat Partner");
+                }
+            } else {
+                partnerNameText.setText("Chat Partner");
             }
         });
     }
