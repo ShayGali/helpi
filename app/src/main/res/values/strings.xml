@@ -23,7 +23,6 @@
     <string name="password">Password\n</string>
     <string name="social_register">-----------------Social Register-----------------</string>
     <string name="select_category">Select Category</string>
-    <string name="select_sub_category">Select SubCategory</string>
     <string name="report">report</string>
     <string name="allFieldsRequired">All fields are required</string>
     <string name="imgTooLarge">Image is too large</string>
@@ -119,6 +118,25 @@
     <string name="logout">Logout</string>
     <string name="delete_account">Delete Account</string>
     <string name="share">Share</string>
+    <string name="dash_board">Dash Board</string>
+    <string name="reports">Reports:</string>
+    <string name="posts_to_approve">Posts to Approve:</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="send_message">Send message</string>
+    <string name="admin_dashboard">Admin Dashboard</string>
+    <string name="upload_images">Upload Images</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
+    <string name="post_type">Post Type</string>
+    <string name="select_product_status">Select Product Status</string>
+    <string name="search_post">Search Post</string>
+    <string name="select_region">Select Region</string>
+    <string name="results_for_your_search">Results For Your Search:</string>
+    <string name="enter_description">Enter description</string>
+    <string name="submit_report">Submit Report</string>
+    <string name="enter_your_notes">Enter your notes</string>
+    <string name="reject_report">Reject Report</string>
+    <string name="delete_post">Delete Post</string>
 
     <string-array name="languages">
         <item>@string/english</item>

@@ -24,7 +24,6 @@
     <string name="password">סיסמה</string>
     <string name="social_register">-----------------Social Register-----------------</string>
     <string name="select_category">בחר קטגוריה</string>
-    <string name="select_sub_category">בחר תת קטגוריה</string>
     <string name="allFieldsRequired">כל השדות הינם חובה</string>
     <string name="imgTooLarge">התמונה גדולה מדי</string>
     <string name="uploadingPost">מעלה פוסט</string>
@@ -88,4 +87,23 @@
     <string name="logout">התנתק</string>
     <string name="delete_account">מחק חשבון</string>
     <string name="share">שתף</string>
+    <string name="dash_board">מרכז בקרה</string>
+    <string name="reports">דיווחים</string>
+    <string name="posts_to_approve">פוסטים לאישור:</string>
+    <string name="type_a_message">כתוב הודעה</string>
+    <string name="send_message">שלח הודעה</string>
+    <string name="admin_dashboard">מרכז בקרה</string>
+    <string name="upload_images">העלה תמונה</string>
+    <string name="description">תיאור</string>
+    <string name="title">כותרת</string>
+    <string name="post_type">סוג פוסט</string>
+    <string name="select_product_status">בחר מצב מוצר</string>
+    <string name="search_post">חפש פוסט</string>
+    <string name="select_region">בחר מיקום</string>
+    <string name="results_for_your_search">תוצאות החיפוש שלך:</string>
+    <string name="enter_description">הכנס תיאור:</string>
+    <string name="submit_report">דווח</string>
+    <string name="enter_your_notes">הכנס את ההערות שלך</string>
+    <string name="reject_report">דחה דיווח</string>
+    <string name="delete_post">מחק את הפוסט</string>
 </resources>

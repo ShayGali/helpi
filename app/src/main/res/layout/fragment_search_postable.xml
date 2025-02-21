@@ -11,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Search Product"
-        android:textSize="32dp"
+        android:text="@string/search_post"
+        android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,9 +23,9 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Select Category"
-        app:boxStrokeWidth="0dp"
+        android:hint="@string/select_category"
         app:boxBackgroundColor="@color/lightGray"
+        app:boxStrokeWidth="0dp"
         app:cornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,13 +35,13 @@
             android:id="@+id/categorySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray"
+            android:background="@drawable/rounded_background"
+            android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:clickable="true"
-            android:background="@drawable/rounded_background" />
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Subcategory Selection -->
@@ -50,9 +50,9 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Select Subcategory"
-        app:boxStrokeWidth="0dp"
+        android:hint="@string/select_subcategory"
         app:boxBackgroundColor="@color/lightGray"
+        app:boxStrokeWidth="0dp"
         app:cornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,12 +62,12 @@
             android:id="@+id/subcategorySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:textColor="@color/black"
+            android:background="@drawable/rounded_background"
+            android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:clickable="true"
-            android:background="@drawable/rounded_background" />
+            android:padding="12dp"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Region Selection -->
@@ -76,9 +76,9 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Select Region"
-        app:boxStrokeWidth="0dp"
+        android:hint="@string/select_region"
         app:boxBackgroundColor="@color/lightGray"
+        app:boxStrokeWidth="0dp"
         app:cornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,12 +88,12 @@
             android:id="@+id/regionSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:textColor="@color/black"
+            android:background="@drawable/rounded_background"
+            android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:clickable="true"
-            android:background="@drawable/rounded_background" />
+            android:padding="12dp"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Product Status Selection -->
@@ -102,9 +102,9 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Select Product Status"
-        app:boxStrokeWidth="0dp"
+        android:hint="@string/select_product_status"
         app:boxBackgroundColor="@color/lightGray"
+        app:boxStrokeWidth="0dp"
         app:cornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,12 +114,12 @@
             android:id="@+id/productStatusSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:textColor="@color/black"
+            android:background="@drawable/rounded_background"
+            android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:clickable="true"
-            android:background="@drawable/rounded_background" />
+            android:padding="12dp"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Search Button -->
@@ -128,7 +128,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Search Product"
+        android:text="@string/search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/productStatusInputLayout" />
