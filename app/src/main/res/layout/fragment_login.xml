@@ -30,8 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:hint="@string/email"
-            app:boxStrokeWidth="0dp"
             app:boxBackgroundColor="@color/lightGray"
+            app:boxStrokeWidth="0dp"
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,15 +43,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="email"
+                android:background="@drawable/rounded_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:inputType="textEmailAddress"
                 android:paddingStart="18dp"
                 android:paddingTop="20dp"
                 android:paddingBottom="6dp"
                 android:textColor="@color/black"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:clickable="true"
-                android:background="@drawable/rounded_background"
                 tools:ignore="LabelFor" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,8 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/password"
-            app:boxStrokeWidth="0dp"
             app:boxBackgroundColor="@color/lightGray"
+            app:boxStrokeWidth="0dp"
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,23 +74,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="@string/password"
+                android:background="@drawable/rounded_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:inputType="textPassword"
                 android:paddingStart="18dp"
                 android:paddingTop="20dp"
                 android:paddingBottom="6dp"
                 android:textColor="@color/black"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:clickable="true"
-                android:background="@drawable/rounded_background"
                 tools:ignore="LabelFor" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/error_on_login_msg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="18dp"
+            android:textColor="@color/design_default_color_error"
+            app:layout_constraintEnd_toEndOf="@+id/password_input_layout"
+            app:layout_constraintStart_toStartOf="@+id/password_input_layout"
+            app:layout_constraintTop_toBottomOf="@+id/password_input_layout" />
 
         <Button
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:backgroundTint="#63B8E4"
             android:paddingStart="35dp"
             android:paddingTop="8dp"
@@ -102,64 +114,64 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/password_input_layout" />
+            app:layout_constraintTop_toBottomOf="@id/error_on_login_msg" />
 
         <LinearLayout
-    android:id="@+id/dont_have_account_layout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
-    android:orientation="horizontal"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/login_button">
+            android:id="@+id/dont_have_account_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_button">
 
-    <TextView
-        android:id="@+id/Dont_have_account"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dont_have_an_account_yet"
-        android:textColor="#A6A6A6"
-        android:textSize="16sp"
-        android:paddingEnd="4dp" />
+            <TextView
+                android:id="@+id/Dont_have_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="4dp"
+                android:text="@string/dont_have_an_account_yet"
+                android:textColor="#A6A6A6"
+                android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/go_to_reg_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/register"
-        android:textColor="#63B8E4"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp" />
+            <Button
+                android:id="@+id/go_to_reg_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text="@string/register"
+                android:textColor="#63B8E4"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/now"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:text="@string/now"
-        android:textColor="#A6A6A6"
-        android:textSize="16sp"
-        android:paddingStart="4dp" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/now"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:paddingStart="4dp"
+                android:text="@string/now"
+                android:textColor="#A6A6A6"
+                android:textSize="16sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/or"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/or"
             android:textColor="#A6A6A6"
             android:textSize="16sp"
-            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dont_have_account_layout"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dont_have_account_layout" />
 
         <LinearLayout
             android:id="@+id/social_login_buttons"
@@ -185,6 +197,8 @@
                 android:layout_margin="8dp"
                 android:src="@drawable/ic_google" />
         </LinearLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

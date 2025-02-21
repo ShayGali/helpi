@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
@@ -78,16 +80,17 @@ public class LoginFragment extends Fragment {
         View googleButton = view.findViewById(R.id.google_button);
         googleButton.setOnClickListener(v -> signInWithGoogle());
 
-        setupObservers();
+        setupObservers(view);
     }
 
-    private void setupObservers() {
+    private void setupObservers(View inflater) {
         userViewModel.getUserState().observe(getViewLifecycleOwner(), state -> {
             if (state.isLoading()) {
                 showLoadingIndicator();
             } else if (state.getError() != null) {
                 hideLoadingIndicator();
-                //TODO - display the error message in TextView
+                TextView errorTextView = inflater.findViewById(R.id.error_on_login_msg);
+                errorTextView.setText(state.getError());
                 Log.w(TAG, "Authentication failed: " + state.getError());
                 Toast.makeText(requireContext(), "Authentication failed: " + state.getError(), Toast.LENGTH_SHORT).show();
             } else if (state.getUser() != null) {
@@ -142,10 +145,12 @@ public class LoginFragment extends Fragment {
     }
 
     private void hideLoadingIndicator() {
-        //TODO: Hide loading indicator
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.hideProgressBar();
     }
 
     private void showLoadingIndicator() {
-        //TODO: Show loading indicator
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.hideProgressBar();
     }
 }
