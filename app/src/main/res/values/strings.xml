@@ -143,6 +143,11 @@
     <string name="global_admin">Global Admin</string>
     <string name="enter_the_email_address_of_the_user_you_want_to_promote">Enter the email address of the user you want to promote</string>
     <string name="ok">OK</string>
+    <string name="category">Post Category</string>
+    <string name="sub_category">Sub Category</string>
+    <string name="location">Post Location</string>
+    <string name="condition">Condition</string>
+    <string name="contact_person">Contact Person</string>
 
     <string-array name="languages">
         <item>@string/english</item>

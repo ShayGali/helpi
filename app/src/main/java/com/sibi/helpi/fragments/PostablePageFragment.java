@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,21 +24,25 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
 import com.sibi.helpi.models.Postable;
+import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.models.Resource;
 import com.sibi.helpi.utils.AppConstants;
+import com.sibi.helpi.utils.LocationUtil;
 import com.sibi.helpi.viewmodels.ChatViewModel;
 import com.sibi.helpi.viewmodels.SearchProductViewModel;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 import com.sibi.helpi.viewmodels.UserViewModel;
-
-import java.util.Objects;
 
 public class PostablePageFragment extends Fragment {
 
     private ViewPager2 productImages;
     private TextView productTitle;
     private TextView productDescription;
+    private TextView postCategory;
+    private TextView posSubtCategory;
+    private TextView postLocation;
+    private TextView postCondition;
     private TextView deliveryPersonName;
 
     private FloatingActionButton acceptButton;
@@ -61,7 +64,6 @@ public class PostablePageFragment extends Fragment {
         postableViewModel = new SearchProductViewModel();
         userViewModel = UserViewModel.getInstance();
 
-        String currentUserId = userViewModel.getCurrentUserId();
         chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
     }
 
@@ -69,19 +71,13 @@ public class PostablePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_postable_page, container, false);
 
-        productImages = view.findViewById(R.id.imageSlider);
-        productTitle = view.findViewById(R.id.postableTitle);
-        productDescription = view.findViewById(R.id.postDescription);
-        deliveryPersonName = view.findViewById(R.id.deliveryPersonName);
-        acceptButton = view.findViewById(R.id.acceptFab);
-        rejectButton = view.findViewById(R.id.rejectFab);
-        reportButton = view.findViewById(R.id.reportButton);
+        initViews(view);
 
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             assert getArguments() != null;
-            String sourcePage= getArguments().getString("sourcePage");
-            if(sourcePage != null) {
-                if(!sourcePage.equals("AdminDashBoardFragment")) {
+            String sourcePage = getArguments().getString("sourcePage");
+            if (sourcePage != null) {
+                if (!sourcePage.equals("AdminDashBoardFragment")) {
                     // Hide the accept and reject buttons
                     view.findViewById(R.id.acceptFab).setVisibility(View.GONE);
                     view.findViewById(R.id.rejectFab).setVisibility(View.GONE);
@@ -92,9 +88,9 @@ public class PostablePageFragment extends Fragment {
 
         if (getArguments() != null) {
 
-            String sourcePage= getArguments().getString("sourcePage");
-            if(sourcePage != null) {
-                if(!sourcePage.equals("AdminDashBoardFragment")) {
+            String sourcePage = getArguments().getString("sourcePage");
+            if (sourcePage != null) {
+                if (!sourcePage.equals("AdminDashBoardFragment")) {
                     // Hide the accept and reject buttons
                     acceptButton.setVisibility(View.GONE);
                     rejectButton.setVisibility(View.GONE);
@@ -104,14 +100,8 @@ public class PostablePageFragment extends Fragment {
             postable = (Postable) getArguments().getSerializable("postable");
 
             if (postable != null) {
-                productTitle.setText(postable.getTitle());
-                productDescription.setText(postable.getDescription());
-//                deliveryPersonName.setText(postable.getDeliveryPersonName()); //TODO - fetch delivery person data from the repository
+                addDataToViews(postable);
 
-                // Assuming Postable has a method getImageUrls() that returns a list of image URLs
-                String[] imageUrls = postable.getImageUrls().toArray(new String[0]);
-                ImageSliderAdapter adapter = new ImageSliderAdapter(getContext(), imageUrls);
-                productImages.setAdapter(adapter);
             }
         }
         emailFab = view.findViewById(R.id.emailFab);
@@ -120,7 +110,47 @@ public class PostablePageFragment extends Fragment {
         return view;
     }
 
-    private void setupButtons(){
+    private void addDataToViews(Postable postable) {
+        productTitle.setText(postable.getTitle());
+        productDescription.append(": " + postable.getDescription());
+        postCategory.append(": " + postable.getCategory());
+        posSubtCategory.append(": " + postable.getSubCategory());
+        postLocation.append(": " + LocationUtil.getLocationNameFromLocation(requireContext(), postable.getLocation()));
+
+        if (postable instanceof ProductPost) {
+            postCondition.append(": " + ((ProductPost) postable).getCondition());
+        } else {
+            postCondition.setVisibility(View.GONE);
+        }
+
+        String[] imageUrls = postable.getImageUrls().toArray(new String[0]);
+        ImageSliderAdapter adapter = new ImageSliderAdapter(getContext(), imageUrls);
+        productImages.setAdapter(adapter);
+
+        // fetch the user name of the postable
+        userViewModel.getUserByIdLiveData(postable.getUserId())
+                .observe(getViewLifecycleOwner(), user -> {
+                    if (user != null) {
+                        deliveryPersonName.append(": " + user.getFullName());
+                    }
+                });
+    }
+
+    private void initViews(View view) {
+        productTitle = view.findViewById(R.id.postableTitle);
+        productImages = view.findViewById(R.id.imageSlider);
+        postCategory = view.findViewById(R.id.postCategory);
+        posSubtCategory = view.findViewById(R.id.postSubCategory);
+        postLocation = view.findViewById(R.id.postLocation);
+        postCondition = view.findViewById(R.id.postCondition);
+        productDescription = view.findViewById(R.id.postDescription);
+        deliveryPersonName = view.findViewById(R.id.deliveryPersonName);
+        acceptButton = view.findViewById(R.id.acceptFab);
+        rejectButton = view.findViewById(R.id.rejectFab);
+        reportButton = view.findViewById(R.id.reportButton);
+    }
+
+    private void setupButtons() {
         acceptButton.setOnClickListener(v -> {
             // Accept the postable
             acceptPostable(postable);
@@ -197,11 +227,11 @@ public class PostablePageFragment extends Fragment {
     }
 
     private void acceptPostable(Postable post) {
-        if(post != null) {
+        if (post != null) {
             String postId = post.getId();
             LiveData<Boolean> succeeded = postableViewModel.updatePostStatus(postId, PostStatus.APPROVED);
             succeeded.observe(getViewLifecycleOwner(), isSucceeded -> {
-                if(isSucceeded) {
+                if (isSucceeded) {
                     Toast.makeText(getContext(), "Post accepted", Toast.LENGTH_SHORT).show();
                     // if the post is accepted, navigate back to the admin dashboard
                     Navigation.findNavController(getView()).navigate(R.id.action_postablePageFragment_to_adminDashBoardFragment);
@@ -213,11 +243,11 @@ public class PostablePageFragment extends Fragment {
     }
 
     private void rejectPostable(Postable post) {
-        if(post != null) {
+        if (post != null) {
             String postId = post.getId();
             LiveData<Boolean> succeeded = postableViewModel.updatePostStatus(postId, PostStatus.REJECTED);
             succeeded.observe(getViewLifecycleOwner(), isSucceeded -> {
-                if(isSucceeded) {
+                if (isSucceeded) {
                     Toast.makeText(getContext(), "Post rejected", Toast.LENGTH_SHORT).show();
                     // if the post is rejected, navigate back to the admin dashboard
                     Navigation.findNavController(getView()).navigate(R.id.action_postablePageFragment_to_adminDashBoardFragment);
@@ -257,7 +287,7 @@ public class PostablePageFragment extends Fragment {
         MutableLiveData<Resource<String>> succeeded = postableViewModel.fileReport(report);
 
         succeeded.observe(getViewLifecycleOwner(), isSucceeded -> {
-            if(isSucceeded != null) {
+            if (isSucceeded != null) {
                 Toast.makeText(getContext(), "Report filed successfully", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "Failed to file report, please try again later", Toast.LENGTH_SHORT).show();

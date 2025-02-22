@@ -113,4 +113,9 @@
     <string name="global_admin">מנהל כללי</string>
     <string name="enter_the_email_address_of_the_user_you_want_to_promote">הכנס את כתובת המייל של המשתמש אותו תרצה לקדם</string>
     <string name="ok">אישור</string>
+    <string name="category">"קטגוריה"</string>
+    <string name="sub_category">"תת קטגוריה"</string>
+    <string name="location">"מיקום"</string>
+    <string name="condition">"מצב"</string>
+    <string name="contact_person">איש קשר</string>
 </resources>
