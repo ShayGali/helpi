@@ -17,6 +17,8 @@ import androidx.navigation.Navigation;
 
 
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,8 +117,10 @@ public class RegisterFragment extends Fragment {
                 // Hide loading and show error
                 hideLoadingIndicator();
                 Log.w(TAG, "Authentication failed: " + state.getError());
-                Toast.makeText(requireContext(), "Authentication failed: " + state.getError(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(requireContext(), state.getError(), Toast.LENGTH_SHORT).show();
+                emailEditText.setError(state.getError());
+                emailEditText.requestFocus();
+//
+
             } else if (state.getUser() != null) {
                 // Registration successful, navigate to next screen
                 hideLoadingIndicator();
@@ -124,6 +128,40 @@ public class RegisterFragment extends Fragment {
                 Toast.makeText(requireContext(), "User created successfully", Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(requireView())
                         .navigate(R.id.action_registerFragment_to_homeFragment);
+            }
+        });
+
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validateEmail(emailEditText, registerButton);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Do nothing
+            }
+        });
+
+        phoneEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                validatePhone(phoneEditText, registerButton);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Do nothing
             }
         });
     }
@@ -183,6 +221,10 @@ public class RegisterFragment extends Fragment {
             byte[] profileImg = getProfileImage();
 
             userViewModel.registerUser(user, password, profileImg);
+
+
+
+
         });
 
         googleButton.setOnClickListener(v -> {
@@ -260,5 +302,22 @@ public class RegisterFragment extends Fragment {
     private void showLoadingIndicator() {
         MainActivity activity = (MainActivity) requireActivity();
         activity.hideProgressBar();
+    }
+
+    private void validateEmail(EditText emailEditText, Button registerButton) {
+        String email = emailEditText.getText().toString().trim();
+        boolean isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        registerButton.setEnabled(isEmailValid);
+        if (!isEmailValid) {
+            emailEditText.setError("Invalid email address");
+        }
+    }
+    private void validatePhone(EditText phoneEditText, Button registerButton) {
+        String phone = phoneEditText.getText().toString().trim();
+        boolean isPhoneValid = android.util.Patterns.PHONE.matcher(phone).matches();
+        registerButton.setEnabled(isPhoneValid);
+        if (!isPhoneValid) {
+            phoneEditText.setError("Invalid phone number");
+        }
     }
 }

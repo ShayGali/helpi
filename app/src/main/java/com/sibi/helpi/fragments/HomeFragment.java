@@ -35,7 +35,6 @@ import com.sibi.helpi.viewmodels.UserViewModel;
 public class HomeFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationClient;
     private UserViewModel userViewModel;
-    private ProductViewModel productViewModel;
     private TextView usernameTextView;
     private ImageView profileImage;
 
@@ -46,7 +45,6 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-        productViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
         userViewModel.getCurrentUser();
     }
 
@@ -69,9 +67,9 @@ public class HomeFragment extends Fragment {
         profileImage.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_profileFragment)
         );
-        goToAdminDashboardButton.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_adminDashBoardFragment)
-        );
+        goToAdminDashboardButton.setOnClickListener( v -> {
+            Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_adminDashBoardFragment);
+        });
 
         goToAdminDashboardButton.setVisibility(View.GONE);
 

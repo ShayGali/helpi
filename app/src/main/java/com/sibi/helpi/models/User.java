@@ -90,6 +90,12 @@ public class User {
     public boolean isAdmin() {
         return userType == UserType.LOCAL_ADMIN || userType == UserType.GLOBAL_ADMIN;
     }
+    public boolean isLocalAdmin() {
+        return userType == UserType.LOCAL_ADMIN;
+    }
+    public boolean isGlobalAdmin() {
+        return userType == UserType.GLOBAL_ADMIN;
+    }
 
     public String getFcmToken() {
         return fcmToken;

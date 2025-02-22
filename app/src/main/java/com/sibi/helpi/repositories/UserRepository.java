@@ -13,14 +13,19 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sibi.helpi.models.Pair;
 import com.sibi.helpi.models.User;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.utils.FirebaseAuthService;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class UserRepository {
     private static final String TAG = "UserRepository";
@@ -170,41 +175,63 @@ public class UserRepository {
         return userLiveData;
     }
 
-    public LiveData<Boolean> addAdmin(String email, AppConstants.UserType userType) {
 
-        MutableLiveData<Boolean> successLiveData = new MutableLiveData<>();
-        // Query the "users" collection for a document with the specified email
-        userCollection.whereEqualTo("email", email)
+    private Task<List<Pair<User, String>>> getUsersByField(String field, String expectedValue) {
+        return userCollection.whereEqualTo(field, expectedValue)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            // Assuming email is unique, get the first document
-                            QueryDocumentSnapshot document = (QueryDocumentSnapshot) querySnapshot.getDocuments().get(0);
-                            String documentId = document.getId();
+                .continueWith(task -> {
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
 
-                            // Get a reference to the document
-                            DocumentReference userRef = userCollection.document(documentId);
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (querySnapshot == null || querySnapshot.isEmpty()) {
+                        Log.d(TAG, "getUsersByField: No users found with " + field + " = " + expectedValue);
+                        return Collections.emptyList(); // Return an empty list if no users found
+                    }
 
-                            // Update the desired field
-                            userRef.update("userType", userType)
-                                    .addOnSuccessListener(aVoid -> successLiveData.postValue(true))
-                                    .addOnFailureListener(e -> {
-                                        Log.e(TAG, "addAdmin: Failed to update user type", e);
-                                        successLiveData.postValue(false);
-                                    });
-                        } else {
-                            Log.d(TAG, "addAdmin: No user found with email: " + email);
-                            successLiveData.postValue(false);
+                    List<Pair<User, String>> usersList = querySnapshot.getDocuments().stream()
+                            .map(documentSnapshot -> {
+                                User user = documentSnapshot.toObject(User.class);
+                                return new Pair<>(user, documentSnapshot.getId());
+                            })
+                            .collect(Collectors.toList());
 
-
-                        }
-                    } else {
-                        Log.e(TAG, "addAdmin: Failed to query users collection", task.getException());
-                        successLiveData.postValue(false);
-                        }
+                    Log.d(TAG, "getUsersByField: Found " + usersList.size() + " users with " + field + " = " + expectedValue);
+                    return usersList;
                 });
-        return successLiveData;
     }
+
+
+
+
+
+    private Task<Boolean> updateUserField(String userId, String field, Object value) {
+        return userCollection.document(userId).update(field, value)
+                .continueWith(Task::isSuccessful);
+    }
+
+    public Task<Boolean> addAdmin(String email, AppConstants.UserType userType) {
+        return getUsersByField("email", email)
+                .continueWithTask(task -> {
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
+
+                    List<Pair<User, String>> users = task.getResult();
+                    if (users == null || users.isEmpty()) {
+                        Log.d(TAG, "addAdmin: No user found with email: " + email);
+                        return Tasks.forResult(false); // Return false if user not found
+                    }
+
+                    String UID = users.get(0).getSecond();
+                    return updateUserField(UID, "userType", userType).continueWith(updateTask -> {
+                        if (!updateTask.isSuccessful()) {
+                            throw Objects.requireNonNull(updateTask.getException());
+                        }
+                        return updateTask.getResult();
+                    });
+                });
+    }
+
 }

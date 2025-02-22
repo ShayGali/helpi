@@ -32,7 +32,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="24dp"
             android:backgroundTint="@color/quantum_bluegrey500"
-            android:text="Add new Admin"
+            android:text="@string/add_new_admin"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView17" />

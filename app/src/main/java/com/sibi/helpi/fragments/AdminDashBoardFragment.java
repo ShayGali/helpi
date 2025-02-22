@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,7 @@ import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.viewmodels.AdminDashBoardViewModel;
+import com.sibi.helpi.viewmodels.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class AdminDashBoardFragment extends Fragment  {
     private List<Report> reportList;
     private List<Postable> postList;
     private AdminDashBoardViewModel adminDashBoardViewModel;
+    private UserViewModel userViewModel;
 
     private Button addAdminButton;
 
@@ -76,10 +79,18 @@ public class AdminDashBoardFragment extends Fragment  {
 
         reportsRecyclerView.setAdapter(reportAdapter);
         postsRecyclerView.setAdapter(postSliderAdapter);
+        addAdminButton = view.findViewById(R.id.addAdminButton);
+
+       userViewModel.getUserState().observe(getViewLifecycleOwner(), state -> {
+            if (state.getUser() != null && !state.getUser().isGlobalAdmin()) {
+                addAdminButton.setVisibility(View.GONE);
+            }
+        });
+
 
 
         setupObservers();
-        setupButtons(view);
+        setupButtons();
 
         return view;
     }
@@ -88,6 +99,7 @@ public class AdminDashBoardFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adminDashBoardViewModel = new ViewModelProvider(requireActivity()).get(AdminDashBoardViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
     }
 
 
@@ -146,9 +158,8 @@ public class AdminDashBoardFragment extends Fragment  {
         return postIds;
     }
 
-    private void setupButtons(View view) {
-        addAdminButton = view.findViewById(R.id.addAdminButton);
-      addAdminButton.setOnClickListener(v -> openDialog());
+    private void setupButtons() {
+        addAdminButton.setOnClickListener(v -> openDialog());
     }
 
 
@@ -190,8 +201,11 @@ public class AdminDashBoardFragment extends Fragment  {
             AppConstants.UserType adminType = radioGroup.getCheckedRadioButtonId() == R.id.globalAdminRadioButton
                     ? AppConstants.UserType.GLOBAL_ADMIN
                     : AppConstants.UserType.LOCAL_ADMIN;
-            onOkAddAdminButton(emailEditText.getText().toString(), adminType);
-            dialog.dismiss();
+
+            onOkAddAdminButton(emailEditText.getText().toString().trim(), adminType, dialog, emailEditText);
+
+
+
         });
 
 
@@ -215,15 +229,22 @@ public class AdminDashBoardFragment extends Fragment  {
         boolean isRadioSelected = radioGroup.getCheckedRadioButtonId() != -1;
 
         okButton.setEnabled(isEmailValid && isRadioSelected);
+
+        // add errors if email is not valid
+        if (!isEmailValid) {
+            emailEditText.setError("Invalid email");
+        } else {
+            emailEditText.setError(null);
+        }
     }
 
-    private void onOkAddAdminButton(String email, AppConstants.UserType adminType) {
-        adminDashBoardViewModel.addAdmin(email, adminType).observe(getViewLifecycleOwner(), isSuccess -> {
-            if (isSuccess) {
+    private void onOkAddAdminButton(String email, AppConstants.UserType adminType, Dialog dialog, EditText emailEditText) {
+        adminDashBoardViewModel.addAdmin(email, adminType).observe(getViewLifecycleOwner(), success -> {
+            if (success) {
                 Toast.makeText(requireContext(), "Admin added successfully", Toast.LENGTH_SHORT).show();
-
+                dialog.dismiss();
             } else {
-             Toast.makeText(requireContext(), "Failed to add admin, are you sure the email is correct?", Toast.LENGTH_LONG).show();
+                emailEditText.setError("User not found");
             }
         });
     }

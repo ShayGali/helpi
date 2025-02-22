@@ -138,6 +138,11 @@
     <string name="location_not_found">Location not found</string>
     <string name="welcome_guest">\"Welcome, Guest\"</string>
     <string name="hi">hi</string>
+    <string name="add_new_admin">Add new Admin</string>
+    <string name="local_admin">Local Admin</string>
+    <string name="global_admin">Global Admin</string>
+    <string name="enter_the_email_address_of_the_user_you_want_to_promote">Enter the email address of the user you want to promote</string>
+    <string name="ok">OK</string>
 
     <string-array name="languages">
         <item>@string/english</item>
