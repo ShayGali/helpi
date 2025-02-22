@@ -122,10 +122,6 @@ public class ProductPost implements Postable {
         this.status = status;
     }
 
-    @Override
-    public String getRegion() {
-        return "";
-    }
 
     @NonNull
     @Override

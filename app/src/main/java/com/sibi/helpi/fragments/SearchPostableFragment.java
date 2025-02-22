@@ -8,19 +8,25 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.sibi.helpi.LocationPickerDialogFragment;
 import com.sibi.helpi.R;
+import com.sibi.helpi.models.MyLatLng;
+import com.sibi.helpi.utils.LocationUtil;
+
 //TODO- add option do  not have fillter
 public class SearchPostableFragment extends Fragment {
 
-    private AutoCompleteTextView categorySpinner, subcategorySpinner, regionSpinner, productStatusSpinner;
-    private TextInputLayout categoryInputLayout, subcategoryInputLayout, regionInputLayout, productStatusInputLayout;
-    private Button submitSearchButton;
+    private AutoCompleteTextView postTypeSpinner, categorySpinner, subcategorySpinner, regionSpinner, productStatusSpinner;
+    private TextInputLayout postTypeInputLayout, categoryInputLayout, subcategoryInputLayout, regionInputLayout, productStatusInputLayout;
+    private View submitSearchButton, clearSearchButton;
+    MyLatLng selectedLocation;
 
     public SearchPostableFragment() {
         // Required empty public constructor
@@ -35,33 +41,28 @@ public class SearchPostableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search_postable, container, false);
-        submitSearchButton = view.findViewById(R.id.btnSearchProduct);
 
-        categorySpinner = view.findViewById(R.id.categorySpinner);
-        subcategorySpinner = view.findViewById(R.id.subcategorySpinner);
-        regionSpinner = view.findViewById(R.id.regionSpinner);
-        productStatusSpinner = view.findViewById(R.id.productStatusSpinner);
+        initializeViews(view);
 
-        // Reference to the TextInputLayouts
-        categoryInputLayout = view.findViewById(R.id.categoryInputLayout);
-        subcategoryInputLayout = view.findViewById(R.id.subcategoryInputLayout);
-        regionInputLayout = view.findViewById(R.id.regionInputLayout);
-        productStatusInputLayout = view.findViewById(R.id.productStatusInputLayout);
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            selectedLocation = bundle.getParcelable("selected_location");
+            if (selectedLocation != null) {
+                // display the location name under the region spinner
+                regionSpinner.setText(LocationUtil.getLocationNameFromLocation(requireContext(), selectedLocation));
+            }
+        });
 
-        String[] categories = getResources().getStringArray(R.array.categories);
-        String[] regions = getResources().getStringArray(R.array.region);
-        String[] productStatus = getResources().getStringArray(R.array.product_condition);
+        setupAutoCompleteTextView(categorySpinner, categoryInputLayout, getResources().getStringArray(R.array.categories));
+        setupAutoCompleteTextView(postTypeSpinner, postTypeInputLayout, getResources().getStringArray(R.array.type));
+        setupAutoCompleteTextView(productStatusSpinner, productStatusInputLayout, getResources().getStringArray(R.array.product_condition));
+//        setupAutoCompleteTextView(regionSpinner, regionInputLayout, regions);
+        setSubCategoryBlocker();
+        setTypeBlocker();
 
-        // Setup the AutoCompleteTextViews with background, rounded corners, and adapter
-        setupAutoCompleteTextView(categorySpinner, categoryInputLayout, categories);
-        setupAutoCompleteTextView(regionSpinner, regionInputLayout, regions);
-        setupAutoCompleteTextView(productStatusSpinner, productStatusInputLayout, productStatus);
-
-        // Disable subcategory spinner initially
-        setSpinnerEnabled(subcategorySpinner, false);
-
-        // Set up the subcategory spinner based on the selected category
-        setupCategorySpinner();
+        regionSpinner.setOnClickListener(v -> {
+            LocationPickerDialogFragment dialog = new LocationPickerDialogFragment();
+            dialog.show(getParentFragmentManager(), "LocationPickerDialogFragment");
+        });
 
         submitSearchButton.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
@@ -74,106 +75,98 @@ public class SearchPostableFragment extends Fragment {
             Navigation.findNavController(view).navigate(R.id.action_searchPostableFragment_to_searchPostableResultFragment, bundle);
         });
 
+        clearSearchButton.setOnClickListener(v -> {
+            // Clear the spinner items to the default value
+            postTypeSpinner.setText("", false);
+            categorySpinner.setText("", false);
+            subcategorySpinner.setText("", false);
+            regionSpinner.setText("", false);
+            productStatusSpinner.setText("", false);
+            selectedLocation = null;
+        });
+
         return view;
     }
 
-    // Method to set up the AutoCompleteTextViews
+    private void initializeViews(View view) {
+        submitSearchButton = view.findViewById(R.id.btnSearch);
+        clearSearchButton = view.findViewById(R.id.btnClearFilters);
+
+        categorySpinner = view.findViewById(R.id.categorySpinner);
+        subcategorySpinner = view.findViewById(R.id.subcategorySpinner);
+        regionSpinner = view.findViewById(R.id.regionSpinner);
+        productStatusSpinner = view.findViewById(R.id.productStatusSpinner);
+
+        categoryInputLayout = view.findViewById(R.id.categoryInputLayout);
+        subcategoryInputLayout = view.findViewById(R.id.subcategoryInputLayout);
+        regionInputLayout = view.findViewById(R.id.regionInputLayout);
+        productStatusInputLayout = view.findViewById(R.id.productStatusInputLayout);
+
+        postTypeSpinner = view.findViewById(R.id.postTypeSpinner);
+        postTypeInputLayout = view.findViewById(R.id.postTypeInputLayout);
+    }
+
     private void setupAutoCompleteTextView(AutoCompleteTextView autoCompleteTextView, TextInputLayout inputLayout, String[] items) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, items);
         autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setKeyListener(null); // Prevent manual input
+        autoCompleteTextView.setThreshold(1000); // Prevents typing to trigger suggestions
 
-        // Apply the custom background and rounded corners
-        autoCompleteTextView.setBackgroundResource(R.drawable.spinner_background);  // Set the custom background
-
-        // Set the threshold to show options immediately
-        autoCompleteTextView.setThreshold(1);  // Show the dropdown with one character typed
-
-        // Disable typing by the user
-        autoCompleteTextView.setFocusable(false);  // Disables typing
-        autoCompleteTextView.setClickable(true);   // Ensures clickability to open the dropdown
-
-        // Ensure that the spinner cannot be typed into
-        autoCompleteTextView.setFocusableInTouchMode(false); // Disables focus in touch mode, no typing at all
-        autoCompleteTextView.setInputType(InputType.TYPE_NULL);  // Completely disables typing
-
-        // Make sure the TextInputLayout is properly styled
-        inputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_OUTLINE);
-        inputLayout.setBoxStrokeColor(getResources().getColor(R.color.blue_primary));  // Set the border color to blue
-
-        // Set up hint and item click listener
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
-            if (position >= 0) {
-                // Update the selected value in the text box
-                autoCompleteTextView.setText(items[position]);  // Set the selected value in the text field
-                inputLayout.setBoxStrokeColor(getResources().getColor(R.color.blue_primary));  // Ensure the border stays blue after selection
-                autoCompleteTextView.clearFocus();  // Remove focus after selection
-
-                // Change hint color to blue after selection
-                inputLayout.setHintTextColor(ContextCompat.getColorStateList(requireContext(), R.color.blue_primary));  // Corrected to use getColorStateList
-            }
+//            autoCompleteTextView.setText(items[position], false); // Ensures selection from list
+            inputLayout.setBoxStrokeColor(ContextCompat.getColor(requireContext(), R.color.blue_primary));
+            inputLayout.setHintTextColor(ContextCompat.getColorStateList(requireContext(), R.color.blue_primary));
         });
 
-        // Add an onClickListener to open the dropdown when clicked
-        autoCompleteTextView.setOnClickListener(v -> {
-            // Refresh the adapter to ensure it shows all options
-            ArrayAdapter<String> newAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, items);
-            autoCompleteTextView.setAdapter(newAdapter);
-            autoCompleteTextView.showDropDown();  // Show the dropdown when clicked, even after selection
-        });
-
-        // Open the dropdown menu as soon as the AutoCompleteTextView is clicked
         autoCompleteTextView.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                inputLayout.setBoxStrokeColor(getResources().getColor(R.color.blue_primary));  // Ensure the stroke color remains blue when focused
-                autoCompleteTextView.showDropDown(); // Show the dropdown immediately
-                inputLayout.setHintTextColor(ContextCompat.getColorStateList(requireContext(), R.color.blue_primary));  // Corrected to use getColorStateList
+                autoCompleteTextView.showDropDown(); // Show dropdown when focused
+            }
+        });
+
+        autoCompleteTextView.setOnClickListener(v -> autoCompleteTextView.showDropDown()); // Open dropdown on click
+    }
+
+    private void setTypeBlocker() {
+        postTypeSpinner.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedType = parent.getItemAtPosition(position).toString();
+            if ("Service".equalsIgnoreCase(selectedType)) {
+                productStatusSpinner.setEnabled(false);
+                productStatusSpinner.setText("");
             } else {
-                inputLayout.setBoxStrokeColor(getResources().getColor(R.color.blue_primary));  // Keep the stroke color blue after losing focus
+                productStatusSpinner.setEnabled(true);
             }
         });
     }
 
-    private void setupCategorySpinner() {
+    private void setSubCategoryBlocker() {
+        subcategorySpinner.setEnabled(false);
         categorySpinner.setOnItemClickListener((parent, view, position, id) -> {
-            String selectedCategory = categorySpinner.getText().toString();
-            int subcategoryArrayId = getSubcategoryArrayId(selectedCategory);
-            if (subcategoryArrayId != 0) {
-                String[] subcategories = getResources().getStringArray(subcategoryArrayId);
-                setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, subcategories);
-                setSpinnerEnabled(subcategorySpinner, true);
-            } else {
-                setSpinnerEnabled(subcategorySpinner, false);
+            subcategorySpinner.setEnabled(position != 0);
+            if (position != 0) {
+                switch (position) {
+                    case 1:
+                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.electronics_subcategories));
+                        break;
+                    case 2:
+                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.fashion_subcategories));
+                        break;
+                    case 3:
+                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.books_subcategories));
+                        break;
+                    case 4:
+                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.home_subcategories));
+                        break;
+                    case 5:
+                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.toys_subcategories));
+                        break;
+                    case 6:
+                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.other_subcategories));
+                        subcategorySpinner.setEnabled(false);
+                        break;
+                }
             }
         });
     }
 
-    private int getSubcategoryArrayId(String category) {
-        switch (category) {
-            case "Electronics":
-                return R.array.electronics_subcategories;
-            case "Fashion":
-                return R.array.fashion_subcategories;
-            case "Books":
-                return R.array.books_subcategories;
-            case "Home":
-                return R.array.home_subcategories;
-            case "Toys":
-                return R.array.toys_subcategories;
-            case "Other":
-                return R.array.other_subcategories;
-            default:
-                return 0;
-        }
-    }
-
-    private void setSpinnerEnabled(AutoCompleteTextView spinner, boolean enabled) {
-        spinner.setEnabled(enabled);
-        if (enabled) {
-            spinner.setBackgroundResource(R.drawable.spinner_background);
-            spinner.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
-        } else {
-            spinner.setBackgroundResource(R.drawable.spinner_disabled_background);
-            spinner.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray));
-        }
-    }
 }
