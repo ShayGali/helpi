@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -67,7 +68,7 @@ public class HomeFragment extends Fragment {
         profileImage.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_profileFragment)
         );
-        goToAdminDashboardButton.setOnClickListener( v -> {
+        goToAdminDashboardButton.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_adminDashBoardFragment);
         });
 
@@ -87,7 +88,6 @@ public class HomeFragment extends Fragment {
                 // Optionally show error to user
                 // Toast.makeText(requireContext(), state.getError(), Toast.LENGTH_SHORT).show();
             } else if (state.getUser() != null) {
-                hideLoading();
                 Log.d("HomeFragment", "State: Success - User: " + state.getUser().getEmail());
                 String helloMsg = getString(R.string.hi) + ", " + state.getUser().getFirstName() +
                         " " + state.getUser().getLastName() + "!";
@@ -108,9 +108,10 @@ public class HomeFragment extends Fragment {
                 } else {
                     goToAdminDashboardButton.setVisibility(View.GONE);
                 }
-
+                hideLoading();
             } else {
                 hideLoading();
+                Toast.makeText(requireContext(), "Unknown state", Toast.LENGTH_SHORT).show();
                 Log.w("HomeFragment", "State: Unknown - neither loading, error, nor user");
                 usernameTextView.setText(R.string.welcome_guest);
             }

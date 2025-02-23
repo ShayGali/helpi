@@ -28,6 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.LocationPickerDialogFragment;
+import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
 import com.sibi.helpi.models.Postable;
@@ -336,16 +337,19 @@ public class OfferPostFragment extends Fragment {
             switch (resource.getStatus()) {
                 case LOADING:
                     showToast(getString(R.string.uploadingPost));
+                    showLoading();
                     break;
 
                 case SUCCESS:
                     showToast(getString(R.string.postedSuccessfully));
+                    hideLoading();
                     clearForm();
                     Navigation.findNavController(requireView()).navigate(R.id.action_offerPostFragment_to_homeFragment);
                     break;
 
                 case ERROR:
                     showToast(getString(R.string.errorPosting));
+                    hideLoading();
                     break;
             }
         });
@@ -363,6 +367,16 @@ public class OfferPostFragment extends Fragment {
         subcategorySpinner.setText("");
         selectedLocation = null;
         conditionSpinner.setText("");
+    }
+
+    private void showLoading() {
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.showProgressBar();
+    }
+
+    private void hideLoading() {
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.hideProgressBar();
     }
 }
 //    TODO: an offer of how to implement the above methods:

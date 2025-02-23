@@ -17,7 +17,7 @@ public class UserState {
     }
 
     public static UserState idle() {
-        return new UserState(false, null, null);
+        return new UserState(true, null, null);
     }
 
 
