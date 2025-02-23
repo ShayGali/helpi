@@ -221,38 +221,34 @@ public class PostRepository {
 
         if (postType == AppConstants.PostType.ANY) {
             return getAllPosts();
-
         }
 
-        // 🔹 Step 1: Build Firestore Query to Filter Non-Location Fields
-        Query query = postsCollection.where(Filter.and(
-                Filter.equalTo("type", postType.ordinal()),
-                Filter.equalTo("status", PostStatus.APPROVED),
-                Filter.equalTo("category", category),
-                Filter.equalTo("subCategory", subcategory),
-                Filter.equalTo("condition", productStatus)
-        ));
+        // 🔹 Step 1: Build Firestore Query Dynamically
+        Query query = postsCollection;
 
-//
+        query = query.whereEqualTo("type", postType.ordinal())
+                .whereEqualTo("status", PostStatus.APPROVED);
+
+        if (!category.isEmpty() && !category.equals("Find everything")) {
+            query = query.whereEqualTo("category", category);
+        }
+        if (!subcategory.isEmpty() && !subcategory.equals("Find everything")) {
+            query = query.whereEqualTo("subCategory", subcategory);
+        }
+        if (postType == AppConstants.PostType.PRODUCT && !productStatus.isEmpty() && !productStatus.equals("Find everything")) {
+            query = query.whereEqualTo("condition", productStatus);
+        }
+
         // 🔹 Step 2: Fetch Data from Firestore
         query.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Postable> postableList = new ArrayList<>();
                     List<Postable> filteredByLocation = new ArrayList<>();
 
-
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                         if (document == null) continue;
 
-                        Long t = document.getLong("type");
-                        if (t == null) {
-                            Log.e("Repository", "Failed to fetch products: type is null");
-                            continue;
-                        }
-
-
                         Postable postable;
-
                         try {
                             if (postType == AppConstants.PostType.PRODUCT) {
                                 postable = document.toObject(ProductPost.class);
@@ -272,10 +268,14 @@ public class PostRepository {
                     }
 
                     // 🔹 Step 3: Apply Location Filtering
-                    postableList.stream().filter(postable -> {
-                        if (postable.getLocation() == null) return false;
-                        return isWithinRadius(location, postable.getLocation(), MAX_RADIUS);
-                    }).forEach(filteredByLocation::add);
+                    postableList.stream()
+                            .filter(postable -> {
+                                if (postable.getLocation() == null) {
+                                    return true;
+                                }
+                                return isWithinRadius(location, postable.getLocation(), MAX_RADIUS) || location.compareTo(new GeoPoint(0, 0)) == 0;
+                            })
+                            .forEach(filteredByLocation::add);
 
                     mutableLiveData.setValue(filteredByLocation);
                 })
@@ -286,6 +286,7 @@ public class PostRepository {
 
         return mutableLiveData;
     }
+
 
 
 

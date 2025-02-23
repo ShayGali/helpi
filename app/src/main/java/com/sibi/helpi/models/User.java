@@ -1,6 +1,8 @@
 package com.sibi.helpi.models;
 
 import java.util.List;
+
+import com.google.firebase.firestore.Exclude;
 import com.sibi.helpi.utils.AppConstants.UserType;
 
 
@@ -26,9 +28,7 @@ public class User {
         this.userType = UserType.DEFAULT_USER;
     }
 
-    public String getUsername() {
-        return firstName + " " + lastName;
-    }
+
 
 
     public String getEmail() {
@@ -87,10 +87,12 @@ public class User {
         this.userType = userType;
     }
 
+    @Exclude
     public boolean isAdmin() {
         return userType == UserType.LOCAL_ADMIN || userType == UserType.GLOBAL_ADMIN;
     }
 
+    @Exclude
     public boolean isGlobalAdmin() {
         return userType == UserType.GLOBAL_ADMIN;
     }
@@ -102,7 +104,12 @@ public class User {
     public void setFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
     }
+    @Exclude
     public String getFullName() {
+        return firstName + " " + lastName;
+    }
+    @Exclude
+    public String getUsername() {
         return firstName + " " + lastName;
     }
 }
