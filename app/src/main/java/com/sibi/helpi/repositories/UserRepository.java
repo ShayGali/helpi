@@ -17,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sibi.helpi.models.Pair;
 import com.sibi.helpi.models.User;
 import com.sibi.helpi.utils.AppConstants;
@@ -82,14 +83,31 @@ public class UserRepository {
     }
 
     public Task<DocumentReference> authWithGoogle(GoogleSignInAccount account) {
-        return authService.signInWithGoogle(account);
+        return authService.signInWithGoogle(account)
+                .continueWithTask(task -> {
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
+                    return updateUserFcmTokenOnSignIn()
+                            .continueWith(tokenTask -> task.getResult());
+                });
     }
 
     public Task<Void> signOut(GoogleSignInClient googleSignInClient) {
+        String userId = getUUID();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
-        return authService.signOut()
-                .continueWithTask(task -> googleSignInClient.signOut());
+
+        // First remove the FCM token
+        Task<Void> removeTokenTask = (userId != null)
+                ? removeFcmToken(userId)
+                : Tasks.forResult(null);
+
+        return removeTokenTask
+                .continueWithTask(task -> authService.signOut())
+                .continueWithTask(task -> {
+                    mAuth.signOut();
+                    return googleSignInClient.signOut();
+                });
     }
 
     public Task<Void> deleteAccount() {
@@ -146,8 +164,10 @@ public class UserRepository {
                     if (!task.isSuccessful()) {
                         throw Objects.requireNonNull(task.getException());
                     }
-                    return getCurrentUser();
-                });
+                    // Update FCM token after successful sign in
+                    return updateUserFcmTokenOnSignIn();
+                })
+                .continueWithTask(task -> getCurrentUser());
     }
 
     public Task<User> getUserById(String userId) {
@@ -232,6 +252,55 @@ public class UserRepository {
                         return updateTask.getResult();
                     });
                 });
+    }
+
+    /**
+     * Updates the FCM token for a specific user
+     */
+    public Task<Void> updateFcmToken(String userId, String token) {
+        return userCollection.document(userId)
+                .update("fcmToken", token)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "FCM Token updated successfully"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error updating FCM token", e));
+    }
+
+    /**
+     * Retrieves the FCM token for a specific user
+     */
+    public Task<String> getFcmToken(String userId) {
+        return userCollection.document(userId).get()
+                .continueWith(task -> {
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
+                    DocumentSnapshot document = task.getResult();
+                    return document.getString("fcmToken");
+                });
+    }
+
+    /**
+     * Updates the user's FCM token during sign in
+     */
+    public Task<Void> updateUserFcmTokenOnSignIn() {
+        return FirebaseMessaging.getInstance().getToken()
+                .continueWithTask(task -> {
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
+                    String token = task.getResult();
+                    String userId = getUUID();
+                    if (userId != null && token != null) {
+                        return updateFcmToken(userId, token);
+                    }
+                    return Tasks.forException(new Exception("User ID or token is null"));
+                });
+    }
+
+    /**
+     * Removes the FCM token when user signs out
+     */
+    public Task<Void> removeFcmToken(String userId) {
+        return updateFcmToken(userId, "");
     }
 
 }
