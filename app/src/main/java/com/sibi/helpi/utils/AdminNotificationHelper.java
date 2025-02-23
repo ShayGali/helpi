@@ -4,8 +4,12 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 import com.sibi.helpi.models.Postable;
+import com.sibi.helpi.models.User;
 import com.sibi.helpi.repositories.UserRepository;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AdminNotificationHelper {
     private static final String TAG = "AdminNotificationHelper";
