@@ -32,6 +32,7 @@
     <string name="select_location">בחר מיקום</string>
     <string name="city_not_found">העיר לא נמצאה</string>
     <string name="location_not_found">המיקום לא נמצא</string>
+    <string name="find_evrthng">מצא הכל</string>
     <string-array name="categories">
         <item>בחר קטגוריה</item>
         <item>אלקטרוניקה</item>
@@ -48,15 +49,6 @@
         <item>טאבלטים</item>
         <item>אוזניות</item>
         <item>רמקולים</item>
-        <item>אחר</item>
-    </string-array>
-    <string-array name="region">
-        <item>בחר אזור</item>
-        <item>תל-אביב</item>
-        <item>ירושלים</item>
-        <item>חיפה</item>
-        <item>באר-שבע</item>
-        <item>אילת</item>
         <item>אחר</item>
     </string-array>
     <string-array name="type">
@@ -118,4 +110,25 @@
     <string name="location">"מיקום"</string>
     <string name="condition">"מצב"</string>
     <string name="contact_person">איש קשר</string>
+    <string name="user_created_successfully">המשתמש נוצר בהצלחה</string>
+    <string name="failed_to_open_chat">פתיחת הצ\'אט נכשלה</string>
+    <string name="admin_added_successfully">מנהל המערכת נוסף בהצלחה</string>
+    <string name="could_not_find_user_information">לא ניתן היה למצוא מידע על המשתמש</string>
+    <string name="authentication_failed">האימות נכשל:</string>
+    <string name="user_signed_in_successfully">המשתמש נכנס בהצלחה</string>
+    <string name="failed_to_sign_in_with_google">הכניסה באמצעות גוגל נכשלה</string>
+    <string name="please_fill_all_the_fields">נא למלא את כל השדות</string>
+    <string name="cannot_chat_with_yourself">לא יכול לשוחח עם עצמך</string>
+    <string name="google_sign_in_failed">כניסה עם גוגל נכשלה</string>
+    <string name="failed_to_resolve_report">אישור הדיווח נכשל</string>
+    <string name="failed_to_reject_report">דחיית הדיווח נכשלה</string>
+    <string name="report_rejected">הדיווח נדחה</string>
+    <string name="post_accepted">הפוסט התקבל</string>
+    <string name="failed_to_accept_post_please_try_again_later">קבלת הפוסט נכשלה, אנא נסה שוב מאוחר יותר</string>
+    <string name="post_rejected">הפוסט נדחה</string>
+    <string name="failed_to_reject_post_please_try_again_later">דחיית הפוסט נכשלה, אנא נסה שוב מאוחר יותר</string>
+    <string name="report_filed_successfully">הדיוווח הוגש בהצלחה</string>
+    <string name="failed_to_file_report_please_try_again_later">הגשת הדיווח נכשלה, אנא נסה שוב מאוחר יותר</string>
+    <string name="cropping_failed">החיתוך נכשל:</string>
+    <string name="report_resolved_post_deleted">הדיווח נפתר, הפוסט נמחק</string>
 </resources>

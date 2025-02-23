@@ -109,11 +109,11 @@ public class ReportResolveFragment extends Fragment {
             if (isSuccess) {
                 adminDashBoardViewModel.updatePostStatus(report.getPostId(), AppConstants.PostStatus.DELETED);
                 // Notify the adapter that the data has changed
-                Toast.makeText(getContext(), "Report resolved, Post deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.report_resolved_post_deleted, Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(requireView()).navigate(R.id.action_reportResolveFragment_to_adminDashBoardFragment);
             } else {
                 // Handle the failure case
-                Toast.makeText(getContext(), "Failed to resolve report", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.failed_to_resolve_report, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -123,12 +123,12 @@ public class ReportResolveFragment extends Fragment {
         adminDashBoardViewModel.updateReport(report.getReportId(), AppConstants.ReportStatus.REJECTED, handlerNotes).observe(getViewLifecycleOwner(), isSuccess -> {
             if (isSuccess) {
                 // Notify the adapter that the data has changed
-                Toast.makeText(getContext(), "Report rejected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.report_rejected, Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(requireView()).navigate(R.id.action_reportResolveFragment_to_adminDashBoardFragment);
 
             } else {
                 // Handle the failure case
-                Toast.makeText(getContext(), "Failed to reject report", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.failed_to_reject_report, Toast.LENGTH_SHORT).show();
             }
         });
 

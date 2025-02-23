@@ -1,8 +1,11 @@
 package com.sibi.helpi.models;
 
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
+import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 
 public class ServicePost implements Postable {
@@ -11,7 +14,7 @@ public class ServicePost implements Postable {
     private String description;
     private String category;
     private String subCategory;
-    private MyLatLng location;
+    private GeoPoint location;
     private String userId;
     private PostStatus status;
     private List<String> imageUrls;
@@ -20,7 +23,7 @@ public class ServicePost implements Postable {
         // Default constructor required for Firebase
     }
 
-    public ServicePost(String title, String description, String category, String subCategory, MyLatLng location, String userId, String condition) {
+    public ServicePost(String title, String description, String category, String subCategory, GeoPoint location, String userId, String condition) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -61,11 +64,11 @@ public class ServicePost implements Postable {
         this.subCategory = subCategory;
     }
 
-    public MyLatLng getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
-    public void setLocation(MyLatLng location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 
@@ -102,6 +105,7 @@ public class ServicePost implements Postable {
         this.title = title;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ServicePost{" +

@@ -241,7 +241,7 @@ public class AdminDashBoardFragment extends Fragment  {
     private void onOkAddAdminButton(String email, AppConstants.UserType adminType, Dialog dialog, EditText emailEditText) {
         adminDashBoardViewModel.addAdmin(email, adminType).observe(getViewLifecycleOwner(), success -> {
             if (success) {
-                Toast.makeText(requireContext(), "Admin added successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.admin_added_successfully, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             } else {
                 emailEditText.setError("User not found");

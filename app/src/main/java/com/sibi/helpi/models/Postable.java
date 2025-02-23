@@ -1,6 +1,7 @@
 package com.sibi.helpi.models;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 
 import java.io.Serializable;
@@ -19,7 +20,7 @@ public interface Postable extends Serializable {
 
     String getSubCategory();
 
-    MyLatLng getLocation();
+    GeoPoint getLocation();
 
     String getUserId();
 
