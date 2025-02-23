@@ -177,7 +177,8 @@
             app:layout_constraintEnd_toStartOf="@+id/btnSearch"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/productStatusInputLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/productStatusInputLayout"
+            app:tint= "@null" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnSearch"
@@ -185,11 +186,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/bg_color"
-            android:src="@drawable/search_24dp_63b8e4ff"
-            android:elevation="6dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnClearFilters"
-            app:layout_constraintTop_toBottomOf="@+id/productStatusInputLayout" />
+        android:src="@drawable/search_24dp_63b8e4ff"
+        android:elevation="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnClearFilters"
+        app:layout_constraintTop_toBottomOf="@+id/productStatusInputLayout"
+        app:tint="@null" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
