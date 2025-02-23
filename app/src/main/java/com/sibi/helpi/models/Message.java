@@ -4,6 +4,10 @@ package com.sibi.helpi.models;
 
 import com.sibi.helpi.viewmodels.UserViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Message {
     private String messageId;
     private String senderId;
@@ -13,7 +17,8 @@ public class Message {
     private boolean seen;
     private boolean isUser;
 
-    public Message() {}
+    public Message() {
+    }
 
     public Message(String messageId, String senderId, String receiverId, String message, long timestamp, boolean seen) {
         this.messageId = messageId;
@@ -75,5 +80,10 @@ public class Message {
     public boolean isUser() {
         UserViewModel userViewModel = UserViewModel.getInstance();
         return senderId.equals(userViewModel.getCurrentUserId());
+    }
+
+    public String getFormattedTimestamp() {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        return timeFormat.format(new Date(timestamp));
     }
 }
