@@ -2,10 +2,15 @@ package com.sibi.helpi.models;
 
 import com.sibi.helpi.viewmodels.UserViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a chat between two users.
@@ -96,16 +101,33 @@ public class Chat {
         this.unreadCount = unreadCount;
     }
 
-    // Add a helper method to format timestamp
     public String getFormattedTimestamp() {
-        // You can implement your own time formatting logic here
-        // For example: "Today", "Yesterday", or "MM/dd/yyyy"
-        return String.valueOf(timestamp);
+        long currentTime = System.currentTimeMillis();
+        long timeDifference = currentTime - timestamp;
+
+        Calendar currentCalendar = Calendar.getInstance();
+        Calendar timestampCalendar = Calendar.getInstance();
+        timestampCalendar.setTimeInMillis(timestamp);
+
+        if (timeDifference < TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)) {
+            // Format as time
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            return timeFormat.format(new Date(timestamp));
+        } else if (currentCalendar.get(Calendar.YEAR) == timestampCalendar.get(Calendar.YEAR)) {
+            // Format as date without year
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM", Locale.getDefault());
+            return dateFormat.format(new Date(timestamp));
+        } else {
+            // Format as date with year
+            SimpleDateFormat dateFormatWithYear = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            return dateFormatWithYear.format(new Date(timestamp));
+        }
     }
 
     public Map<String, Integer> getUnreadCounts() {
         return unreadCounts;
     }
+
     public void setUnreadCounts(Map<String, Integer> unreadCounts) {
         this.unreadCounts = unreadCounts;
     }
