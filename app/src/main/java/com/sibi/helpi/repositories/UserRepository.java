@@ -23,6 +23,7 @@ import com.sibi.helpi.models.User;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.utils.FirebaseAuthService;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -301,6 +302,21 @@ public class UserRepository {
      */
     public Task<Void> removeFcmToken(String userId) {
         return updateFcmToken(userId, "");
+    }
+
+    public Task<List<User>> getAllAdmins() {
+        return userCollection.whereIn("userType", Arrays.asList(
+                        AppConstants.UserType.GLOBAL_ADMIN.toString(),
+                        AppConstants.UserType.LOCAL_ADMIN.toString()))
+                .get()
+                .continueWith(task -> {
+                    if (!task.isSuccessful()) {
+                        throw Objects.requireNonNull(task.getException());
+                    }
+                    return task.getResult().getDocuments().stream()
+                            .map(document -> document.toObject(User.class))
+                            .collect(Collectors.toList());
+                });
     }
 
 }

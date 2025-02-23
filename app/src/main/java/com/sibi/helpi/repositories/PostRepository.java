@@ -26,6 +26,7 @@ import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Resource;
 import com.sibi.helpi.models.ServicePost;
+import com.sibi.helpi.utils.AdminNotificationHelper;
 import com.sibi.helpi.utils.AppConstants;
 
 import java.util.ArrayList;
@@ -180,6 +181,7 @@ public class PostRepository {
         } else {
             savePostData(post, postType, postLiveData);
         }
+        AdminNotificationHelper.getInstance().sendNotificationForNewPost(post);
     }
 
     private void saveImgData(Postable post, AppConstants.PostType postType, byte[][] images, MutableLiveData<Resource<String>> postLiveData) {

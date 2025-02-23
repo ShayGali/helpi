@@ -17,10 +17,11 @@ import androidx.navigation.NavDeepLinkBuilder;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.repositories.UserRepository;
 
-public class ChatFirebaseMessagingService extends FirebaseMessagingService {
+public class GenFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "ChatFirebaseMessaging";
     private static final String CHANNEL_ID = "chat_messages";
 
@@ -29,16 +30,61 @@ public class ChatFirebaseMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        // Check if message contains data payload
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-            String chatId = remoteMessage.getData().get("chatId");
-            String message = remoteMessage.getData().get("message");
-            String senderName = remoteMessage.getData().get("senderName");
+            String type = remoteMessage.getData().get("type");
 
-            // Create and show notification
-            sendNotification(chatId, senderName, message);
+            if ("new_message".equals(type)) {
+                handleChatMessage(remoteMessage);
+            } else if ("new_post_review".equals(type)) {
+                handleNewPostNotification(remoteMessage);
+            }
         }
+    }
+
+    private void handleChatMessage(@NonNull RemoteMessage remoteMessage){
+        String chatId = remoteMessage.getData().get("chatId");
+        String senderName = remoteMessage.getData().get("senderName");
+        String messageBody = remoteMessage.getData().get("messageBody");
+
+        sendNotification(chatId, senderName, messageBody);
+    }
+
+    private void handleNewPostNotification(RemoteMessage remoteMessage) {
+        String postId = remoteMessage.getData().get("postId");
+        String title = remoteMessage.getData().get("title");
+        String message = remoteMessage.getData().get("message");
+
+        // Create intent for when notification is clicked
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // Add extra data for navigation
+        Bundle args = new Bundle();
+        args.putString("postId", postId);
+        args.putString("sourcePage", "AdminDashBoardFragment");
+        args.putBoolean("fromNotification", true);
+        intent.putExtras(args);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this,
+                postId.hashCode(),
+                intent,
+                PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_chat_24)
+                        .setContentTitle(title)
+                        .setContentText(message)
+                        .setAutoCancel(true)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        notificationManager.notify(postId.hashCode(), notificationBuilder.build());
     }
 
     @Override

@@ -4,6 +4,7 @@ import static com.sibi.helpi.utils.AppConstants.LANGUAGE_KEY;
 import static com.sibi.helpi.utils.LocaleHelper.setLocale;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import android.content.SharedPreferences;
@@ -49,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
             }
         }
+
+        handleNotificationIntent(getIntent());
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
@@ -113,6 +117,29 @@ public class MainActivity extends AppCompatActivity {
     public void hideProgressBar() {
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleNotificationIntent(intent);
+    }
+
+    private void handleNotificationIntent(Intent intent) {
+        if (intent != null && intent.getExtras() != null) {
+            boolean fromNotification = intent.getBooleanExtra("fromNotification", false);
+            String postId = intent.getStringExtra("postId");
+
+            if (fromNotification && postId != null) {
+                NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+                Bundle args = new Bundle();
+                args.putString("postId", postId);
+                args.putString("sourcePage", "AdminDashBoardFragment");
+
+                navController.navigate(R.id.postablePageFragment, args);
+            }
         }
     }
 
