@@ -32,6 +32,7 @@
     <string name="select_location">בחר מיקום</string>
     <string name="city_not_found">העיר לא נמצאה</string>
     <string name="location_not_found">המיקום לא נמצא</string>
+    <string name="find_evrthng">מצא הכל</string>
     <string-array name="categories">
         <item>בחר קטגוריה</item>
         <item>אלקטרוניקה</item>
@@ -40,6 +41,7 @@
         <item>רהיטים</item>
         <item>צעצועים</item>
         <item>אחר</item>
+        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="electronics_subcategories">
         <item>בחר תת קטגוריה</item>
@@ -49,25 +51,19 @@
         <item>אוזניות</item>
         <item>רמקולים</item>
         <item>אחר</item>
-    </string-array>
-    <string-array name="region">
-        <item>בחר אזור</item>
-        <item>תל-אביב</item>
-        <item>ירושלים</item>
-        <item>חיפה</item>
-        <item>באר-שבע</item>
-        <item>אילת</item>
-        <item>אחר</item>
+        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="type">
         <item>בחר סוג פרסום</item>
         <item>מוצר</item>
         <item>שירות</item>
+        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="product_condition">
         <item>בחר מצב מוצר</item>
         <item>חדש</item>
         <item>משומש</item>
+        <item>@string/find_evrthng</item>
     </string-array>
     <string name="dont_have_an_account_yet">עדיין אין לך חשבון?</string>
     <string name="now">עכשיו!</string>

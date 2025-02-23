@@ -278,7 +278,7 @@ public class RegisterFragment extends Fragment {
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Throwable cropError = UCrop.getError(data);
-            Toast.makeText(requireContext(), "Cropping failed: " + cropError.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.cropping_failed) + cropError.getMessage(), Toast.LENGTH_SHORT).show();
         } else if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             if (task.isSuccessful()) {
@@ -290,7 +290,7 @@ public class RegisterFragment extends Fragment {
             } else {
                 // Handle sign-in failure
                 Log.w(TAG, "Google sign-in failed", task.getException());
-                Toast.makeText(requireContext(), "Google sign-in failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.google_sign_in_failed, Toast.LENGTH_SHORT).show();
             }
         } else {
             throw new IllegalStateException("Unexpected value: " + requestCode);

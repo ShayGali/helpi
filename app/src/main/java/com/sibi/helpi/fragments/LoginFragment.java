@@ -92,11 +92,11 @@ public class LoginFragment extends Fragment {
                 TextView errorTextView = inflater.findViewById(R.id.error_on_login_msg);
                 errorTextView.setText(state.getError());
                 Log.w(TAG, "Authentication failed: " + state.getError());
-                Toast.makeText(requireContext(), "Authentication failed: " + state.getError(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.authentication_failed) + state.getError(), Toast.LENGTH_SHORT).show();
             } else if (state.getUser() != null) {
                 hideLoadingIndicator();
                 Log.d(TAG, "Authentication successful");
-                Toast.makeText(requireContext(), "User signed in successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.user_signed_in_successfully, Toast.LENGTH_SHORT).show();
                 navigateToHome();
             }
         });
@@ -119,7 +119,7 @@ public class LoginFragment extends Fragment {
                     userViewModel.authWithGoogle(account);
                 }
             } else {
-                Toast.makeText(requireContext(), "Failed to sign in with google", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.failed_to_sign_in_with_google, Toast.LENGTH_SHORT).show();
                 Log.w(TAG, "register with google:failure", task.getException());
             }
         }
@@ -130,7 +130,7 @@ public class LoginFragment extends Fragment {
         String password = passwordEditText.getText().toString();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(requireContext(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), R.string.please_fill_all_the_fields, Toast.LENGTH_SHORT).show();
             return;
         }
 

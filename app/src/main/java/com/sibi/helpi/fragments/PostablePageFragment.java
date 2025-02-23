@@ -174,7 +174,7 @@ public class PostablePageFragment extends Fragment {
                     showLoadingDialog(); // Add a loading indicator
                     navigateToChat(otherUserId);
                 } else {
-                    Toast.makeText(getContext(), "Cannot chat with yourself", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.cannot_chat_with_yourself, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -200,13 +200,13 @@ public class PostablePageFragment extends Fragment {
                                                     .navigate(R.id.action_postablePageFragment_to_chatMessagesFragment, args);
                                         } catch (Exception e) {
                                             Log.e("PostablePageFragment", "Navigation failed", e);
-                                            Toast.makeText(getContext(), "Failed to open chat", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), R.string.failed_to_open_chat, Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
                     } else {
                         hideLoadingDialog();
-                        Toast.makeText(getContext(), "Could not find user information", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.could_not_find_user_information, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -232,11 +232,11 @@ public class PostablePageFragment extends Fragment {
             LiveData<Boolean> succeeded = postableViewModel.updatePostStatus(postId, PostStatus.APPROVED);
             succeeded.observe(getViewLifecycleOwner(), isSucceeded -> {
                 if (isSucceeded) {
-                    Toast.makeText(getContext(), "Post accepted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.post_accepted, Toast.LENGTH_SHORT).show();
                     // if the post is accepted, navigate back to the admin dashboard
                     Navigation.findNavController(getView()).navigate(R.id.action_postablePageFragment_to_adminDashBoardFragment);
                 } else {
-                    Toast.makeText(getContext(), "Failed to accept post, please try again later", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.failed_to_accept_post_please_try_again_later, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -248,11 +248,11 @@ public class PostablePageFragment extends Fragment {
             LiveData<Boolean> succeeded = postableViewModel.updatePostStatus(postId, PostStatus.REJECTED);
             succeeded.observe(getViewLifecycleOwner(), isSucceeded -> {
                 if (isSucceeded) {
-                    Toast.makeText(getContext(), "Post rejected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.post_rejected, Toast.LENGTH_SHORT).show();
                     // if the post is rejected, navigate back to the admin dashboard
                     Navigation.findNavController(getView()).navigate(R.id.action_postablePageFragment_to_adminDashBoardFragment);
                 } else {
-                    Toast.makeText(getContext(), "Failed to reject post, please try again later", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.failed_to_reject_post_please_try_again_later, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -288,9 +288,9 @@ public class PostablePageFragment extends Fragment {
 
         succeeded.observe(getViewLifecycleOwner(), isSucceeded -> {
             if (isSucceeded != null) {
-                Toast.makeText(getContext(), "Report filed successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.report_filed_successfully, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), "Failed to file report, please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.failed_to_file_report_please_try_again_later, Toast.LENGTH_SHORT).show();
             }
         });
     }
