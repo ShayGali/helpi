@@ -10,6 +10,7 @@ import com.google.firebase.database.*;
 import com.sibi.helpi.models.Chat;
 import com.sibi.helpi.models.Message;
 import com.sibi.helpi.models.User;
+import com.sibi.helpi.utils.NotificationHelper;
 
 import java.util.*;
 
@@ -135,6 +136,10 @@ public class ChatRepository {
 
                                     // Increment unread count
                                     incrementUnreadCountForReceiver(chatId, currentUserId, receiverId);
+
+                                    // Send notification
+                                    NotificationHelper.getInstance()
+                                            .sendNotificationForNewMessage(message, chatId);
                                 });
                     }
                 });

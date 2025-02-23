@@ -99,6 +99,7 @@ dependencies {
 
     // Image loading
     implementation(libs.glide)
+    implementation(libs.firebase.messaging)
     annotationProcessor(libs.compiler)
 
     // Image crop
