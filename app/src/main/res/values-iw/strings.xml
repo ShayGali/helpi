@@ -131,4 +131,5 @@
     <string name="failed_to_file_report_please_try_again_later">הגשת הדיווח נכשלה, אנא נסה שוב מאוחר יותר</string>
     <string name="cropping_failed">החיתוך נכשל:</string>
     <string name="report_resolved_post_deleted">הדיווח נפתר, הפוסט נמחק</string>
+    <string name="phone_number">phone_number</string>
 </resources>

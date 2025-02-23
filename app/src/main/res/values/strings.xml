@@ -161,6 +161,9 @@
     <string name="failed_to_file_report_please_try_again_later">Failed to file report, please try again later</string>
     <string name="cropping_failed">"Cropping failed: "</string>
     <string name="report_resolved_post_deleted">Report resolved, Post deleted</string>
+    <string name="phone_number">phone_number</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="change_profile_image">Change profile image</string>
 
     <string-array name="languages">
         <item>@string/english</item>
