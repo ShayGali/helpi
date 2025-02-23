@@ -5,16 +5,16 @@ import android.location.Address;
 import android.location.Geocoder;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.R;
-import com.sibi.helpi.models.MyLatLng;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 public class LocationUtil {
-    public static String getCityFromLocation(Context context, MyLatLng location) {
-        if(location == null) {
+    public static String getCityFromLocation(Context context, GeoPoint location) {
+        if (location == null) {
             return context.getString(R.string.city_not_found);
         }
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
@@ -29,10 +29,9 @@ public class LocationUtil {
         return context.getString(R.string.city_not_found);
     }
 
-    public static String getLocationNameFromLocation(Context context, MyLatLng location) {
+    public static String getLocationNameFromLocation(Context context, GeoPoint location) {
 
-        if (location == null)
-        {
+        if (location == null) {
             return context.getString(R.string.location_not_found);
         }
 

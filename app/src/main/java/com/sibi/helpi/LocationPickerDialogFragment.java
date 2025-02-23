@@ -29,7 +29,6 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.sibi.helpi.models.MyLatLng;
 
 import java.util.Arrays;
 
@@ -40,7 +39,8 @@ public class LocationPickerDialogFragment extends DialogFragment implements OnMa
     private MapView mapView;
     private FusedLocationProviderClient fusedLocationClient;
     private Marker currentMarker;
-    private MyLatLng selectedLocation;
+    private double latitude;
+    private double longitude;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,7 +81,8 @@ public class LocationPickerDialogFragment extends DialogFragment implements OnMa
                         } else {
                             currentMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(place.getName()));
                         }
-                        selectedLocation = new MyLatLng(latLng.latitude, latLng.longitude);
+                        latitude = latLng.latitude;
+                        longitude = latLng.longitude;
                     }
                 }
 
@@ -93,12 +94,11 @@ public class LocationPickerDialogFragment extends DialogFragment implements OnMa
         }
 
         view.findViewById(R.id.btnConfirmLocation).setOnClickListener(v -> {
-            if (selectedLocation != null) {
-                Bundle result = new Bundle();
-                result.putParcelable("selected_location", selectedLocation);
-                getParentFragmentManager().setFragmentResult("requestKey", result);
-                dismiss();
-            }
+            Bundle result = new Bundle();
+            result.putDouble("latitude", latitude);
+            result.putDouble("longitude", longitude);
+            getParentFragmentManager().setFragmentResult("requestKey", result);
+            dismiss();
         });
     }
 
@@ -132,7 +132,8 @@ public class LocationPickerDialogFragment extends DialogFragment implements OnMa
                     LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
                     currentMarker = mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
-                    selectedLocation = new MyLatLng(currentLocation.latitude, currentLocation.longitude);
+                    latitude = currentLocation.latitude;
+                    longitude = currentLocation.longitude;
                 }
             });
         } else {
@@ -146,7 +147,8 @@ public class LocationPickerDialogFragment extends DialogFragment implements OnMa
             } else {
                 currentMarker = mMap.addMarker(new MarkerOptions().position(center).title("Selected Location"));
             }
-            selectedLocation = new MyLatLng(center.latitude, center.longitude);
+            latitude = center.latitude;
+            longitude = center.longitude;
         });
     }
 

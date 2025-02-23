@@ -3,7 +3,6 @@ package com.sibi.helpi.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -23,16 +22,15 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.LocationPickerDialogFragment;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.ImageSliderAdapter;
-import com.sibi.helpi.models.MyLatLng;
 import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.ServicePost;
@@ -66,7 +64,7 @@ public class OfferPostFragment extends Fragment {
     private EditText etDescription;
     private FloatingActionButton btnPost;
     private FloatingActionButton btnCancelPost;
-    private MyLatLng selectedLocation;
+    private GeoPoint selectedLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,11 +81,11 @@ public class OfferPostFragment extends Fragment {
         setupImagePicker();
 
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            selectedLocation = bundle.getParcelable("selected_location");
-            if (selectedLocation != null) {
-                // display the location name under the region spinner
-                regionSpinner.setText(LocationUtil.getLocationNameFromLocation(requireContext(), selectedLocation));
-            }
+            double latitude = bundle.getDouble("latitude");
+            double longitude = bundle.getDouble("longitude");
+            selectedLocation = new GeoPoint(latitude, longitude);
+            // display the location name under the region spinner
+            regionSpinner.setText(LocationUtil.getLocationNameFromLocation(requireContext(), selectedLocation));
         });
 
 

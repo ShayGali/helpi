@@ -125,7 +125,10 @@ public class RegisterFragment extends Fragment {
                 // Registration successful, navigate to next screen
                 hideLoadingIndicator();
                 Log.d(TAG, "Authentication successful");
-                Toast.makeText(requireContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(
+                        requireContext(),
+                        R.string.user_created_successfully,
+                        Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(requireView())
                         .navigate(R.id.action_registerFragment_to_homeFragment);
             }

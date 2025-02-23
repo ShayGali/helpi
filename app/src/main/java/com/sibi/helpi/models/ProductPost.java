@@ -2,6 +2,7 @@ package com.sibi.helpi.models;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class ProductPost implements Postable {
     private String description;
     private String category;
     private String subCategory;
-    private MyLatLng location;
+    private GeoPoint location;
     private String condition;
     private String userId;
     private PostStatus status;
@@ -29,7 +30,7 @@ public class ProductPost implements Postable {
         // Default constructor required for Firebase
     }
 
-    public ProductPost(String title, String description, String category, String subCategory, MyLatLng location, String condition, String userId) {
+    public ProductPost(String title, String description, String category, String subCategory, GeoPoint location, String condition, String userId) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -82,11 +83,11 @@ public class ProductPost implements Postable {
         this.subCategory = subCategory;
     }
 
-    public MyLatLng getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
-    public void setLocation(MyLatLng location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 
