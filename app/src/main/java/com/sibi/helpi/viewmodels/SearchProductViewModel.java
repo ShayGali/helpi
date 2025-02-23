@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.models.Resource;
@@ -30,8 +31,8 @@ public class SearchProductViewModel extends ViewModel {
         reportsRepository = ReportsRepository.getInstance();
     }
 
-    public LiveData<List<Postable>> getPosts(String category, String subcategory, String region, String productStatus) {
-        return postRepository.getPosts(category, subcategory, region, productStatus, AppConstants.PostType.ANY);
+    public LiveData<List<Postable>> getPosts(String category, String subcategory, GeoPoint region, String productStatus, AppConstants.PostType postType) {
+        return postRepository.getPosts(category, subcategory, region, productStatus, postType);
     }
 
     public LiveData<List<String>> getProductImages(String productId) {

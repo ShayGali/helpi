@@ -5,6 +5,8 @@ import static com.sibi.helpi.utils.AppConstants.IMG_UPLOAD_FAILED;
 import static com.sibi.helpi.utils.AppConstants.POST_UPLOAD_FAILED;
 import static com.sibi.helpi.utils.AppConstants.STORAGE_POSTS;
 import static com.sibi.helpi.utils.AppConstants.PostStatus;
+import static com.sibi.helpi.utils.LocationUtil.isWithinRadius;
+import static com.sibi.helpi.utils.AppConstants.MAX_RADIUS;
 
 
 import android.net.Uri;
@@ -19,7 +21,10 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sibi.helpi.models.Postable;
@@ -53,9 +58,11 @@ public class PostRepository {
         return instance;
     }
 
-    private CollectionReference postsCollection;
-    private StorageReference storageReference;
-    private ImagesRepository imagesRepository;
+    private final CollectionReference postsCollection;
+    private final StorageReference storageReference;
+    private final ImagesRepository imagesRepository;
+
+
 
     private PostRepository() {
         imagesRepository = ImagesRepository.getInstance();
@@ -63,7 +70,108 @@ public class PostRepository {
         storageReference = FirebaseStorage.getInstance().getReference().child(STORAGE_POSTS);
     }
 
-    public LiveData<List<Postable>> getPosts(@NonNull String category, @NonNull String subcategory, @NonNull String region, @NonNull String productStatus, AppConstants.PostType postType) {
+//    public LiveData<List<Postable>> getPosts(@NonNull String category, @NonNull String subcategory, @NonNull GeoPoint region, @NonNull String productStatus) {
+//        MutableLiveData<List<Postable>> mutableLiveData = new MutableLiveData<>();
+//        postsCollection.get()
+//                .addOnSuccessListener(queryDocumentSnapshots -> {
+//                    List<Postable> postableList = new ArrayList<>();
+//                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+//                        if (document == null) {
+//                            continue;
+//                        }
+//
+//                        Long t = document.getLong("type");
+//                        if (t == null) {
+//                            Log.e("Repository", "Failed to fetch products: type is null");
+//                            continue;
+//                        }
+//
+//                        AppConstants.PostType type = AppConstants.PostType.values()[Math.toIntExact(t)];
+//                        Postable postable = null;
+//                        try {
+//                            if (type == AppConstants.PostType.PRODUCT) {
+//                                postable = document.toObject(ProductPost.class);
+//
+//                                // Check product status only if it's a product post and status filter is not empty
+//                                if (!productStatus.isEmpty() && postable != null) {
+//                                    String condition = ((ProductPost) postable).getCondition();
+//                                    if (condition == null || !condition.equals(productStatus)) {
+//                                        continue;
+//                                    }
+//                                }
+//                            } else if (type == AppConstants.PostType.SERVICE) {
+//                                postable = document.toObject(ServicePost.class);
+//                            } else {
+//                                Log.w("Repository", "Unknown post type: " + type);
+//                                continue;
+//                            }
+//
+//                            if (postable != null) {
+//                                // Apply filters only if they are not empty and the corresponding field exists
+//                                if (!category.isEmpty() &&
+//                                        (postable.getCategory() == null || !postable.getCategory().equals(category))) {
+//                                    continue;
+//                                }
+//                                if (!subcategory.isEmpty() &&
+//                                        (postable.getSubCategory() == null || !postable.getSubCategory().equals(subcategory))) {
+//                                    continue;
+//                                }
+//                                // TODO: fix it
+////                                if (!region.isEmpty() &&
+////                                        (postable.getRegion() == null || !postable.getRegion().equals(region))) {
+////                                    continue;
+////                                }
+//                            if (!productStatus.isEmpty() && !((ProductPost) postable).getCondition().equals(productStatus)) {
+//                                continue;
+//                            }
+//                        } else if (type == AppConstants.PostType.SERVICE) {
+//                            postable = document.toObject(ServicePost.class);
+//                        } else {
+//                            throw new IllegalArgumentException("Unknown type: " + type);
+//                        }
+//                        Log.d("Repository", "Postable: " + postable);
+//                        if (postable != null) {
+//                            // filter by fields
+//                            if (!category.isEmpty() && !postable.getCategory().equals(category)) {
+//                                continue;
+//                            }
+//                            if (!subcategory.isEmpty() && !postable.getSubCategory().equals(subcategory)) {
+//                                continue;
+//                            }
+//                            //TODO
+////                            if (!region.isEmpty() && !postable.getRegion().equals(region)) {
+////                                continue;
+////                            }
+//
+//                                // Check post status
+//                                if (postable.getStatus() == null || postable.getStatus() != PostStatus.APPROVED) {
+//                                    continue;
+//                                }
+//
+//                                postableList.add(postable);
+//                            }
+//                        } catch (Exception e) {
+//                            Log.e("Repository", "Error processing document: " + document.getId(), e);
+//                            // TODO: handle this error
+//                            continue;
+////                            if(postable.getStatus() != null && postable.getStatus() != PostStatus.APPROVED ) {
+////                                continue;
+////                            }
+//
+////                            postableList.add(postable);
+//                        }
+//                    }
+//                    mutableLiveData.setValue(postableList);
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.e("Repository", "Failed to fetch products: " + e.getMessage());
+//                    mutableLiveData.setValue(null);
+//                });
+//
+//        return mutableLiveData;
+//    }
+
+    private LiveData<List<Postable>> getAllPosts(){
         MutableLiveData<List<Postable>> mutableLiveData = new MutableLiveData<>();
         postsCollection.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -84,14 +192,6 @@ public class PostRepository {
                         try {
                             if (type == AppConstants.PostType.PRODUCT) {
                                 postable = document.toObject(ProductPost.class);
-
-                                // Check product status only if it's a product post and status filter is not empty
-                                if (!productStatus.isEmpty() && postable != null) {
-                                    String condition = ((ProductPost) postable).getCondition();
-                                    if (condition == null || !condition.equals(productStatus)) {
-                                        continue;
-                                    }
-                                }
                             } else if (type == AppConstants.PostType.SERVICE) {
                                 postable = document.toObject(ServicePost.class);
                             } else {
@@ -99,59 +199,11 @@ public class PostRepository {
                                 continue;
                             }
 
-                            if (postable != null) {
-                                // Apply filters only if they are not empty and the corresponding field exists
-                                if (!category.isEmpty() &&
-                                        (postable.getCategory() == null || !postable.getCategory().equals(category))) {
-                                    continue;
-                                }
-                                if (!subcategory.isEmpty() &&
-                                        (postable.getSubCategory() == null || !postable.getSubCategory().equals(subcategory))) {
-                                    continue;
-                                }
-                                // TODO: fix it
-//                                if (!region.isEmpty() &&
-//                                        (postable.getRegion() == null || !postable.getRegion().equals(region))) {
-//                                    continue;
-//                                }
-                            if (!productStatus.isEmpty() && !((ProductPost) postable).getCondition().equals(productStatus)) {
-                                continue;
-                            }
-                        } else if (type == AppConstants.PostType.SERVICE) {
-                            postable = document.toObject(ServicePost.class);
-                        } else {
-                            throw new IllegalArgumentException("Unknown type: " + type);
-                        }
-                        Log.d("Repository", "Postable: " + postable);
-                        if (postable != null) {
-                            // filter by fields
-                            if (!category.isEmpty() && !postable.getCategory().equals(category)) {
-                                continue;
-                            }
-                            if (!subcategory.isEmpty() && !postable.getSubCategory().equals(subcategory)) {
-                                continue;
-                            }
-                            //TODO
-//                            if (!region.isEmpty() && !postable.getRegion().equals(region)) {
-//                                continue;
-//                            }
-
-                                // Check post status
-                                if (postable.getStatus() == null || postable.getStatus() != PostStatus.APPROVED) {
-                                    continue;
-                                }
-
+                            if (postable != null && postable.getStatus() == PostStatus.APPROVED) {
                                 postableList.add(postable);
                             }
                         } catch (Exception e) {
                             Log.e("Repository", "Error processing document: " + document.getId(), e);
-                            // TODO: handle this error
-                            continue;
-//                            if(postable.getStatus() != null && postable.getStatus() != PostStatus.APPROVED ) {
-//                                continue;
-//                            }
-
-//                            postableList.add(postable);
                         }
                     }
                     mutableLiveData.setValue(postableList);
@@ -164,9 +216,79 @@ public class PostRepository {
         return mutableLiveData;
     }
 
-    public LiveData<List<Postable>> getPosts() {
-        return getPosts("", "", "", "", AppConstants.PostType.PRODUCT);
+    public LiveData<List<Postable>> getPosts(@NonNull String category, @NonNull String subcategory, @NonNull GeoPoint location, @NonNull String productStatus, @NonNull AppConstants.PostType postType) {
+        MutableLiveData<List<Postable>> mutableLiveData = new MutableLiveData<>();
+
+        if (postType == AppConstants.PostType.ANY) {
+            return getAllPosts();
+
+        }
+
+        // 🔹 Step 1: Build Firestore Query to Filter Non-Location Fields
+        Query query = postsCollection.where(Filter.and(
+                Filter.equalTo("type", postType.ordinal()),
+                Filter.equalTo("status", PostStatus.APPROVED),
+                Filter.equalTo("category", category),
+                Filter.equalTo("subCategory", subcategory),
+                Filter.equalTo("condition", productStatus)
+        ));
+
+//
+        // 🔹 Step 2: Fetch Data from Firestore
+        query.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Postable> postableList = new ArrayList<>();
+                    List<Postable> filteredByLocation = new ArrayList<>();
+
+
+                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                        if (document == null) continue;
+
+                        Long t = document.getLong("type");
+                        if (t == null) {
+                            Log.e("Repository", "Failed to fetch products: type is null");
+                            continue;
+                        }
+
+
+                        Postable postable;
+
+                        try {
+                            if (postType == AppConstants.PostType.PRODUCT) {
+                                postable = document.toObject(ProductPost.class);
+                            } else if (postType == AppConstants.PostType.SERVICE) {
+                                postable = document.toObject(ServicePost.class);
+                            } else {
+                                Log.w("Repository", "Unknown post type: " + postType);
+                                continue;
+                            }
+
+                            if (postable != null) {
+                                postableList.add(postable);
+                            }
+                        } catch (Exception e) {
+                            Log.e("Repository", "Error processing document: " + document.getId(), e);
+                        }
+                    }
+
+                    // 🔹 Step 3: Apply Location Filtering
+                    postableList.stream().filter(postable -> {
+                        if (postable.getLocation() == null) return false;
+                        return isWithinRadius(location, postable.getLocation(), MAX_RADIUS);
+                    }).forEach(filteredByLocation::add);
+
+                    mutableLiveData.setValue(filteredByLocation);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Repository", "Failed to fetch products: " + e.getMessage());
+                    mutableLiveData.setValue(null);
+                });
+
+        return mutableLiveData;
     }
+
+
+
 
     public void savePost(Postable post, byte[][] images, AppConstants.PostType postType, MutableLiveData<Resource<String>> postLiveData) {
         Log.d("Repository", "Starting product post");
@@ -257,35 +379,14 @@ public class PostRepository {
         return mutableLiveData;
     }
 
-//    public LiveData<List<Postable>> getUnderReviewPosts() {
-//        MutableLiveData<List<Postable>> mutableLiveData = new MutableLiveData<>();
-//        postsCollection.get()
-//                .addOnSuccessListener(queryDocumentSnapshots -> {
-//                    List<Postable> posts = new ArrayList<>();
-//                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-//                        Postable post = document.toObject(ProductPost.class);
-//                        if (post != null) {
-//                            if (post.getStatus() != null && post.getStatus() == PostStatus.UNDER_REVIEW) {
-//                                posts.add(post);
-//                            }
-//                        }
-//                    }
-//                    mutableLiveData.setValue(posts);
-//                })
-//                .addOnFailureListener(e -> {
-//                    Log.e("Repository", "Failed to fetch posts: " + e.getMessage());
-//                    mutableLiveData.setValue(null);
-//                });
-//
-//
-//        return mutableLiveData;
-//    }
+
 
 
     public LiveData<List<Postable>> getUnderReviewPosts() {
         MutableLiveData<List<Postable>> mutableLiveData = new MutableLiveData<>();
 
-        postsCollection.get()
+        Query query = postsCollection.whereEqualTo("status", PostStatus.UNDER_REVIEW);
+        query.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Postable> postableList = new ArrayList<>();
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
@@ -300,6 +401,7 @@ public class PostRepository {
                     Log.e("Repository", "Failed to fetch products: " + e.getMessage());
                     mutableLiveData.setValue(null);
                 });
+
         return mutableLiveData;
     }
 

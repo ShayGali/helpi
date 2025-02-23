@@ -13,10 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.PostableAdapter;
 import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
+import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.viewmodels.SearchProductViewModel;
 
 import java.util.ArrayList;
@@ -54,9 +56,14 @@ public class SearchPostableResultFragment extends Fragment {
         String subcategory = bundle.getString("subcategory");
         String region = bundle.getString("region");
         String productStatus = bundle.getString("productStatus"); // the condition of the product
+        double latitude = bundle.getDouble("latitude");
+        double longitude = bundle.getDouble("longitude");
+        String postType = bundle.getString("postType");
+
+        AppConstants.PostType type = AppConstants.PostType.fromString(postType);
 
         // get the products from the repository
-        LiveData<List<Postable>> postsLiveData = searchProductViewModel.getPosts(category, subcategory, region, productStatus);
+        LiveData<List<Postable>> postsLiveData = searchProductViewModel.getPosts(category, subcategory, new GeoPoint(latitude, longitude) , productStatus,type );
 
 
         postsSliderAdapter = new PostableAdapter(postable -> {
