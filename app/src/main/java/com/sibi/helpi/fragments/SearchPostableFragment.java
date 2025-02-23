@@ -26,7 +26,7 @@ public class SearchPostableFragment extends Fragment {
     private AutoCompleteTextView postTypeSpinner, categorySpinner, subcategorySpinner, regionSpinner, productStatusSpinner;
     private TextInputLayout postTypeInputLayout, categoryInputLayout, subcategoryInputLayout, regionInputLayout, productStatusInputLayout;
     private View submitSearchButton, clearSearchButton;
-    MyLatLng selectedLocation;
+    private MyLatLng selectedLocation;
 
     public SearchPostableFragment() {
         // Required empty public constructor
