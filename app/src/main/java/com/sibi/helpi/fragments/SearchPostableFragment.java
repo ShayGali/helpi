@@ -23,6 +23,8 @@ public class SearchPostableFragment extends Fragment {
     private AutoCompleteTextView postTypeSpinner, categorySpinner, subcategorySpinner, regionSpinner, productStatusSpinner;
     private TextInputLayout postTypeInputLayout, categoryInputLayout, subcategoryInputLayout, regionInputLayout, productStatusInputLayout;
     private View submitSearchButton, clearSearchButton;
+    private double latitude, longitude;
+
 
     public SearchPostableFragment() {
         // Required empty public constructor
@@ -41,8 +43,8 @@ public class SearchPostableFragment extends Fragment {
         initializeViews(view);
 
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            double latitude = bundle.getDouble("latitude");
-            double longitude = bundle.getDouble("longitude");
+            latitude = bundle.getDouble("latitude");
+            longitude = bundle.getDouble("longitude");
             // display the location name under the region spinner
             regionSpinner.setText(LocationUtil.getLocationName(requireContext(), latitude, longitude));
         });
@@ -65,7 +67,8 @@ public class SearchPostableFragment extends Fragment {
             bundle.putString("subcategory", subcategorySpinner.getText().toString());
             bundle.putString("region", regionSpinner.getText().toString());
             bundle.putString("productStatus", productStatusSpinner.getText().toString());
-
+            bundle.putDouble("latitude", latitude);
+            bundle.putDouble("longitude", longitude);
             // navigate to the search result fragment and add the bundle
             Navigation.findNavController(view).navigate(R.id.action_searchPostableFragment_to_searchPostableResultFragment, bundle);
         });
