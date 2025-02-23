@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.GeoPoint;
@@ -85,7 +84,7 @@ public class OfferPostFragment extends Fragment {
             double longitude = bundle.getDouble("longitude");
             selectedLocation = new GeoPoint(latitude, longitude);
             // display the location name under the region spinner
-            regionSpinner.setText(LocationUtil.getLocationNameFromLocation(requireContext(), selectedLocation));
+            regionSpinner.setText(LocationUtil.getLocationName(requireContext(), selectedLocation));
         });
 
 

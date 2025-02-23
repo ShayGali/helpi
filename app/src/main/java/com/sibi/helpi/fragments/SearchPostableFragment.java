@@ -23,7 +23,6 @@ public class SearchPostableFragment extends Fragment {
     private AutoCompleteTextView postTypeSpinner, categorySpinner, subcategorySpinner, regionSpinner, productStatusSpinner;
     private TextInputLayout postTypeInputLayout, categoryInputLayout, subcategoryInputLayout, regionInputLayout, productStatusInputLayout;
     private View submitSearchButton, clearSearchButton;
-    GeoPoint selectedLocation;
 
     public SearchPostableFragment() {
         // Required empty public constructor
@@ -44,9 +43,8 @@ public class SearchPostableFragment extends Fragment {
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             double latitude = bundle.getDouble("latitude");
             double longitude = bundle.getDouble("longitude");
-            selectedLocation = new GeoPoint(latitude, longitude);
             // display the location name under the region spinner
-            regionSpinner.setText(LocationUtil.getLocationNameFromLocation(requireContext(), selectedLocation));
+            regionSpinner.setText(LocationUtil.getLocationName(requireContext(), latitude, longitude));
         });
 
         setupAutoCompleteTextView(categorySpinner, categoryInputLayout, addAllOption(getResources().getStringArray(R.array.categories)));
@@ -79,7 +77,6 @@ public class SearchPostableFragment extends Fragment {
             subcategorySpinner.setText("", false);
             regionSpinner.setText("", false);
             productStatusSpinner.setText("", false);
-            selectedLocation = null;
         });
 
         return view;
