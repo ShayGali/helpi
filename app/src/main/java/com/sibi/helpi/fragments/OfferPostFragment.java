@@ -168,6 +168,7 @@ public class OfferPostFragment extends Fragment {
         subcategorySpinner.setEnabled(false);
         categorySpinner.setOnItemClickListener((parent, view, position, id) -> {
             subcategorySpinner.setEnabled(position != 0);
+            subcategorySpinner.setText("", false);
             if (position != 0) {
                 switch (position) {
                     case 1:

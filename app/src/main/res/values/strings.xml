@@ -48,7 +48,6 @@
         <item>Furniture</item>
         <item>Toys</item>
         <item>Other</item>
-        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="electronics_subcategories">
         <item>Select Sub Category</item>
@@ -58,33 +57,28 @@
         <item>Headphones</item>
         <item>Speakers</item>
         <item>Other</item>
-        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="type">
         <item>Select Post Type</item>
         <item>@string/product</item>
         <item>@string/service</item>
-        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="product_condition">
         <item>Select Product Status</item>
         <item>New</item>
         <item>Used</item>
-        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="fashion_subcategories">
         <item>Select Sub Category</item>
         <item>Suits</item>
         <item>Shirts</item>
         <item>Shoes</item>
-        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="home_subcategories">
         <item>Select Sub Category</item>
         <item>Sofa</item>
         <item>Table</item>
         <item>Chair</item>
-        <item>@string/find_evrthng</item>
     </string-array>
 
     <string-array name="toys_subcategories">
@@ -92,19 +86,16 @@
         <item>Board Games</item>
         <item>Outdoor Games</item>
         <item>Indoor Games</item>
-        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="books_subcategories">
         <item>Select Sub Category</item>
         <item>Novel</item>
         <item>Textbook</item>
         <item>Magazine</item>
-        <item>@string/find_evrthng</item>
     </string-array>
 
     <string-array name="other_subcategories">
         <item>Other</item>
-        <item>@string/find_evrthng</item>
     </string-array>
 
     <string name="english">English</string>

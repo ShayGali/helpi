@@ -49,9 +49,9 @@ public class SearchPostableFragment extends Fragment {
             regionSpinner.setText(LocationUtil.getLocationNameFromLocation(requireContext(), selectedLocation));
         });
 
-        setupAutoCompleteTextView(categorySpinner, categoryInputLayout, getResources().getStringArray(R.array.categories));
-        setupAutoCompleteTextView(postTypeSpinner, postTypeInputLayout, getResources().getStringArray(R.array.type));
-        setupAutoCompleteTextView(productStatusSpinner, productStatusInputLayout, getResources().getStringArray(R.array.product_condition));
+        setupAutoCompleteTextView(categorySpinner, categoryInputLayout, addAllOption(getResources().getStringArray(R.array.categories)));
+        setupAutoCompleteTextView(postTypeSpinner, postTypeInputLayout, addAllOption(getResources().getStringArray(R.array.type)));
+        setupAutoCompleteTextView(productStatusSpinner, productStatusInputLayout, addAllOption(getResources().getStringArray(R.array.product_condition)));
 //        setupAutoCompleteTextView(regionSpinner, regionInputLayout, regions);
         setSubCategoryBlocker();
         setTypeBlocker();
@@ -141,29 +141,45 @@ public class SearchPostableFragment extends Fragment {
         categorySpinner.setOnItemClickListener((parent, view, position, id) -> {
             subcategorySpinner.setEnabled(position != 0);
             if (position != 0) {
+                String[] subcategories = null;
                 switch (position) {
                     case 1:
-                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.electronics_subcategories));
+                        subcategories = getResources().getStringArray(R.array.electronics_subcategories);
                         break;
                     case 2:
-                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.fashion_subcategories));
+                        subcategories = getResources().getStringArray(R.array.fashion_subcategories);
                         break;
                     case 3:
-                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.books_subcategories));
+                        subcategories = getResources().getStringArray(R.array.books_subcategories);
                         break;
                     case 4:
-                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.home_subcategories));
+                        subcategories = getResources().getStringArray(R.array.home_subcategories);
                         break;
                     case 5:
-                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.toys_subcategories));
+                        subcategories = getResources().getStringArray(R.array.toys_subcategories);
                         break;
                     case 6:
-                        setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, getResources().getStringArray(R.array.other_subcategories));
+                        subcategories = getResources().getStringArray(R.array.other_subcategories);
+                        subcategorySpinner.setEnabled(false);
+                        break;
+                    default:
+                        subcategories = new String[]{};
                         subcategorySpinner.setEnabled(false);
                         break;
                 }
+                String[] subcategoriesWithAll = addAllOption(subcategories);
+
+                setupAutoCompleteTextView(subcategorySpinner, subcategoryInputLayout, subcategoriesWithAll);
+                subcategorySpinner.setText("", false);
             }
         });
+    }
+
+    private String[] addAllOption(String[] array) {
+        String[] newArray = new String[array.length + 1];
+        newArray[array.length] = getString(R.string.find_evrthng);
+        System.arraycopy(array, 0, newArray, 0, array.length);
+        return newArray;
     }
 
 }

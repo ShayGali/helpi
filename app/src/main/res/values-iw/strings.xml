@@ -41,7 +41,6 @@
         <item>רהיטים</item>
         <item>צעצועים</item>
         <item>אחר</item>
-        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="electronics_subcategories">
         <item>בחר תת קטגוריה</item>
@@ -51,19 +50,16 @@
         <item>אוזניות</item>
         <item>רמקולים</item>
         <item>אחר</item>
-        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="type">
         <item>בחר סוג פרסום</item>
         <item>מוצר</item>
         <item>שירות</item>
-        <item>@string/find_evrthng</item>
     </string-array>
     <string-array name="product_condition">
         <item>בחר מצב מוצר</item>
         <item>חדש</item>
         <item>משומש</item>
-        <item>@string/find_evrthng</item>
     </string-array>
     <string name="dont_have_an_account_yet">עדיין אין לך חשבון?</string>
     <string name="now">עכשיו!</string>
