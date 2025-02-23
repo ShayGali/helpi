@@ -60,31 +60,40 @@ public class ChatMessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return messages.size();
     }
 
-    static class UserMessageViewHolder extends RecyclerView.ViewHolder {
+
+    static abstract class MessageViewHolder extends RecyclerView.ViewHolder {
         private final TextView messageTextView;
+        private final TextView timeTextView;
+        MessageViewHolder(@NonNull View itemView) {
+            super(itemView);
+            messageTextView = itemView.findViewById(R.id.text_message_body);
+            timeTextView = itemView.findViewById(R.id.msgTime);
+        }
+        void bind(Message message) {
+            messageTextView.setText(message.getMessage());
+            timeTextView.setText(message.getFormattedTimestamp());
+        }
+
+    }
+
+    static class UserMessageViewHolder extends MessageViewHolder {
 
         UserMessageViewHolder(@NonNull View itemView) {
             super(itemView);
-            messageTextView = itemView.findViewById(R.id.text_message_body);
         }
 
-        void bind(Message message) {
-            messageTextView.setText(message.getMessage());
-        }
     }
 
-    static class PartnerMessageViewHolder extends RecyclerView.ViewHolder {
-        private final TextView messageTextView;
+    static class PartnerMessageViewHolder extends MessageViewHolder {
         private final ImageView profileImageView;
 
         PartnerMessageViewHolder(@NonNull View itemView) {
             super(itemView);
-            messageTextView = itemView.findViewById(R.id.text_message_body);
             profileImageView = itemView.findViewById(R.id.image_profile);
         }
 
         void bind(Message message) {
-            messageTextView.setText(message.getMessage());
+            super.bind(message);
             // Set profile image using Glide if available
             // Glide.with(itemView.getContext())
             //     .load(message.getProfileImageUrl())
