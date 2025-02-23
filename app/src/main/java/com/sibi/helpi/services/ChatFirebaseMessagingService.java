@@ -1,5 +1,6 @@
 package com.sibi.helpi.services;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -61,6 +62,8 @@ public class ChatFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String chatId, String senderName, String messageBody) {
+        createNotificationChannel();
+
         // Create pending intent for when user clicks notification
         PendingIntent pendingIntent = new NavDeepLinkBuilder(this)
                 .setGraph(R.navigation.nav_graph)
@@ -93,5 +96,23 @@ public class ChatFirebaseMessagingService extends FirebaseMessagingService {
         Bundle bundle = new Bundle();
         bundle.putString("chatId", chatId);
         return bundle;
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Chat Messages",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Notifications for new chat messages");
+            channel.enableLights(true);
+            channel.enableVibration(true);
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+        }
     }
 }
