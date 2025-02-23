@@ -41,6 +41,7 @@ junitJupiter = "5.11.4"
 testng = "6.9.6"
 uiautomator = "2.3.0"
 junitJupiterVersion = "5.8.1"
+firebaseMessaging = "24.1.0"
 
 [libraries]
 android-image-cropper = { module = "com.theartofdev.edmodo:android-image-cropper", version.ref = "androidImageCropper" }
@@ -88,6 +89,7 @@ junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.r
 testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
