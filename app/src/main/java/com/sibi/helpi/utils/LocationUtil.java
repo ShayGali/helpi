@@ -48,4 +48,26 @@ public class LocationUtil {
         }
         return getLocationName(context, location.getLatitude(), location.getLongitude());
     }
+
+    public static boolean isWithinRadius(GeoPoint center, GeoPoint target, double radiusKm) {
+        final double R = 6371; // Earth radius in km
+        double lat1 = Math.toRadians(center.getLatitude());
+        double lon1 = Math.toRadians(center.getLongitude());
+        double lat2 = Math.toRadians(target.getLatitude());
+        double lon2 = Math.toRadians(target.getLongitude());
+
+        double dlat = lat2 - lat1;
+        double dlon = lon2 - lon1;
+
+        double a = Math.sin(dlat / 2) * Math.sin(dlat / 2) +
+                Math.cos(lat1) * Math.cos(lat2) *
+                        Math.sin(dlon / 2) * Math.sin(dlon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        double distance = R * c; // Distance in km
+
+        return distance <= radiusKm;
+    }
+
+
 }

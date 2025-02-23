@@ -1,6 +1,8 @@
 package com.sibi.helpi.fragments;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -47,6 +49,7 @@ public class PostablePageFragment extends Fragment {
 
     private FloatingActionButton acceptButton;
     private FloatingActionButton rejectButton;
+    private FloatingActionButton callButton;
     private Postable postable;
 
     private SearchProductViewModel postableViewModel;
@@ -54,7 +57,7 @@ public class PostablePageFragment extends Fragment {
 
     private Button reportButton;
 
-    private FloatingActionButton emailFab;
+    private FloatingActionButton chatFab;
     private ChatViewModel chatViewModel;
     private Dialog loadingDialog;
 
@@ -104,7 +107,7 @@ public class PostablePageFragment extends Fragment {
 
             }
         }
-        emailFab = view.findViewById(R.id.emailFab);
+
         setupButtons();
 
         return view;
@@ -148,6 +151,8 @@ public class PostablePageFragment extends Fragment {
         acceptButton = view.findViewById(R.id.acceptFab);
         rejectButton = view.findViewById(R.id.rejectFab);
         reportButton = view.findViewById(R.id.reportButton);
+        chatFab = view.findViewById(R.id.emailFab);
+        callButton = view.findViewById(R.id.phoneFab);
     }
 
     private void setupButtons() {
@@ -166,7 +171,7 @@ public class PostablePageFragment extends Fragment {
             showReportDialog();
         });
 
-        emailFab.setOnClickListener(v -> {
+        chatFab.setOnClickListener(v -> {
             if (postable != null) {
                 String otherUserId = postable.getUserId();
                 // Ensure we're not trying to chat with ourselves
@@ -178,7 +183,30 @@ public class PostablePageFragment extends Fragment {
                 }
             }
         });
+
+
+
+        callButton.setOnClickListener(v -> {
+            if (postable != null) {
+                String otherUserId = postable.getUserId();
+                getPhoneNumber(otherUserId).observe(getViewLifecycleOwner(), phoneNumber -> {
+                    if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse("tel:" + phoneNumber));
+                        startActivity(intent);
+
+
+
+                                } else {
+                                    Toast.makeText(getContext(), "Phone number not available, Maybe try our chat?", Toast.LENGTH_SHORT).show();
+                                    callButton.setEnabled(false);
+                                }
+
+                        });
+            }
+        });
     }
+
 
     private void navigateToChat(String otherUserId) {
         String currentUserId = userViewModel.getCurrentUserId();
@@ -293,6 +321,17 @@ public class PostablePageFragment extends Fragment {
                 Toast.makeText(getContext(), R.string.failed_to_file_report_please_try_again_later, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private LiveData<String> getPhoneNumber(String userId) {
+        MutableLiveData<String> phoneNumber = new MutableLiveData<>();
+        userViewModel.getUserByIdLiveData(userId)
+                .observe(getViewLifecycleOwner(), user -> {
+                    if (user != null) {
+                        phoneNumber.postValue(user.getPhoneNumber());
+                    }
+                });
+        return phoneNumber;
     }
 
 }
