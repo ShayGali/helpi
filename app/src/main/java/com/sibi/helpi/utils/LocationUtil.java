@@ -4,7 +4,6 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.R;
 
@@ -29,15 +28,10 @@ public class LocationUtil {
         return context.getString(R.string.city_not_found);
     }
 
-    public static String getLocationNameFromLocation(Context context, GeoPoint location) {
-
-        if (location == null) {
-            return context.getString(R.string.location_not_found);
-        }
-
+    public static String getLocationName(Context context, double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         try {
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses != null && !addresses.isEmpty()) {
                 return addresses.get(0).getAddressLine(0);
             }
@@ -45,5 +39,13 @@ public class LocationUtil {
             e.printStackTrace();
         }
         return context.getString(R.string.location_not_found);
+    }
+
+    public static String getLocationName(Context context, GeoPoint location) {
+
+        if (location == null) {
+            return context.getString(R.string.location_not_found);
+        }
+        return getLocationName(context, location.getLatitude(), location.getLongitude());
     }
 }

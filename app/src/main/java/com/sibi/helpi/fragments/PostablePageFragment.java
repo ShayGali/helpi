@@ -115,7 +115,7 @@ public class PostablePageFragment extends Fragment {
         productDescription.append(": " + postable.getDescription());
         postCategory.append(": " + postable.getCategory());
         posSubtCategory.append(": " + postable.getSubCategory());
-        postLocation.append(": " + LocationUtil.getLocationNameFromLocation(requireContext(), postable.getLocation()));
+        postLocation.append(": " + LocationUtil.getLocationName(requireContext(), postable.getLocation()));
 
         if (postable instanceof ProductPost) {
             postCondition.append(": " + ((ProductPost) postable).getCondition());
