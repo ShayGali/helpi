@@ -18,6 +18,7 @@ public class AppConstants {
     public static final String PREFS_NAME = "MyPrefs";
     public static final String LANGUAGE_KEY = "language";
 
+    public static final int MAX_RADIUS = 50;
 
     public enum PostStatus {
         UNDER_REVIEW("Under Review"),
@@ -74,6 +75,27 @@ public class AppConstants {
 
 
     public enum PostType {
-        PRODUCT, SERVICE, ANY
+        PRODUCT("Product"),
+        SERVICE("Service"),
+        ANY("Any");
+
+        private final String typeText;
+
+        PostType(String typeText) {
+            this.typeText = typeText;
+        }
+
+        public String getTypeText() {
+            return typeText;
+        }
+
+        public static PostType fromString(String text) {
+            for (PostType type : PostType.values()) {
+                if (type.typeText.equalsIgnoreCase(text)) {
+                    return type;
+                }
+            }
+            throw new IllegalArgumentException("Unknown type: " + text);
+        }
     }
 }

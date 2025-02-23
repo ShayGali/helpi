@@ -69,6 +69,15 @@ public class SearchPostableFragment extends Fragment {
             bundle.putString("productStatus", productStatusSpinner.getText().toString());
             bundle.putDouble("latitude", latitude);
             bundle.putDouble("longitude", longitude);
+
+            if (postTypeSpinner.getText().toString().equals("Service")) {
+                bundle.putString("postType", "Service");
+            } else if( postTypeSpinner.getText().toString().equals("Product")) {
+                bundle.putString("postType", "Product");
+            }
+            else {
+                bundle.putString("postType", "Any");
+            }
             // navigate to the search result fragment and add the bundle
             Navigation.findNavController(view).navigate(R.id.action_searchPostableFragment_to_searchPostableResultFragment, bundle);
         });

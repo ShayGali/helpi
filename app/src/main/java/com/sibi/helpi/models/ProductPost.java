@@ -87,6 +87,7 @@ public class ProductPost implements Postable {
         return location;
     }
 
+
     public void setLocation(GeoPoint location) {
         this.location = location;
     }
