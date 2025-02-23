@@ -25,6 +25,7 @@ import com.sibi.helpi.utils.FirebaseAuthService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -302,5 +303,58 @@ public class UserRepository {
     public Task<Void> removeFcmToken(String userId) {
         return updateFcmToken(userId, "");
     }
+
+   public Task<Boolean> updateProfile(String firstName, String lastName, String phoneNumber, String email, byte[] profileImg) {
+    return getCurrentUser().continueWithTask(task -> {
+        if (!task.isSuccessful()) {
+            throw Objects.requireNonNull(task.getException());
+        }
+        User currentUser = task.getResult();
+        if (currentUser == null) {
+            return Tasks.forResult(false);
+        }
+        if (firstName != null && !firstName.isEmpty()) {
+            currentUser.setFirstName(firstName);
+        }
+        if (lastName != null && !lastName.isEmpty()) {
+            currentUser.setLastName(lastName);
+        }
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+            currentUser.setPhoneNumber(phoneNumber);
+        }
+        if (email != null && !email.isEmpty()) {
+            currentUser.setEmail(email);
+        }
+
+        if (profileImg != null) {
+            return uploadProfileImageAndSaveUser(currentUser, profileImg)
+                    .continueWith(task1 -> {
+                        if (!task1.isSuccessful()) {
+                            throw Objects.requireNonNull(task1.getException());
+                        }
+                        return true;
+                    });
+        }
+        else {
+            return saveUserData(currentUser, getUUID())
+                    .continueWith(task1 -> {
+                        if (!task1.isSuccessful()) {
+                            Log.e(TAG, "updateProfile: Failed to save user data", task1.getException());
+                        }
+                        return true;
+                    });
+        }
+    });
+}
+
+public Task<Boolean> isEmailTaken(String email) {
+    return getUsersByField("email", email)
+            .continueWith(task -> {
+                if (!task.isSuccessful()) {
+                    Log.e(TAG, "isEmailTaken: Failed to check email", task.getException());
+                }
+                return !task.getResult().isEmpty();
+            });
+}
 
 }

@@ -205,6 +205,7 @@
                     android:layout_marginStart="16dp"
                     android:background="@color/gray" />
 
+                <!-- Change Language Section -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/changeLanguageBtn"
                     android:layout_width="match_parent"
@@ -256,6 +257,61 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:background="@color/gray" />
+
+                <!-- Update Profile Section -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/updateProfileBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layoutDirection="ltr">
+
+                    <ImageView
+                        android:id="@+id/imageUpdateProfile"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layoutDirection="ltr"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_edit" /> <!-- Replace with your update profile icon -->
+
+                    <ImageView
+                        android:id="@+id/arrowUpdateProfile"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layoutDirection="ltr"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/image_right_arrow" />
+
+                    <TextView
+                        android:id="@+id/textViewUpdateProfile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layoutDirection="ltr"
+                        android:text="@string/update_profile"
+                        android:textColor="@color/textSecondary"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/imageUpdateProfile"
+                        app:layout_constraintTop_toTopOf="@+id/imageUpdateProfile" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Separator -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/gray" />
+
+                <!-- Logout Section -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/logout_btn"
                     android:layout_width="match_parent"

@@ -131,5 +131,9 @@
     <string name="failed_to_file_report_please_try_again_later">הגשת הדיווח נכשלה, אנא נסה שוב מאוחר יותר</string>
     <string name="cropping_failed">החיתוך נכשל:</string>
     <string name="report_resolved_post_deleted">הדיווח נפתר, הפוסט נמחק</string>
-    <string name="phone_number">phone_number</string>
+    <string name="phone_number">טלפון</string>
+    <string name="save_changes">שמור שינויים</string>
+    <string name="change_profile_image">שנה תמונת פרופיל</string>
+    <string name="profile_image_description">תמונת פרופיל</string>
+    <string name="profile_updated_successfully">הנתונים התעדכנו בהצלחה!</string>
 </resources>

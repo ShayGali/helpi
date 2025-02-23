@@ -54,14 +54,14 @@ public class RegisterFragment extends Fragment {
 
     private Uri profilePicUri;
 
-    EditText fNameEditText;
-    EditText lNameEditText;
-    EditText emailEditText;
-    EditText phoneEditText;
-    EditText passwordEditText;
-    Button registerButton;
-    Button chooseProfilePicButton;
-    View googleButton;
+    private EditText fNameEditText;
+    private EditText lNameEditText;
+    private EditText emailEditText;
+    private  EditText phoneEditText;
+    private EditText passwordEditText;
+    private Button registerButton;
+    private  Button chooseProfilePicButton;
+    private View googleButton;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -84,7 +84,6 @@ public class RegisterFragment extends Fragment {
                 new ActivityResultContracts.GetContent(),
                 uri -> {
                     if (uri != null) {
-//                        String fileName = "cropped_image_ " + System.currentTimeMillis() + ".jpg"; //another option to create a unique file name
                         String fileName = "cropped_image.jpg";
                         Uri destinationUri = Uri.fromFile(new File(requireContext().getCacheDir(), fileName));
                         UCrop.of(uri, destinationUri)

@@ -55,6 +55,10 @@
         <action
             android:id="@+id/action_profileFragment_to_chatListFragment"
             app:destination="@id/chatListFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_fragment_edit_profile"
+            app:destination="@id/fragment_edit_profile" />
+
     </fragment>
     <fragment
         android:id="@+id/adminDashBoardFragment"
@@ -130,6 +134,16 @@
         android:id="@+id/chatMessagesFragment"
         android:name="com.sibi.helpi.fragments.ChatMessagesFragment"
         android:label="ChatMessagesFragment" />
+    <fragment
+        android:id="@+id/fragment_edit_profile"
+        android:name="com.sibi.helpi.fragments.UpdateProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_fragment_edit_profile_to_fragment_home"
+            app:destination="@id/homeFragment" />
+
+    </fragment>
 
 
 </navigation>

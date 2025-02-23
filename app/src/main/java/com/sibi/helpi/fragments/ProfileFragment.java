@@ -90,6 +90,10 @@ public class ProfileFragment extends Fragment {
             showLoading();
             userViewModel.deleteAccount();
         });
+        view.findViewById(R.id.updateProfileBtn).setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_profileFragment_to_fragment_edit_profile)
+        );
+
 
         View changeLanguageBtn = view.findViewById(R.id.changeLanguageBtn);
 

@@ -157,6 +157,31 @@ public class UserViewModel extends ViewModel {
         return successLiveData;
     }
 
+    public LiveData<Boolean> updateProfile(String firstName, String lastName, String phoneNumber, String email, byte[] profileImg) {
+        MutableLiveData<Boolean> successLiveData = new MutableLiveData<>();
+        userState.setValue(UserState.loading());
+        userRepository.updateProfile(firstName, lastName, phoneNumber, email, profileImg)
+                .addOnSuccessListener(aVoid -> {
+                    userState.setValue(UserState.success(null));
+                    successLiveData.postValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    userState.setValue(UserState.error(e.getMessage()));
+                    successLiveData.postValue(false);
+                });
+
+        return successLiveData;
+    }
+
+    public LiveData<Boolean> isEmailTaken(String email) {
+        MutableLiveData<Boolean> isTakenLiveData = new MutableLiveData<>();
+        userRepository.isEmailTaken(email)
+                .addOnSuccessListener(isTaken -> isTakenLiveData.postValue(isTaken))
+                .addOnFailureListener(e -> isTakenLiveData.postValue(true));
+
+        return isTakenLiveData;
+    }
+
 
 
 
