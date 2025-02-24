@@ -1,0 +1,116 @@
+@startuml
+
+' Use layout direction to make it more horizontal
+left to right direction
+
+' Interfaces
+interface Postable {
+  +String getId()
+  +void setId(String id)
+  +String getTitle()
+  +String getDescription()
+  +String getCategory()
+  +void setCategory(String category)
+  +String getSubCategory()
+  +void setSubCategory(String subCategory)
+  +GeoPoint getLocation()
+  +String getUserId()
+  +List<String> getImageUrls()
+  +void setImageUrls(List<String> imageUrls)
+  +PostStatus getStatus()
+  +void setStatus(PostStatus status)
+  +Timestamp getTimestamp()
+  +void setTimestamp(Timestamp timestamp)
+}
+
+' Model classes
+class ProductPost {
+  -String id
+  -String title
+  -String description
+  -String category
+  -String subCategory
+  -GeoPoint location
+  -String condition
+  -String userId
+  -PostStatus status
+  -List<String> imageUrls
+  -Timestamp timestamp
+}
+
+class ServicePost {
+  -String id
+  -String title
+  -String description
+  -String category
+  -String subCategory
+  -GeoPoint location
+  -String userId
+  -PostStatus status
+  -List<String> imageUrls
+  -Timestamp timestamp
+}
+
+' Repository
+class PostRepository {
+  -CollectionReference postsCollection
+  -StorageReference storageReference
+  -ImagesRepository imagesRepository
+  +static PostRepository getInstance()
+  +LiveData<List<Postable>> getPosts()
+  +void savePost(Postable, byte[][], PostType)
+  +LiveData<Resource<Void>> deletePost(String)
+  +LiveData<Boolean> updatePostStatus(String)
+}
+
+' ViewModel
+class PostViewModel {
+  -PostRepository postRepository
+  -MutableLiveData<Resource<String>> postLiveData
+  +LiveData<Resource<String>> getPostLiveData()
+  +void savePost(Postable, byte[][], PostType)
+}
+
+' Fragment
+class OfferPostFragment {
+  -AutoCompleteTextView categorySpinner
+  -AutoCompleteTextView typeSpinner
+  -Button btnUploadImage
+  -ViewPager2 imageSlider
+  -FloatingActionButton btnPost
+  -Postable createConcretePost(String)
+  -void setupSpinners()
+  -void observePostProductLiveData()
+}
+
+' Relationships
+Postable <|.. ProductPost
+Postable <|.. ServicePost
+
+PostRepository --> Postable : manages
+PostViewModel --> PostRepository : uses
+OfferPostFragment --> PostViewModel : uses
+
+' Layout hint for more horizontal arrangement
+ProductPost -[hidden]right- ServicePost
+PostRepository -[hidden]right- PostViewModel
+PostViewModel -[hidden]right- OfferPostFragment
+
+' Add enumerations in a separate area
+note top of Postable
+  <b>Enumerations:</b>
+
+  enum PostStatus {
+    UNDER_REVIEW
+    APPROVED
+    REJECTED
+  }
+
+  enum PostType {
+    PRODUCT
+    SERVICE
+    ANY
+  }
+end note
+
+@enduml

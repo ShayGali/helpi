@@ -1,0 +1,150 @@
+@startuml Helpi App UML
+
+' Use horizontal layout
+left to right direction
+
+' Simplify diagram with packages
+package "Models" {
+  ' Interfaces
+  interface Postable {
+    +String getId()
+    +String getTitle()
+    +String getDescription()
+    +String getCategory()
+    +GeoPoint getLocation()
+    +String getUserId()
+    +PostStatus getStatus()
+  }
+
+  ' Model classes
+  class ProductPost {
+    -String title
+    -String description
+    -String category
+    -String condition
+    -PostStatus status
+  }
+
+  class ServicePost {
+    -String title
+    -String description
+    -String category
+    -PostStatus status
+  }
+
+  class Chat {
+    -String chatId
+    -List<String> participants
+    -String lastMessage
+    -long timestamp
+    +String getChatPartnerName()
+  }
+
+  class Message {
+    -String messageId
+    -String senderId
+    -String message
+    -boolean seen
+    +boolean isUser()
+  }
+}
+
+package "Repositories" {
+  class PostRepository {
+    +static getInstance()
+    +LiveData<List<Postable>> getPosts()
+    +void savePost()
+    +LiveData<Boolean> updatePostStatus()
+  }
+
+  class ChatRepository {
+    +static getInstance()
+    +LiveData<List<Chat>> getUserChats()
+    +LiveData<List<Message>> getChatMessages()
+    +void sendMessage()
+    +LiveData<Chat> getChatByParticipants()
+  }
+}
+
+package "ViewModels" {
+  class SearchProductViewModel {
+    +LiveData<List<Postable>> getPosts()
+    +LiveData<Boolean> updatePostStatus()
+  }
+
+  class ChatViewModel {
+    +LiveData<List<Chat>> getChatsList()
+    +LiveData<List<Message>> getChatMessages()
+    +void sendMessage()
+  }
+
+  class PostViewModel {
+    +void savePost()
+  }
+
+  class UserViewModel {
+    +static getInstance()
+    +String getCurrentUserId()
+    +void signInWithEmail()
+  }
+}
+
+package "Fragments" {
+  class OfferPostFragment {
+    -Postable createConcretePost()
+  }
+
+  class SearchPostableFragment {
+    -void setupAutoCompleteTextView()
+  }
+
+  class SearchPostableResultFragment {
+    -SearchProductViewModel viewModel
+  }
+
+  class PostablePageFragment {
+    -void navigateToChat()
+  }
+
+  class ChatMessagesFragment {
+    -void observeViewModel()
+  }
+}
+
+' Relationships but minimized
+Postable <|.. ProductPost
+Postable <|.. ServicePost
+
+PostRepository --> Postable : manages
+ChatRepository --> Chat : manages
+ChatRepository --> Message : manages
+
+SearchProductViewModel --> PostRepository : uses
+ChatViewModel --> ChatRepository : uses
+
+OfferPostFragment --> PostViewModel : uses
+SearchPostableResultFragment --> SearchProductViewModel : uses
+PostablePageFragment --> SearchProductViewModel : uses
+PostablePageFragment --> ChatViewModel : uses
+PostablePageFragment --> UserViewModel : uses
+ChatMessagesFragment --> ChatViewModel : uses
+
+' Navigation flows - keep only the important ones
+SearchPostableFragment ...> SearchPostableResultFragment : navigates to
+SearchPostableResultFragment ...> PostablePageFragment : navigates to
+PostablePageFragment ...> ChatMessagesFragment : navigates to
+
+' Arrange packages horizontally
+Models -[hidden]right- Repositories
+Repositories -[hidden]right- ViewModels
+ViewModels -[hidden]right- Fragments
+
+' Enumerations as notes at the top
+note top of Models
+  <b>Key Enumerations:</b>
+
+  enum PostStatus { UNDER_REVIEW, APPROVED, REJECTED }
+  enum PostType { PRODUCT, SERVICE, ANY }
+end note
+
+@enduml

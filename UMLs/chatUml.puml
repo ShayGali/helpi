@@ -1,0 +1,163 @@
+@startuml Helpi App Architecture
+
+' Use horizontal layout
+left to right direction
+
+' Group related components
+package "Domain Models" {
+  ' Interfaces
+  interface Postable {
+    +getId(), getTitle(), getDescription()
+    +getCategory(), getSubCategory()
+    +getLocation(), getUserId()
+    +getStatus(), getImageUrls()
+  }
+
+  ' Model classes
+  class ProductPost {
+    -title, description, category
+    -condition, status, imageUrls
+  }
+
+  class ServicePost {
+    -title, description, category
+    -location, status, imageUrls
+  }
+
+  class Chat {
+    -chatId, participants, lastMessage
+    -partnerNames, unreadCounts
+    +getChatPartnerName()
+    +getUnreadCount()
+  }
+
+  class Message {
+    -senderId, receiverId, message
+    -timestamp, seen
+    +isUser()
+  }
+
+  class User {
+    -email, firstName, lastName
+    -phoneNumber, profileImgUri
+    -userType, fcmToken
+    +getFullName(), isAdmin()
+  }
+}
+
+package "Data Layer" {
+  class PostRepository {
+    +getInstance()
+    +getPosts(), savePost()
+    +updatePostStatus()
+    +getUnderReviewPosts()
+  }
+
+  class ChatRepository {
+    +getInstance(), getUserChats()
+    +getChatMessages(), sendMessage()
+    +getChatByParticipants()
+  }
+
+  class UserRepository {
+    +registerUser(), authWithGoogle()
+    +getCurrentUser(), signInWithEmail()
+    +updateFcmToken()
+  }
+}
+
+package "Business Logic" {
+  class SearchProductViewModel {
+    +getPosts(), getProductImages()
+    +updatePostStatus(), fileReport()
+  }
+
+  class ChatViewModel {
+    +getChatsList(), getChatMessages()
+    +sendMessage(), getChatById()
+  }
+
+  class UserViewModel {
+    +getInstance(), getUserState()
+    +getCurrentUserId(), signInWithEmail()
+    +getUserByIdLiveData()
+  }
+
+  class ChatFirebaseMessagingService {
+    +onMessageReceived(), onNewToken()
+    +createNotificationChannel()
+  }
+}
+
+package "UI Layer" {
+  class SearchPostableFragment {
+    -setupAutoCompleteTextView()
+  }
+
+  class SearchPostableResultFragment {
+    -productRecyclerView
+    -searchProductViewModel
+  }
+
+  class PostablePageFragment {
+    -productImages, postable
+    -navigateToChat()
+  }
+
+  class ChatMessagesFragment {
+    -recyclerView, messageInput
+    -setupClickListeners()
+  }
+
+  class ChatListFragment {
+    -recyclerView, chatListAdapter
+    -updateChatList()
+  }
+}
+
+' Core relationships
+Postable <|.. ProductPost
+Postable <|.. ServicePost
+
+UserRepository ..> User : manages
+PostRepository --> Postable : manages
+ChatRepository --> Chat : manages
+ChatRepository --> Message : manages
+
+' ViewModels to Repositories
+SearchProductViewModel --> PostRepository
+ChatViewModel --> ChatRepository
+UserViewModel --> UserRepository
+
+' Fragments to ViewModels
+SearchPostableResultFragment --> SearchProductViewModel
+PostablePageFragment --> SearchProductViewModel
+PostablePageFragment --> ChatViewModel
+PostablePageFragment --> UserViewModel
+ChatMessagesFragment --> ChatViewModel
+ChatListFragment --> ChatViewModel
+
+' Service connections
+ChatFirebaseMessagingService ..> UserRepository
+ChatRepository ..> UserRepository
+
+' Navigation flows
+SearchPostableFragment ..> SearchPostableResultFragment
+SearchPostableResultFragment ..> PostablePageFragment
+PostablePageFragment ..> ChatMessagesFragment
+ChatListFragment ..> ChatMessagesFragment
+
+' Arrange packages horizontally
+Domain_Models -[hidden]right- Data_Layer
+Data_Layer -[hidden]right- Business_Logic
+Business_Logic -[hidden]right- UI_Layer
+
+' Condensed enumerations at the top
+note top of Domain_Models
+  <b>Key Types:</b>
+  UserType { DEFAULT_USER, LOCAL_ADMIN, GLOBAL_ADMIN }
+  PostStatus { UNDER_REVIEW, APPROVED, REJECTED }
+  PostType { PRODUCT, SERVICE, ANY }
+end note
+
+@enduml
