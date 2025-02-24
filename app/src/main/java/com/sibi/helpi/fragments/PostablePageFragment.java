@@ -1,5 +1,7 @@
 package com.sibi.helpi.fragments;
 
+import static com.sibi.helpi.utils.LocaleHelper.getTranslatedCategory;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -297,6 +299,8 @@ public class PostablePageFragment extends Fragment {
         submitReportButton.setOnClickListener(v -> {
             String selectedReason = reportReasonSpinner.getSelectedItem().toString();
             String description = reportDescriptionEditText.getText().toString();
+            //Translate the reason to English
+            selectedReason = getTranslatedCategory(getContext(), selectedReason, "reportReason", AppConstants.LOCAL_TO_ENGLISH);
 
 
             // Handle the report submission here

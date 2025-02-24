@@ -1,5 +1,8 @@
 package com.sibi.helpi.fragments;
 
+import static com.sibi.helpi.utils.AppConstants.ENGLISH_TO_LOCAL;
+import static com.sibi.helpi.utils.LocaleHelper.getTranslatedCategory;
+
 import android.app.Dialog;
 import android.os.Bundle;
 
@@ -27,6 +30,7 @@ import com.sibi.helpi.adapters.PostableAdapter;
 import com.sibi.helpi.adapters.ReportAdapter;
 import com.sibi.helpi.models.Pair;
 import com.sibi.helpi.models.Postable;
+import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.viewmodels.AdminDashBoardViewModel;
@@ -134,10 +138,18 @@ public class AdminDashBoardFragment extends Fragment  {
         adminDashBoardViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
             if (posts != null) {
                 postList = new ArrayList<>(posts);
+                for (Postable post : postList) {
+                    post.setCategory(getTranslatedCategory(getContext(), post.getCategory(), "category", ENGLISH_TO_LOCAL));
+                    post.setSubCategory(getTranslatedCategory(getContext(), post.getSubCategory(), "subcategory", ENGLISH_TO_LOCAL));
+                    if (post instanceof ProductPost) {
+                        ((ProductPost) post).setCondition(getTranslatedCategory(getContext(), ((ProductPost) post).getCondition(), "condition", ENGLISH_TO_LOCAL));
+                    }
+                }
+
                 postSliderAdapter.setPostableList(postList);
 
                 // Fetch images for each product
-                for (Postable productPost : postList) { //TODO - change to postable
+                for (Postable productPost : postList) {
                     adminDashBoardViewModel.getProductImages(productPost.getId()).observe(getViewLifecycleOwner(), imageUrls -> {
                         productPost.setImageUrls(imageUrls);
                         postSliderAdapter.notifyDataSetChanged();

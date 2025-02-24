@@ -1,5 +1,7 @@
 package com.sibi.helpi.utils;
 
+import static com.sibi.helpi.utils.LocaleHelper.getCurrentLocale;
+
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,7 +18,7 @@ public class LocationUtil {
         if (location == null) {
             return context.getString(R.string.city_not_found);
         }
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(context, getCurrentLocale(context));
         try {
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (addresses != null && !addresses.isEmpty()) {
@@ -29,7 +31,7 @@ public class LocationUtil {
     }
 
     public static String getLocationName(Context context, double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(context, getCurrentLocale(context));
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses != null && !addresses.isEmpty()) {
