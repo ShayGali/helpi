@@ -135,6 +135,7 @@ public class ProductPost implements Postable {
         this.timestamp = timestamp;
     }
 
+
     @NonNull
     @Override
     public String toString() {

@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/back2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.OfferPostFragment">
@@ -16,40 +17,41 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/add_post"
+            android:textStyle="bold"
             android:textSize="32sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
       <!-- Post type -->
-<com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/spinnerPostTypeLayout"
-    android:layout_width="300dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:hint="@string/post_type"
-    app:boxBackgroundMode="outline"
-    app:boxStrokeWidth="0dp"
-    app:boxBackgroundColor="@color/lightGray"
-    app:cornerRadius="16dp"
-    app:hintEnabled="true"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/textView12">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/spinnerPostTypeLayout"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/post_type"
+            app:boxBackgroundColor="@color/lightGray"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeWidth="0dp"
+            app:cornerRadius="16dp"
+            app:hintEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView12">
 
-    <AutoCompleteTextView
-        android:id="@+id/spinnerPostType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:textColor="@color/black"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:clickable="true"
-        android:background="@drawable/rounded_background" />
-</com.google.android.material.textfield.TextInputLayout>
+            <AutoCompleteTextView
+                android:id="@+id/spinnerPostType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:padding="12dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
         <!-- Category Selection -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/categoryInputLayout"
@@ -164,6 +166,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:backgroundTint="@color/colorPrimary"
             android:text="@string/upload_images"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -222,27 +225,33 @@
             android:id="@+id/btnCancelPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/colorError"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
             android:clickable="true"
-            android:src="@drawable/ic_cancel"
+            android:src="@drawable/ic_clean_fields"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnPostProduct"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/description" />
+            app:layout_constraintTop_toBottomOf="@+id/description"
+            app:tint="@null" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnPostProduct"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/colorPrimary"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
             android:clickable="true"
             android:src="@drawable/ic_upload"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.8"
             app:layout_constraintStart_toEndOf="@+id/btnCancelPost"
-            app:layout_constraintTop_toBottomOf="@+id/description" />
+            app:layout_constraintTop_toBottomOf="@+id/description"
+            app:tint="@null" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -8,7 +8,7 @@
     <string name="social_login">-----------------------התחברות דרך רשת חברתית-----------------------</string>
     <string name="navigation">ניווט</string>
     <string name="search">חיפוש</string>
-    <string name="add_post">הצע מוצר</string>
+    <string name="add_post">פרסם</string>
     <string name="first_name">שם פרטי</string>
     <string name="last_name">שם משפחה</string>
     <string name="My_User">המשתמש שלי</string>
@@ -33,6 +33,8 @@
     <string name="city_not_found">העיר לא נמצאה</string>
     <string name="location_not_found">המיקום לא נמצא</string>
     <string name="find_evrthng">מצא הכל</string>
+    <string name="recent_products">מוצרים אחרונים שנוספו</string>
+    <string name="recent_services">שירותים אחרונים שנוספו</string>
     <string-array name="categories">
         <item>בחר קטגוריה</item>
         <item>אלקטרוניקה</item>

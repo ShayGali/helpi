@@ -7,7 +7,7 @@
     <!-- Primary Color (כחול) -->
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#1976D2</color> <!-- לשורת הסטטוס -->
-    <color name="colorAccent">#FFC107</color> <!-- כפתורים ופעולות חשובות -->
+    <color name="colorAccent">#ffd230</color> <!-- כפתורים ופעולות חשובות -->
     <color name="colorHint">#A6A6A6</color>
     <color name="colorError">#FF0000</color>
     <color name="colorSuccess">#00FF00</color>
@@ -27,9 +27,15 @@
     <color name="user_message_background">#AB45F1</color>
     <color name="partner_message_background">#AB45F1</color>
 
-    <color name="primaryColor">#3D8BFF</color>
-    <color name="lightGray">#D3D3D3</color>
+    <!-- Background fragment search postable -->
+    <color name="gradient1">#FFC107</color>
+    <color name="gradient2">#757575</color>
+    <color name="gradient3">#2196F3</color>
+    gradient1
 
+    <color name="primaryColor">#3D8BFF</color>
+    <color name="lightGray">#a6a6a6</color>
+    #D3D3D3
     <color name="message_user_background">#2196F3</color>
     <color name="message_partner_background">#EEEEEE</color>
     <color name="unread_badge_background">#FF4081</color>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#757575"
+    android:background="@drawable/back"
     tools:context=".fragments.ProfileFragment">
 
     <TextView
@@ -14,9 +14,10 @@
         android:layout_marginTop="32dp"
         android:layoutDirection="ltr"
         android:text="@string/profile"
+        android:textStyle="bold"
         android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textColor="@color/textPrimary"
+        android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +26,7 @@
         android:id="@+id/back_home_btn"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/background_oval"
@@ -51,7 +52,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/background_oval"
         android:layoutDirection="ltr"
@@ -108,7 +109,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="250dp"
-        android:background="#FFFFFF"
+        android:background="@color/bg_color"
         android:layoutDirection="ltr"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent">
@@ -394,49 +395,6 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:background="@color/colorHint" />
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:layoutDirection="ltr">
-
-                    <ImageView
-                        android:id="@+id/imageGallery"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layoutDirection="ltr"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_round_share" />
-
-                    <ImageView
-                        android:id="@+id/arrow3"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layoutDirection="ltr"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/image_right_arrow" />
-
-                    <TextView
-                        android:id="@+id/textViewGallery"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layoutDirection="ltr"
-                        android:text="@string/share"
-                        android:textColor="@color/textSecondary"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imageGallery"
-                        app:layout_constraintTop_toTopOf="@+id/imageGallery" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
             </LinearLayout>
