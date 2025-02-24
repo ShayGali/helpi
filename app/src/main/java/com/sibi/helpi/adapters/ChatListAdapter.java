@@ -7,18 +7,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.Chat;
+import com.sibi.helpi.viewmodels.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatViewHolder> {
     private List<Chat> chatList;
     private final OnChatClickListener onChatClickListener;
+
 
     public interface OnChatClickListener {
         void onChatClick(Chat chat);
@@ -46,7 +50,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Chat chat = chatList.get(position);
-        holder.bind(chat);
+        holder.bind(chat, (LifecycleOwner)holder.itemView.getContext());
         holder.itemView.setOnClickListener(v -> onChatClickListener.onChatClick(chat));
     }
 
@@ -61,6 +65,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
         private final TextView lastMessageTextView;
         private final TextView timestampTextView;
         private final TextView unreadCountTextView;
+        private static UserViewModel userViewModel;
+
 
         ChatViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,9 +75,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
             lastMessageTextView = itemView.findViewById(R.id.last_message);
             timestampTextView = itemView.findViewById(R.id.timestamp);
             unreadCountTextView = itemView.findViewById(R.id.unread_count);
+            userViewModel = UserViewModel.getInstance();
         }
 
-        void bind(Chat chat) {
+        void bind(Chat chat, LifecycleOwner LifecycleOwner) {
             // Set chat partner name
             chatPartnerNameTextView.setText(chat.getChatPartnerName());
 
@@ -90,20 +97,32 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
             }
 
             // Load profile image if available
-            String profileImageUrl = chat.getProfileImageUrl();
-            if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
-                profileImageView.setVisibility(View.VISIBLE);
-                Glide.with(itemView.getContext())
-                        .load(profileImageUrl)
-                        .circleCrop()
-                        .placeholder(R.drawable.ic_chat_24)
-                        .into(profileImageView);
-            } else {
-                Glide.with(itemView.getContext())
-                        .load(R.drawable.ic_chat_24)
-                        .circleCrop()
-                        .into(profileImageView);
-            }
+            Map<String, String> partnerNames = chat.getPartnerNames();
+            String UID1 = partnerNames.keySet().toArray()[0].toString();
+            String UID2 = partnerNames.keySet().toArray()[1].toString();
+            String partnerUid = UID1.equals(userViewModel.getCurrentUserId()) ? UID2 : UID1;
+
+
+            userViewModel.getUserByIdLiveData(partnerUid).observe(LifecycleOwner, user -> {
+                if (user != null) {
+                    String profileImageUrl = user.getProfileImgUri();
+                    if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                        profileImageView.setVisibility(View.VISIBLE);
+                        Glide.with(itemView.getContext())
+                                .load(profileImageUrl)
+                                .circleCrop()
+                                .placeholder(R.drawable.ic_chat_24)
+                                .into(profileImageView);
+                    } else {
+                        Glide.with(itemView.getContext())
+                                .load(R.drawable.ic_chat_24)
+                                .circleCrop()
+                                .into(profileImageView);
+                    }
+                }
+            });
+
         }
     }
+
 }
