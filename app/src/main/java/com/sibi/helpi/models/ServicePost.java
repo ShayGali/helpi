@@ -3,6 +3,7 @@ package com.sibi.helpi.models;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.firebase.Timestamp;
@@ -85,7 +86,7 @@ public class ServicePost implements Postable {
     }
 
     public List<String> getImageUrls() {
-        return imageUrls;
+        return imageUrls != null ? imageUrls : new ArrayList<>();
     }
 
     public void setImageUrls(List<String> imageUrls) {

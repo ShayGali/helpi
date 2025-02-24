@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_homeFragment_to_adminDashBoardFragment"
             app:destination="@id/adminDashBoardFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_postablePageFragment"
+            app:destination="@id/postablePageFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"

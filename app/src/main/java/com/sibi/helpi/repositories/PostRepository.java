@@ -25,6 +25,8 @@ import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.sibi.helpi.models.Postable;
@@ -483,78 +485,38 @@ public class PostRepository {
         return mutableLiveData;
     }
 
+    public Task<List<Postable>> getRecentPosts(int numberOfPost, AppConstants.PostType postType) {
+        Query query = postsCollection;
+        query = query.whereEqualTo("type", postType.ordinal());
+        query = query.whereEqualTo("status", PostStatus.APPROVED);
+        query = query.orderBy("timestamp", Query.Direction.DESCENDING);
+        query = query.limit(numberOfPost);
 
-//    public LiveData<List<Postable>> getLatestPosts(List<String> postsIds, AppConstants.PostType postType, int numOfPosts) {
-//        MutableLiveData<List<Postable>> mutableLiveData = new MutableLiveData<>();
-//        if (postsIds.isEmpty()) {
-//            mutableLiveData.setValue(new ArrayList<>());
-//            return mutableLiveData;
-//        }
-//
-//        // Split IDs into chunks of 10
-//        List<List<String>> batches = new ArrayList<>();
-//        for (int i = 0; i < postsIds.size(); i += 10) {
-//            batches.add(postsIds.subList(i, Math.min(i + 10, postsIds.size())));
-//        }
-//
-//        List<Postable> LatestPosts = new ArrayList<>();
-//        AtomicInteger completedQueries = new AtomicInteger(0);
-//
-//        for (List<String> batch : batches) {
-//            postsCollection
-//                    .whereIn(FieldPath.documentId(), batch)
-//                    .get()
-//                    .addOnSuccessListener(queryDocumentSnapshots -> {
-//                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-//                            if (document == null) continue;
-//
-//                            Long t = document.getLong("type");
-//                            if (t == null) {
-//                                Log.e("Repository", "Failed to fetch products: type is null");
-//                                continue;
-//                            }
-//
-//                            AppConstants.PostType type = AppConstants.PostType.values()[Math.toIntExact(t)];
-//                            Postable postable = null;
-//                            if (type == AppConstants.PostType.PRODUCT) {
-//                                postable = document.toObject(ProductPost.class);
-//                            } else if (type == AppConstants.PostType.SERVICE) {
-//                                postable = document.toObject(ServicePost.class);
-//                            } else {
-//                                throw new IllegalArgumentException("Unknown type: " + type);
-//                            }
-//
-//                            if (postable != null) {
-//                                LatestPosts.add(postable);
-//                            }
-//                        }
-//                        // Sort the posts by date, each post have a field called "date" that contains the date of the post
-//                        LatestPosts.sort((o1, o2) -> {
-//                            if (o1 instanceof ProductPost && o2 instanceof ProductPost) {
-//                                return ((ProductPost) o2).getDate().compareTo(((ProductPost) o1).getDate());
-//                            } else if (o1 instanceof ServicePost && o2 instanceof ServicePost) {
-//                                return ((ServicePost) o2).getDate().compareTo(((ServicePost) o1).getDate());
-//                            } else {
-//                                throw new IllegalArgumentException("Unknown type: " + postType.toString());
-//                            }
-//                        });
-//
-//                        // If all queries are complete, update LiveData
-//                        if (completedQueries.incrementAndGet() == batches.size()) {
-//                            //gave the 5 latest post according to the date and type
-//                            if (LatestPosts.size() > numOfPosts) {
-//                                LatestPosts = LatestPosts.subList(0, numOfPosts);
-//                            }
-//
-//                            mutableLiveData.setValue(LatestPosts);
-//                        }
-//                    })
-//                    .addOnFailureListener(e -> {
-//                        Log.e("Repository", "Failed to fetch products: " + e.getMessage());
-//                        mutableLiveData.setValue(null);
-//                    });
-//        }
-//
-//        return mutableLiveData;
-//    }
+
+
+        return query.get().continueWith(task -> {
+            if (task.isSuccessful()) {
+                List<Postable> postableList = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Postable postable = null;
+                    if (postType == AppConstants.PostType.PRODUCT) {
+                        postable = document.toObject(ProductPost.class);
+                    } else if (postType == AppConstants.PostType.SERVICE) {
+                        postable = document.toObject(ServicePost.class);
+                    }
+                    if (postable != null) {
+                        postableList.add(postable);
+                    }
+                }
+                Log.d("Repository", "Fetched " + postableList.size() + " posts");
+                return postableList;
+            } else {
+                Log.e("Repository", "Failed to fetch recent posts: " + task.getException());
+                return null;
+            }
+        });
+    }
+
+
+
 }

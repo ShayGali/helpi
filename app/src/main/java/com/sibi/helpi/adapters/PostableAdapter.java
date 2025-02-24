@@ -54,7 +54,7 @@ public class PostableAdapter extends RecyclerView.Adapter<PostableAdapter.Postab
         holder.regionTextView.setText(LocationUtil.getCityFromLocation(holder.regionTextView.getContext(), postable.getLocation()));
         holder.statusTextView.setText(postable.getStatus().getStatusText());
 
-        if (!postable.getImageUrls().isEmpty()) {
+        if (postable.getImageUrls()!=null && !postable.getImageUrls().isEmpty()) {
             holder.imageView.setVisibility(View.VISIBLE);
             holder.noImageTextView.setVisibility(View.GONE);
             Glide.with(holder.itemView.getContext())
