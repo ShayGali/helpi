@@ -393,7 +393,18 @@ public class PostRepository {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Postable> postableList = new ArrayList<>();
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                        Postable postable = document.toObject(ProductPost.class);
+                        if (document == null) continue;
+                        Postable postable = null;
+                        Long t = document.getLong("type");
+                        if (t == null) {
+                            Log.e("Repository", "Failed to fetch products: type is null");
+                            continue;
+                        }
+                        if (t == AppConstants.PostType.PRODUCT.ordinal()) {
+                            postable = document.toObject(ProductPost.class);
+                        } else if (t == AppConstants.PostType.SERVICE.ordinal()) {
+                            postable = document.toObject(ServicePost.class);
+                        }
                         if (postable != null && postable.getStatus() == PostStatus.UNDER_REVIEW) {
                             postableList.add(postable);
                         }

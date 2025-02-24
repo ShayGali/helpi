@@ -3,12 +3,10 @@ package com.sibi.helpi.fragments;
 import static com.sibi.helpi.utils.AppConstants.ENGLISH_TO_LOCAL;
 import static com.sibi.helpi.utils.LocaleHelper.getTranslatedCategory;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,19 +26,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
+
 import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.PostableAdapter;
 import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.ProductPost;
-import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.utils.AppConstants;
-import com.sibi.helpi.viewmodels.ProductViewModel;
 import com.sibi.helpi.viewmodels.SearchProductViewModel;
 import com.sibi.helpi.viewmodels.UserViewModel;
 

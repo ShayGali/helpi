@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
+import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 
 public class ServicePost implements Postable {
@@ -21,6 +22,7 @@ public class ServicePost implements Postable {
     private PostStatus status;
     private List<String> imageUrls;
     private Timestamp timestamp;
+
 
     public ServicePost() {
         // Default constructor required for Firebase
@@ -117,6 +119,8 @@ public class ServicePost implements Postable {
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
+
+
 
     @NonNull
 
