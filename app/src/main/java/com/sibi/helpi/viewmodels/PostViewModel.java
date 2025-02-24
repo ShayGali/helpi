@@ -2,7 +2,6 @@ package com.sibi.helpi.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.sibi.helpi.models.Postable;
@@ -10,11 +9,11 @@ import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.models.Resource;
 import com.sibi.helpi.utils.AppConstants;
 
-public class OfferPostViewModel extends ViewModel {
+public class PostViewModel extends ViewModel {
     private PostRepository postRepository;
     private MutableLiveData<Resource<String>> postLiveData = new MutableLiveData<>();
 
-    public OfferPostViewModel() {
+    public PostViewModel() {
         postRepository = PostRepository.getInstance();
     }
 

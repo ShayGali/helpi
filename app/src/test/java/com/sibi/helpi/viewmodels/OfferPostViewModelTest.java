@@ -1,7 +1,6 @@
 package com.sibi.helpi.viewmodels;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.sibi.helpi.models.Resource;
@@ -11,19 +10,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 public class OfferPostViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    private OfferPostViewModel viewModel;
+    private PostViewModel viewModel;
     private MockedStatic<PostRepository> mockedPostRepository;
 
     @Before
@@ -35,7 +32,7 @@ public class OfferPostViewModelTest {
         PostRepository dummyPostRepository = Mockito.mock(PostRepository.class);
         mockedPostRepository.when(PostRepository::getInstance).thenReturn(dummyPostRepository);
 
-        viewModel = new OfferPostViewModel();
+        viewModel = new PostViewModel();
     }
 
     @After

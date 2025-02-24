@@ -41,19 +41,18 @@ import com.sibi.helpi.models.ServicePost;
 import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.utils.LocationUtil;
-import com.sibi.helpi.viewmodels.OfferPostViewModel;
+import com.sibi.helpi.viewmodels.PostViewModel;
 import com.sibi.helpi.viewmodels.UserViewModel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.ArrayList;
 
 public class OfferPostFragment extends Fragment {
 
     private static final int PICK_IMAGES_REQUEST = 1;
 
-    private OfferPostViewModel offerPostViewModel;
+    private PostViewModel offerPostViewModel;
     private AutoCompleteTextView categorySpinner;
     private AutoCompleteTextView subcategorySpinner;
     private AutoCompleteTextView regionSpinner;
@@ -234,7 +233,7 @@ public class OfferPostFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        offerPostViewModel = new ViewModelProvider(this).get(OfferPostViewModel.class);
+        offerPostViewModel = new ViewModelProvider(this).get(PostViewModel.class);
 
         UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
