@@ -12,7 +12,7 @@
         android:id="@+id/tvReportReason"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reason: Example"
+        android:text="@string/reason_example"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Description: Example details"
+        android:text="@string/description_example_details"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvReportReason" />
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Title: Example Title"
+        android:text="@string/title_example_title"
         android:textStyle="bold"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Description: Example post details"
+        android:text="@string/description_example_post_details"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvPostTitle" />

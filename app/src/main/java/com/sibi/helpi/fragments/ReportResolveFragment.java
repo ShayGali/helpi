@@ -1,5 +1,7 @@
 package com.sibi.helpi.fragments;
 
+import static com.sibi.helpi.utils.LocaleHelper.getTranslatedCategory;
+
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -64,10 +66,19 @@ public class ReportResolveFragment extends Fragment {
     }
 
     private void updateUI(Report report) {
-        postTitle.setText(postable.getTitle());
-        postDescription.setText(postable.getDescription());
-        reportReason.setText(report.getReason().getReasonText());
-        reportDescription.setText(report.getReporterNotes());
+
+
+        String reportReason = getTranslatedCategory(requireContext(), report.getReason().getReasonText(), "reportReason", AppConstants.ENGLISH_TO_LOCAL);
+        reportReason = getString(R.string.report_reason) + " " + reportReason;
+        String reportDescription = getString(R.string.report_description) + " " + report.getReporterNotes();
+        String postTitle = postable.getTitle();
+        String postDescription = getString(R.string.post_description) + " " + postable.getDescription();
+
+        this.postTitle.setText(postTitle);
+        this.postDescription.setText(postDescription);
+        this.reportReason.setText(reportReason);
+        this.reportDescription.setText(reportDescription);
+
 
 
 

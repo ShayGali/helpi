@@ -8,6 +8,8 @@ import android.os.LocaleList;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.collection.ScatterSet;
+
 import com.sibi.helpi.R;
 
 import java.util.ArrayList;
@@ -96,6 +98,10 @@ public class LocaleHelper {
             case "condition":
                 english = new ArrayList<>(Arrays.asList(englishContext.getResources().getStringArray(R.array.product_condition)));
                 localized = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.product_condition)));
+                break;
+            case "reportReason":
+                english = new ArrayList<>(Arrays.asList(englishContext.getResources().getStringArray(R.array.report_reasons)));
+                localized = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.report_reasons)));
                 break;
             default:
                 return selectedCategory; // Default to original if type is not recognized
