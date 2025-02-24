@@ -1,5 +1,8 @@
 package com.sibi.helpi.fragments;
 
+import static com.sibi.helpi.utils.AppConstants.ENGLISH_TO_LOCAL;
+import static com.sibi.helpi.utils.LocaleHelper.getTranslatedCategory;
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -34,6 +37,7 @@ import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.adapters.PostableAdapter;
 import com.sibi.helpi.models.Postable;
+import com.sibi.helpi.models.ProductPost;
 import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.viewmodels.ProductViewModel;
@@ -99,20 +103,28 @@ public class HomeFragment extends Fragment {
         lastProductRecyclerView.setLayoutManager(productHorizontalLayoutManager);
 
         // get the products from the repository
-        LiveData<List<Postable>> postsLiveData = searchProductViewModel.getLatestPosts(AppConstants.PostType.PRODUCT, 5);
+        LiveData<List<Postable>> postsLiveData = searchProductViewModel.getRecentPosts(5, AppConstants.PostType.PRODUCT);
 
         productSliderAdapter = new PostableAdapter(postable -> {
             Bundle postableBundle = new Bundle();
-            postableBundle.putString("sourcePage", "SearchPostableResultFragment");
+            postableBundle.putString("sourcePage", "homeFragment");
             postableBundle.putSerializable("postable", postable);
-            Navigation.findNavController(view).navigate(R.id.action_searchPostableResultFragment_to_postablePageFragment, postableBundle);
+            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_postablePageFragment, postableBundle);
         });
 
         lastProductRecyclerView.setAdapter(productSliderAdapter);
 
         // observe the products
         postsLiveData.observe(getViewLifecycleOwner(), products -> {
+            if (products == null) products = new ArrayList<>();
             productPostList = new ArrayList<>(products);
+            for (Postable post : productPostList) {
+                post.setCategory(getTranslatedCategory(getContext(), post.getCategory(), "category", ENGLISH_TO_LOCAL));
+                post.setSubCategory(getTranslatedCategory(getContext(), post.getSubCategory(), "subcategory", ENGLISH_TO_LOCAL));
+                if (post instanceof ProductPost) {
+                    ((ProductPost) post).setCondition(getTranslatedCategory(getContext(), ((ProductPost) post).getCondition(), "condition", ENGLISH_TO_LOCAL));
+                }
+            }
             productSliderAdapter.setPostableList(productPostList);
 
             // Fetch images for each product
@@ -133,20 +145,25 @@ public class HomeFragment extends Fragment {
 
 
         // get the products from the repository
-        LiveData<List<Postable>> serviceLiveData = searchServiceViewModel.getLatestPosts(AppConstants.PostType.PRODUCT, 5);
+        LiveData<List<Postable>> serviceLiveData = searchServiceViewModel.getRecentPosts(5, AppConstants.PostType.SERVICE);
 
         serviceSliderAdapter = new PostableAdapter(postable -> {
             Bundle postableBundle = new Bundle();
-            postableBundle.putString("sourcePage", "SearchPostableResultFragment");
+            postableBundle.putString("sourcePage", "HomeFragment");
             postableBundle.putSerializable("postable", postable);
-            Navigation.findNavController(view).navigate(R.id.action_searchPostableResultFragment_to_postablePageFragment, postableBundle);
+            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_postablePageFragment, postableBundle);
         });
 
-        lastServicesRecyclerView.setAdapter(productSliderAdapter);
+        lastServicesRecyclerView.setAdapter(serviceSliderAdapter);
 
         // observe the products
         serviceLiveData.observe(getViewLifecycleOwner(), products -> {
+            if(products == null) products = new ArrayList<>();
             servicePostList = new ArrayList<>(products);
+            for (Postable post : servicePostList) {
+                post.setCategory(getTranslatedCategory(getContext(), post.getCategory(), "category", ENGLISH_TO_LOCAL));
+                post.setSubCategory(getTranslatedCategory(getContext(), post.getSubCategory(), "subcategory", ENGLISH_TO_LOCAL));
+            }
             serviceSliderAdapter.setPostableList(servicePostList);
 
             // Fetch images for each product

@@ -48,10 +48,15 @@ public class SearchProductViewModel extends ViewModel {
         reportsRepository.saveReport(report, reportLiveData);
         return reportLiveData;
     }
-    public  LiveData<List<Postable>> getLatestPosts(AppConstants.PostType type, int numOfPosts){
-        return postRepository.getPosts();
-
-//        return postRepository.getLatestPosts(type, numOfPosts);
-
+    public LiveData<List<Postable>> getRecentPosts(int numOfPosts, AppConstants.PostType type) {
+        MutableLiveData<List<Postable>> postsLiveData = new MutableLiveData<>();
+        postRepository.getRecentPosts(numOfPosts, type).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                postsLiveData.setValue(task.getResult());
+            } else {
+                postsLiveData.setValue(null);
+            }
+        });
+        return postsLiveData;
     }
 }
