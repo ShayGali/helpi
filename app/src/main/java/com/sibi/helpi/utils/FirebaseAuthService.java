@@ -65,7 +65,7 @@ public class FirebaseAuthService{
 
     public String getCurrentUserId() {
         if (auth.getCurrentUser() == null) {
-            throw new IllegalStateException("No user is currently signed in");
+            return null; // Return null instead of throwing exception
         }
         return auth.getCurrentUser().getUid();
     }
