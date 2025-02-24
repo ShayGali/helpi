@@ -328,7 +328,7 @@ public class OfferPostFragment extends Fragment {
             showToast(getString(R.string.allFieldsRequired));
             return false;
         }
-        if (conditionSpinner.getText().toString().isEmpty()) {
+        if (conditionSpinner.getText().toString().isEmpty() && typeSpinner.getText().toString().equals(getString(R.string.product))) {
             showToast(getString(R.string.allFieldsRequired));
             return false;
         }

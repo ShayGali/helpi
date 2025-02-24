@@ -176,9 +176,9 @@
     <string name="description_example_details">"Report Description:  "</string>
     <string name="title_example_title">Post Title:</string>
     <string name="description_example_post_details">Post Details:</string>
-    <string name="post_title">Post Title</string>
+    <string name="post_title">Post Title:</string>
     <string name="report_reason">Report Reason:</string>
-    <string name="report_description">Report Description</string>
+    <string name="report_description">Report Description:</string>
     <string name="post_description">Post Description:</string>
     <string name="resolve_report">Resolve Report</string>
     <string name="off">Off</string>
