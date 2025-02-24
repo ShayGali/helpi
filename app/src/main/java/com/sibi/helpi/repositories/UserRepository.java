@@ -131,6 +131,9 @@ public class UserRepository {
     }
 
     public String getUUID() {
+        if (authService.getCurrentUserId() == null) {
+            return null; // Return null instead of throwing an exception
+        }
         return authService.getCurrentUserId();
     }
 

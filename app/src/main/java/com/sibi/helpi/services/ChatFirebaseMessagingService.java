@@ -46,9 +46,17 @@ public class ChatFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         Log.d(TAG, "Refreshed token: " + token);
-        // Update token in Firebase Database
+
         UserRepository userRepository = new UserRepository();
-        String userId = userRepository.getUUID();
+        String userId = null;
+
+        try {
+            userId = userRepository.getUUID();
+        } catch (IllegalStateException e) {
+            Log.d(TAG, "Received new FCM token while no user is signed in. Token will be updated on login.");
+            return;
+        }
+
         if (userId != null) {
             updateUserToken(token);
         }
@@ -56,7 +64,15 @@ public class ChatFirebaseMessagingService extends FirebaseMessagingService {
 
     private void updateUserToken(String token) {
         UserRepository userRepository = new UserRepository();
-        String userId = userRepository.getUUID();
+        String userId;
+
+        try {
+            userId = userRepository.getUUID();
+        } catch (IllegalStateException e) {
+            Log.d(TAG, "Cannot update FCM token - no user is signed in");
+            return;
+        }
+
         if (userId != null) {
             userRepository.updateFcmToken(userId, token)
                     .addOnFailureListener(e -> Log.e(TAG, "Error updating user token", e));
