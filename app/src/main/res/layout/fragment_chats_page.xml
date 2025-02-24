@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/back2"
     tools:context=".fragments.ChatListFragment">
 
     <ImageView
         android:id="@+id/login_page_logo"
         android:layout_width="220dp"
         android:layout_height="135dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="32dp"
         android:gravity="center"
         android:scaleType="fitXY"
         android:src="@drawable/logo_helpi"
@@ -23,10 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="43dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="24dp"
         android:gravity="left"
         android:text="@string/My_Chats"
-        android:textColor="@color/black"
+        android:textColor="@color/textPrimary"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

@@ -2,19 +2,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/searchPostableFragment"
-        android:icon="@drawable/ic_search_24dp"
+        android:icon="@drawable/taskbar_search_icon"
         android:title="@string/search"
         android:tooltipText="@string/search"
         app:showAsAction="always" />
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/taskbar_home_icon"
         android:title="@string/home"
         android:tooltipText="@string/home"
         app:showAsAction="always" />
     <item
         android:id="@+id/offerPostFragment"
-        android:icon="@drawable/ic_offer_product"
+        android:icon="@drawable/taskbar_post_icon"
         android:title="@string/add_post"
         android:tooltipText="@string/add_post"
         app:showAsAction="always"

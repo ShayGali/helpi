@@ -40,6 +40,10 @@
     <string name="select_location">Select Location</string>
     <string name="city_not_found">City not found</string>
     <string name="find_evrthng">Find everything</string>
+    <string name="recent_products">Recent Products</string>
+    <string name="recent_services">Recent Services</string>
+
+
     <string-array name="categories">
         <item>Select Category</item>
         <item>Electronics</item>
