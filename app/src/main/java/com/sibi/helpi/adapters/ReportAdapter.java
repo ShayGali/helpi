@@ -1,6 +1,7 @@
 package com.sibi.helpi.adapters;
 
-import static java.security.AccessController.getContext;
+import static com.sibi.helpi.utils.LocaleHelper.getTranslatedCategory;
+import android.content.Context;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.sibi.helpi.R;
 import com.sibi.helpi.models.Postable;
 import com.sibi.helpi.models.Report;
 import com.sibi.helpi.models.Pair;
+import com.sibi.helpi.utils.AppConstants;
+import com.sibi.helpi.utils.LocaleHelper.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +51,16 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         Pair<Report, Postable> report = reportList.get(position);
         Report report1 = report.getFirst();
         Postable postable = report.getSecond();
-        holder.reasonTextView.setText(report1.getReason().getReasonText());
-        holder.descriptionTextView.setText(report1.getReporterNotes());
-        holder.postTitleTextView.setText(postable.getTitle());
-        holder.postDescriptionTextView.setText(postable.getDescription());
+        String reportReason = getTranslatedCategory(holder.itemView.getContext(), report1.getReason().getReasonText(), "reportReason", AppConstants.ENGLISH_TO_LOCAL);
+        reportReason = holder.itemView.getContext().getString(R.string.report_reason) +" "+  reportReason;
+        String reportDescription = holder.itemView.getContext().getString(R.string.report_description) + " " +report1.getReporterNotes();
+        String postTitle = holder.itemView.getContext().getString(R.string.post_title) + " " + postable.getTitle();
+        String postDescription = holder.itemView.getContext().getString(R.string.post_description) + " " + postable.getDescription();
+
+        holder.reasonTextView.setText(reportReason);
+        holder.descriptionTextView.setText(reportDescription);
+        holder.postTitleTextView.setText(postTitle);
+        holder.postDescriptionTextView.setText(postDescription);
         if (!postable.getImageUrls().isEmpty()) {
             holder.imageView.setVisibility(View.VISIBLE);
             holder.noImageTextView.setVisibility(View.GONE);

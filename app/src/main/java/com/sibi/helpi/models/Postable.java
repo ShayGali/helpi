@@ -18,8 +18,10 @@ public interface Postable extends Serializable {
     String getDescription();
 
     String getCategory();
+    void setCategory(String category);
 
     String getSubCategory();
+    void setSubCategory(String subCategory);
 
     GeoPoint getLocation();
 
@@ -37,5 +39,7 @@ public interface Postable extends Serializable {
     void setTimestamp(Timestamp timestamp);
 
     String toString();
+
+
 
 }

@@ -1,5 +1,8 @@
 package com.sibi.helpi.fragments;
 
+import static com.sibi.helpi.utils.AppConstants.LOCAL_TO_ENGLISH;
+import static com.sibi.helpi.utils.LocaleHelper.getTranslatedCategory;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -260,6 +263,11 @@ public class OfferPostFragment extends Fragment {
         String category = categorySpinner.getText().toString();
         String subCategory = subcategorySpinner.getText().toString();
         String condition = conditionSpinner.getText().toString();
+
+        // Ensure category and subcategory are stored in English
+        category = getTranslatedCategory(getContext(), category, "category",LOCAL_TO_ENGLISH);
+        subCategory = getTranslatedCategory(getContext() ,subCategory,"subcategory",LOCAL_TO_ENGLISH);
+        condition = getTranslatedCategory(getContext(), condition,"condition",LOCAL_TO_ENGLISH);
 
         // Check if a location is needed and prevent a crash
         if (selectedLocation == null) {

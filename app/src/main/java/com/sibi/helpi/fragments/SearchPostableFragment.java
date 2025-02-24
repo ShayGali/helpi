@@ -1,5 +1,9 @@
 package com.sibi.helpi.fragments;
 
+import static com.sibi.helpi.utils.AppConstants.LOCAL_TO_ENGLISH;
+
+import static com.sibi.helpi.utils.LocaleHelper.getTranslatedCategory;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,10 +67,19 @@ public class SearchPostableFragment extends Fragment {
 
         submitSearchButton.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
-            bundle.putString("category", categorySpinner.getText().toString());
-            bundle.putString("subcategory", subcategorySpinner.getText().toString());
-            bundle.putString("region", regionSpinner.getText().toString());
-            bundle.putString("productStatus", productStatusSpinner.getText().toString());
+
+            String category = categorySpinner.getText().toString();
+            String subCategory = subcategorySpinner.getText().toString();
+            String productStatus = productStatusSpinner.getText().toString();
+
+            // Ensure category and subcategory are stored in English
+            category = getTranslatedCategory(getContext(), category, "category",LOCAL_TO_ENGLISH);
+            subCategory = getTranslatedCategory(getContext() ,subCategory,"subcategory",LOCAL_TO_ENGLISH);
+            productStatus = getTranslatedCategory(getContext(), productStatus,"condition",LOCAL_TO_ENGLISH);
+
+            bundle.putString("category", category);
+            bundle.putString("subcategory", subCategory);
+            bundle.putString("productStatus", productStatus);
             bundle.putDouble("latitude", latitude);
             bundle.putDouble("longitude", longitude);
 

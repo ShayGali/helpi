@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="report_reasons">
+        <item>ספאם</item>
+        <item>התנהגות לא הולמת</item>
+        <item>אחר</item>
+    </string-array>
+</resources>

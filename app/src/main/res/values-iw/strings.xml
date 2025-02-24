@@ -61,6 +61,36 @@
         <item>חדש</item>
         <item>משומש</item>
     </string-array>
+    <string-array name="fashion_subcategories">
+        <item>בחר תת קטגוריה</item>
+        <item>חליפות</item>
+        <item>חולצות</item>
+        <item>נעליים</item>
+    </string-array>
+    <string-array name="home_subcategories">
+        <item>בחר תת קטגוריה</item>
+        <item>ספות</item>
+        <item>שולחנות</item>
+        <item>כסאות</item>
+    </string-array>
+
+    <string-array name="toys_subcategories">
+        <item>בחר תת קטגוריה</item>
+        <item>משחקי קופסה</item>
+        <item>משחקים עבור חוץ</item>
+        <item>משחקים עבור פנים</item>
+    </string-array>
+    <string-array name="books_subcategories">
+        <item>בחר תת קטגוריה</item>
+        <item>נובלות</item>
+        <item>ספרי לימוד</item>
+        <item>מגזינים</item>
+    </string-array>
+
+    <string-array name="other_subcategories">
+        <item>אחר</item>
+    </string-array>
+
     <string name="dont_have_an_account_yet">עדיין אין לך חשבון?</string>
     <string name="now">עכשיו!</string>
     <string name="or">או</string>
@@ -136,4 +166,15 @@
     <string name="change_profile_image">שנה תמונת פרופיל</string>
     <string name="profile_image_description">תמונת פרופיל</string>
     <string name="profile_updated_successfully">הנתונים התעדכנו בהצלחה!</string>
+    <string name="profile_update_failed">עדכון הפרופיל נכשל</string>
+    <string name="update_profile">עדכן פרופיל</string>
+    <string name="reason_example">סיבת הדיווח:</string>
+    <string name="description_example_details">פרטי הדיווח:</string>
+    <string name="title_example_title">כותרת הפוסט:</string>
+    <string name="description_example_post_details">פרטי הפוסט:</string>
+    <string name="post_title">כותרת הפוסט:</string>
+    <string name="report_reason">סיבת הדיווח:</string>
+    <string name="report_description">פרטי הדיווח:</string>
+    <string name="post_description">פרטי הפוסט:</string>
+    <string name="resolve_report">פתור דיווח</string>
 </resources>

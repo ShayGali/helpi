@@ -20,6 +20,9 @@ public class AppConstants {
 
     public static final int MAX_RADIUS = 50;
 
+    public static final int ENGLISH_TO_LOCAL = 1;
+    public static final int LOCAL_TO_ENGLISH = 0;
+
     public enum PostStatus {
         UNDER_REVIEW("Under Review"),
         APPROVED("Approved"),
