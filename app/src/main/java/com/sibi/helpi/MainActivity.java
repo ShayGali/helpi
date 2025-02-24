@@ -28,11 +28,13 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.sibi.helpi.utils.ChatNotificationManager;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
     private ProgressBar progressBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
         // Apply saved language before setting content view
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeFirebase() {
+        Log.d(TAG, "initializeFirebase: ");
         // Initialize Firebase
         FirebaseApp.initializeApp(this);
 
@@ -91,10 +94,10 @@ public class MainActivity extends AppCompatActivity {
             // Test connection
             database.getReference().child("test").setValue("test_connection")
                     .addOnSuccessListener(aVoid ->
-                            Log.d("MainActivity", "Successfully connected to Realtime Database")
+                            Log.d(TAG, "Successfully connected to Realtime Database")
                     )
                     .addOnFailureListener(e ->
-                            Log.e("MainActivity", "Failed to connect to Realtime Database", e)
+                            Log.e(TAG, "Failed to connect to Realtime Database", e)
                     );
 
         } catch (Exception e) {

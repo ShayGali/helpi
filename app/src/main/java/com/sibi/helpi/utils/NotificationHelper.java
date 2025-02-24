@@ -57,6 +57,7 @@ public class NotificationHelper {
 
     private void sendNotification(String recipientToken, String senderName,
                                   String messageContent, String chatId) {
+        Log.d(TAG, "Sending notification to " + recipientToken);
         // Create notification data
         Map<String, String> data = new HashMap<>();
         data.put("chatId", chatId);

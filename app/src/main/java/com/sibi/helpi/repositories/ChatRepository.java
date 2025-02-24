@@ -99,6 +99,7 @@ public class ChatRepository {
 
     // Send a new message
     public void sendMessage(String currentUserId, String chatId, String messageText) {
+        Log.d(TAG, "Sending message: " + messageText);
         db.child(CHATS_REF)
                 .child(chatId)
                 .get()
