@@ -357,4 +357,26 @@ public Task<Boolean> isEmailTaken(String email) {
             });
 }
 
+public Task<Boolean> getUserNotificationStatus(String userId) {
+    return userCollection.document(userId).get()
+            .continueWith(task -> {
+                if (!task.isSuccessful()) {
+                    Log.e(TAG, "getUserNotificationStatus: Failed to get user notification status", task.getException());
+                    return false;
+                }
+                DocumentSnapshot document = task.getResult();
+                return document.getBoolean("notificationEnabled");
+            });
+}
+
+public Task<Boolean> updateUserNotificationStatus(String userId, boolean isEnabled) {
+    return userCollection.document(userId).update("notificationEnabled", isEnabled)
+            .continueWith(task -> {
+                if (!task.isSuccessful()) {
+                    Log.e(TAG, "updateUserNotificationStatus: Failed to update notification status", task.getException());
+                }
+                return task.isSuccessful();
+            });
+}
+
 }

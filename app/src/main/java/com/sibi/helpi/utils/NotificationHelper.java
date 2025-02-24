@@ -34,11 +34,11 @@ public class NotificationHelper {
         // Get the recipient's FCM token
         userRepository.getUserById(message.getReceiverId())
                 .addOnSuccessListener(recipient -> {
-                    if (recipient != null && recipient.getFcmToken() != null) {
+                    if (recipient != null && recipient.getFcmToken() != null && recipient.getNotificationEnabled()) {
                         // Get sender's name
                         userRepository.getUserById(message.getSenderId())
                                 .addOnSuccessListener(sender -> {
-                                    if (sender != null) {
+                                    if (sender != null ) {
                                         sendNotification(
                                                 recipient.getFcmToken(),
                                                 sender.getFullName(),

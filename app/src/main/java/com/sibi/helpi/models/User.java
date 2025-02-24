@@ -15,6 +15,7 @@ public class User {
     private String profileImgUri;
     private UserType userType;
     private String fcmToken;
+    private boolean notificationEnabled;
 
     public User() {
     }
@@ -26,10 +27,16 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.profileImgUri = profileImgUri;
         this.userType = UserType.DEFAULT_USER;
+        this.notificationEnabled = true;
     }
 
 
-
+public boolean getNotificationEnabled() {
+        return notificationEnabled;
+    }
+    public void setNotificationEnabled(boolean notificationEnabled) {
+        this.notificationEnabled = notificationEnabled;
+    }
 
     public String getEmail() {
         return email;
