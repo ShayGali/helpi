@@ -30,6 +30,12 @@ exports.sendChatNotification = functions
             }
 
             const recipientData = recipientDoc.data();
+
+            if (recipientData.notificationEnabled === false) {
+                console.log("Notifications disabled for recipient. Skipping notification.");
+                return null;
+            }
+
             const recipientToken = recipientData.fcmToken;
 
             if (!recipientToken) {
