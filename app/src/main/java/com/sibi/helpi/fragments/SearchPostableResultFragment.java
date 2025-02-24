@@ -1,5 +1,8 @@
 package com.sibi.helpi.fragments;
 
+import static com.sibi.helpi.utils.AppConstants.ENGLISH_TO_LOCAL;
+import static com.sibi.helpi.utils.LocaleHelper.getTranslatedCategory;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
@@ -54,7 +57,6 @@ public class SearchPostableResultFragment extends Fragment {
         assert bundle != null;
         String category = bundle.getString("category");
         String subcategory = bundle.getString("subcategory");
-        String region = bundle.getString("region");
         String productStatus = bundle.getString("productStatus"); // the condition of the product
         double latitude = bundle.getDouble("latitude");
         double longitude = bundle.getDouble("longitude");
@@ -64,6 +66,8 @@ public class SearchPostableResultFragment extends Fragment {
 
         // get the products from the repository
         LiveData<List<Postable>> postsLiveData = searchProductViewModel.getPosts(category, subcategory, new GeoPoint(latitude, longitude) , productStatus,type );
+
+
 
 
         postsSliderAdapter = new PostableAdapter(postable -> {
@@ -78,6 +82,17 @@ public class SearchPostableResultFragment extends Fragment {
         // observe the products
         postsLiveData.observe(getViewLifecycleOwner(), products -> {
             productPostList = new ArrayList<>(products);
+            // Translate the category, subcategory and productStatus to The locale language
+            for (Postable post : productPostList) {
+                post.setCategory(getTranslatedCategory(getContext(), post.getCategory(), "category", ENGLISH_TO_LOCAL));
+                post.setSubCategory(getTranslatedCategory(getContext(), post.getSubCategory(), "subcategory",ENGLISH_TO_LOCAL));
+                if (post instanceof ProductPost) {
+                    ((ProductPost) post).setCondition(getTranslatedCategory(getContext(), ((ProductPost) post).getCondition(), "condition",ENGLISH_TO_LOCAL));
+                }
+
+
+            }
+
             postsSliderAdapter.setPostableList(productPostList);
 
             // Fetch images for each product
