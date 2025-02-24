@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.LocationPickerDialogFragment;
 import com.sibi.helpi.MainActivity;
@@ -42,6 +43,7 @@ import com.sibi.helpi.viewmodels.UserViewModel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class OfferPostFragment extends Fragment {
@@ -266,9 +268,9 @@ public class OfferPostFragment extends Fragment {
         }
 
         if (typeSpinner.getText().toString().equals(getString(R.string.product))) {
-            return new ProductPost(title, description, category, subCategory, selectedLocation, condition, userId);
+            return new ProductPost(title, description, category, subCategory, selectedLocation, condition, userId, Timestamp.now());
         } else if (typeSpinner.getText().toString().equals(getString(R.string.service))) {
-            return new ServicePost(title, description, category, subCategory, selectedLocation, userId, condition);
+            return new ServicePost(title, description, category, subCategory, selectedLocation, userId, Timestamp.now());
         } else {
             showToast("Invalid post type selected.");
             return null;

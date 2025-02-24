@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 
@@ -18,18 +19,21 @@ public class ServicePost implements Postable {
     private String userId;
     private PostStatus status;
     private List<String> imageUrls;
+    private Timestamp timestamp;
 
     public ServicePost() {
         // Default constructor required for Firebase
     }
 
-    public ServicePost(String title, String description, String category, String subCategory, GeoPoint location, String userId, String condition) {
+    public ServicePost(String title, String description, String category, String subCategory, GeoPoint location, String userId, Timestamp timestamp) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.subCategory = subCategory;
         this.location = location;
         this.userId = userId;
+        this.timestamp = timestamp;
+        this.status = PostStatus.UNDER_REVIEW;
     }
 
     public String getId() {
@@ -105,7 +109,16 @@ public class ServicePost implements Postable {
         this.title = title;
     }
 
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @NonNull
+
     @Override
     public String toString() {
         return "ServicePost{" +
@@ -118,6 +131,7 @@ public class ServicePost implements Postable {
                 ", userId='" + userId + '\'' +
                 ", status=" + status +
                 ", imageUrls=" + imageUrls +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }

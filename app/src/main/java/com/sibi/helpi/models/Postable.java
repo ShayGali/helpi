@@ -1,6 +1,7 @@
 package com.sibi.helpi.models;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 
@@ -31,6 +32,9 @@ public interface Postable extends Serializable {
     PostStatus getStatus();
 
     void setStatus(PostStatus status);
+
+    Timestamp getTimestamp();
+    void setTimestamp(Timestamp timestamp);
 
     String toString();
 

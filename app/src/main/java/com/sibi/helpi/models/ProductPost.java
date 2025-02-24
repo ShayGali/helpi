@@ -2,6 +2,7 @@ package com.sibi.helpi.models;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.sibi.helpi.utils.AppConstants.PostStatus;
 
@@ -24,13 +25,14 @@ public class ProductPost implements Postable {
     private String userId;
     private PostStatus status;
     private List<String> imageUrls;
+    private Timestamp timestamp;
 
 
     public ProductPost() {
         // Default constructor required for Firebase
     }
 
-    public ProductPost(String title, String description, String category, String subCategory, GeoPoint location, String condition, String userId) {
+    public ProductPost(String title, String description, String category, String subCategory, GeoPoint location, String condition, String userId, Timestamp timestamp) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -38,6 +40,7 @@ public class ProductPost implements Postable {
         this.location = location;
         this.condition = condition;
         this.userId = userId;
+        this.timestamp = timestamp;
         this.status = PostStatus.UNDER_REVIEW;
     }
 
@@ -124,6 +127,13 @@ public class ProductPost implements Postable {
         this.status = status;
     }
 
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
 
     @NonNull
     @Override
@@ -138,6 +148,7 @@ public class ProductPost implements Postable {
                 ", condition='" + condition + '\'' +
                 ", userId='" + userId + '\'' +
                 ", status=" + status +
+                ", timestamp=" + timestamp +
                 ", imageUrls=" + imageUrls +
                 '}';
     }
