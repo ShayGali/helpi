@@ -176,11 +176,32 @@ public class UserViewModel extends ViewModel {
     public LiveData<Boolean> isEmailTaken(String email) {
         MutableLiveData<Boolean> isTakenLiveData = new MutableLiveData<>();
         userRepository.isEmailTaken(email)
-                .addOnSuccessListener(isTaken -> isTakenLiveData.postValue(isTaken))
+                .addOnSuccessListener(isTakenLiveData::postValue)
                 .addOnFailureListener(e -> isTakenLiveData.postValue(true));
 
         return isTakenLiveData;
     }
+
+
+
+    public LiveData<Boolean> getNotificationSetting() {
+        MutableLiveData<Boolean> notificationSetting = new MutableLiveData<>();
+        userRepository.getUserNotificationStatus(getCurrentUserId()).addOnSuccessListener(notificationSetting::postValue)
+                .addOnFailureListener(e -> notificationSetting.postValue(false));
+        return notificationSetting;
+      }
+
+      public LiveData<Boolean> setNotificationSetting(boolean isEnabled) {
+        MutableLiveData<Boolean> notificationSetting = new MutableLiveData<>();
+        userRepository.updateUserNotificationStatus(getCurrentUserId(), isEnabled)
+                .addOnSuccessListener(aVoid -> notificationSetting.postValue(true))
+                .addOnFailureListener(e -> notificationSetting.postValue(false));
+        return notificationSetting;
+        }
+
+
+
+
 
 
 

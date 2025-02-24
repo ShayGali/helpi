@@ -177,6 +177,7 @@
     <string name="report_description">Report Description</string>
     <string name="post_description">Post Description:</string>
     <string name="resolve_report">Resolve Report</string>
+    <string name="off">Off</string>
 
 
     <string-array name="languages">

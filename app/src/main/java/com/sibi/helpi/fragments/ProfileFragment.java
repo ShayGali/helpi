@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.User;
@@ -39,6 +43,14 @@ public class ProfileFragment extends Fragment {
     private TextView emailTextView;
     private ImageView profileImage;
     private View unreadDot;
+
+    private SwitchMaterial notificationSwitch;
+
+    private boolean isNotificationEnabled = true;
+
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +79,8 @@ public class ProfileFragment extends Fragment {
         emailTextView = view.findViewById(R.id.email_profile_fragment);
         profileImage = view.findViewById(R.id.profile_img_profile_frag);
         unreadDot = view.findViewById(R.id.unread_dot);
+        notificationSwitch = view.findViewById(R.id.switchNotification);
+
     }
 
     private void setupClickListeners(View view) {
@@ -110,6 +124,27 @@ public class ProfileFragment extends Fragment {
             });
             builder.create().show();
         });
+
+        notificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isNotificationEnabled = isChecked;
+            userViewModel.setNotificationSetting(isChecked).observe(getViewLifecycleOwner(), aBoolean -> {
+                if (aBoolean) {
+                    updateSwitchColor(isChecked);
+                } else {
+                    notificationSwitch.setChecked(!isChecked);
+                    isNotificationEnabled = !isChecked;
+                    Toast.makeText(requireContext(), "Failed to update notification setting", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        });
+
+
+
+
+
+
+
     }
 
     private void setLanguage(String selectedLanguage) {
@@ -166,7 +201,16 @@ public class ProfileFragment extends Fragment {
                         unreadDot.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
                     }
                 });
+
+        userViewModel.getNotificationSetting().observe(getViewLifecycleOwner(), isEnabled -> {
+            isNotificationEnabled = isEnabled;
+            notificationSwitch.setChecked(isEnabled);
+            updateSwitchColor(isEnabled);
+        });
+
     }
+
+
 
     private void showLoading() {
         MainActivity activity = (MainActivity) requireActivity();
@@ -194,5 +238,19 @@ public class ProfileFragment extends Fragment {
             profileImage.setImageResource(R.drawable.icon_account_circle);
         }
     }
+
+    private void updateSwitchColor(boolean isChecked) {
+        int thumbColor = isChecked ? getResources().getColor(R.color.colorPrimary) : getResources().getColor(R.color.gray);
+        int trackColor = isChecked ? getResources().getColor(R.color.colorPrimary) : getResources().getColor(R.color.gray);
+
+        notificationSwitch.setThumbTintList(ColorStateList.valueOf(thumbColor));
+        notificationSwitch.setTrackTintList(ColorStateList.valueOf(trackColor));
+    }
+
+
+
+
+
+
 
 }
