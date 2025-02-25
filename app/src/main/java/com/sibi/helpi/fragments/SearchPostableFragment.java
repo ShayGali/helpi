@@ -16,8 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.firestore.GeoPoint;
-import com.sibi.helpi.LocationPickerDialogFragment;
 import com.sibi.helpi.R;
 import com.sibi.helpi.utils.LocationUtil;
 
