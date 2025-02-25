@@ -16,10 +16,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.sibi.helpi.MainActivity;
 import com.sibi.helpi.R;
 import com.sibi.helpi.utils.LocationUtil;
 
-//TODO- add option do  not have fillter
 public class SearchPostableFragment extends Fragment {
 
     private AutoCompleteTextView postTypeSpinner, categorySpinner, subcategorySpinner, regionSpinner, productStatusSpinner;
@@ -202,4 +202,14 @@ public class SearchPostableFragment extends Fragment {
         return newArray;
     }
 
+
+    private void showLoading() {
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.showProgressBar();
+    }
+
+    private void hideLoading() {
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.hideProgressBar();
+    }
 }
