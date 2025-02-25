@@ -146,7 +146,7 @@
     <string name="failed_to_open_chat">פתיחת הצ\'אט נכשלה</string>
     <string name="admin_added_successfully">מנהל המערכת נוסף בהצלחה</string>
     <string name="could_not_find_user_information">לא ניתן היה למצוא מידע על המשתמש</string>
-    <string name="authentication_failed">האימות נכשל:</string>
+    <string name="authentication_failed">האימות נכשל - אנא נסה שוב</string>
     <string name="user_signed_in_successfully">המשתמש נכנס בהצלחה</string>
     <string name="failed_to_sign_in_with_google">הכניסה באמצעות גוגל נכשלה</string>
     <string name="please_fill_all_the_fields">נא למלא את כל השדות</string>

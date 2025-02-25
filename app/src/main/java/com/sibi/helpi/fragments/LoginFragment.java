@@ -39,6 +39,7 @@ public class LoginFragment extends Fragment {
     private EditText passwordEditText;
     private Button loginButton;
     private UserViewModel userViewModel;
+    private boolean tryToSignIn = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,8 +54,7 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
@@ -87,12 +87,11 @@ public class LoginFragment extends Fragment {
         userViewModel.getUserState().observe(getViewLifecycleOwner(), state -> {
             if (state.isLoading()) {
                 showLoadingIndicator();
-            } else if (state.getError() != null) {
+            } else if (state.getError() != null && tryToSignIn) {
                 hideLoadingIndicator();
                 TextView errorTextView = inflater.findViewById(R.id.error_on_login_msg);
-                errorTextView.setText(state.getError());
+                errorTextView.setText(getString(R.string.authentication_failed));
                 Log.w(TAG, "Authentication failed: " + state.getError());
-                Toast.makeText(requireContext(), getString(R.string.authentication_failed) + state.getError(), Toast.LENGTH_SHORT).show();
             } else if (state.getUser() != null) {
                 hideLoadingIndicator();
                 Log.d(TAG, "Authentication successful");
@@ -103,6 +102,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void signInWithGoogle() {
+        tryToSignIn = true;
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -126,6 +126,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void signIn() {
+        tryToSignIn = true;
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
