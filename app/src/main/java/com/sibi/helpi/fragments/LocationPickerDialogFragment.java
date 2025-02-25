@@ -1,4 +1,4 @@
-package com.sibi.helpi;
+package com.sibi.helpi.fragments;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -29,6 +29,8 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.sibi.helpi.BuildConfig;
+import com.sibi.helpi.R;
 
 import java.util.Arrays;
 
