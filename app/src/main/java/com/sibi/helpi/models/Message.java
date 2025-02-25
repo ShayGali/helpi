@@ -77,9 +77,8 @@ public class Message {
         this.seen = seen;
     }
 
-    public boolean isUser() {
-        UserViewModel userViewModel = UserViewModel.getInstance();
-        return senderId.equals(userViewModel.getCurrentUserId());
+    public boolean isUser(String currentUserId) {
+        return senderId.equals(currentUserId);
     }
 
     public String getFormattedTimestamp() {

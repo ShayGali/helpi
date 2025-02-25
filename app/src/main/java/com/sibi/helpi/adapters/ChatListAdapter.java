@@ -1,13 +1,17 @@
 package com.sibi.helpi.adapters;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -50,7 +54,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Chat chat = chatList.get(position);
-        holder.bind(chat, (LifecycleOwner)holder.itemView.getContext());
+        holder.bind(chat, (LifecycleOwner) holder.itemView.getContext());
         holder.itemView.setOnClickListener(v -> onChatClickListener.onChatClick(chat));
     }
 
@@ -75,12 +79,12 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
             lastMessageTextView = itemView.findViewById(R.id.last_message);
             timestampTextView = itemView.findViewById(R.id.timestamp);
             unreadCountTextView = itemView.findViewById(R.id.unread_count);
-            userViewModel = UserViewModel.getInstance();
+            userViewModel = new ViewModelProvider((ViewModelStoreOwner) itemView.getContext()).get(UserViewModel.class);
         }
 
         void bind(Chat chat, LifecycleOwner LifecycleOwner) {
             // Set chat partner name
-            chatPartnerNameTextView.setText(chat.getChatPartnerName());
+            chatPartnerNameTextView.setText(chat.getChatPartnerName(userViewModel.getCurrentUserId()));
 
             // Set last message
             lastMessageTextView.setText(chat.getLastMessage());
@@ -89,15 +93,19 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
             timestampTextView.setText(chat.getFormattedTimestamp());
 
             // Handle unread count
-            if (chat.getUnreadCount() > 0) {
+            if (chat.getUnreadCount(userViewModel.getCurrentUserId()) > 0) {
                 unreadCountTextView.setVisibility(View.VISIBLE);
-                unreadCountTextView.setText(String.valueOf(chat.getUnreadCount()));
+                unreadCountTextView.setText(String.valueOf(chat.getUnreadCount(userViewModel.getCurrentUserId())));
             } else {
                 unreadCountTextView.setVisibility(View.GONE);
             }
 
             // Load profile image if available
             Map<String, String> partnerNames = chat.getPartnerNames();
+            if(partnerNames.size() != 2) {
+                Log.e("ChatListAdapter", "Chat has more than 2 participants");
+                return;
+            }
             String UID1 = partnerNames.keySet().toArray()[0].toString();
             String UID2 = partnerNames.keySet().toArray()[1].toString();
             String partnerUid = UID1.equals(userViewModel.getCurrentUserId()) ? UID2 : UID1;

@@ -1,7 +1,5 @@
 package com.sibi.helpi.models;
 
-import com.sibi.helpi.viewmodels.UserViewModel;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,13 +15,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class Chat {
     private String chatId;
-    private List<String> participants = new ArrayList<>();
+    private List<String> participants;
     private String lastMessage = "";
     private long timestamp;
-    private Map<String, String> partnerNames = new HashMap<>();
+    private Map<String, String> partnerNames;
     private String profileImageUrl = "";
     private int unreadCount;
-    private Map<String, Integer> unreadCounts = new HashMap<>();
+    private Map<String, Integer> unreadCounts;
 
     public Chat() {
         this.participants = new ArrayList<>();
@@ -39,6 +37,8 @@ public class Chat {
         this.timestamp = timestamp;
         this.profileImageUrl = profileImageUrl;
         this.unreadCount = unreadCount;
+        partnerNames = new HashMap<>();
+        unreadCounts = new HashMap<>();
     }
 
     public String getChatId() {
@@ -81,8 +81,7 @@ public class Chat {
         this.partnerNames = partnerNames != null ? partnerNames : new HashMap<>();
     }
 
-    public String getChatPartnerName() {
-        String currentUserId = UserViewModel.getInstance().getCurrentUserId();
+    public String getChatPartnerName(String currentUserId) {
         if (partnerNames != null && currentUserId != null) {
             return partnerNames.getOrDefault(currentUserId, "Chat Partner");
         }
@@ -132,8 +131,7 @@ public class Chat {
         this.unreadCounts = unreadCounts;
     }
 
-    public int getUnreadCount() {
-        String currentUserId = UserViewModel.getInstance().getCurrentUserId();
+    public int getUnreadCount(String currentUserId) {
         return unreadCounts.getOrDefault(currentUserId, 0);
     }
 }

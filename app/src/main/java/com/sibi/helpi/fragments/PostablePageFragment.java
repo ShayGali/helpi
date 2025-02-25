@@ -67,7 +67,7 @@ public class PostablePageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         postableViewModel = new SearchProductViewModel();
-        userViewModel = UserViewModel.getInstance();
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
     }

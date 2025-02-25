@@ -6,19 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.sibi.helpi.R;
 import com.sibi.helpi.models.Message;
+
 import java.util.List;
 
 public class ChatMessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_USER = 1;
     private static final int VIEW_TYPE_PARTNER = 2;
     private List<Message> messages;
+    private String currentUserId;
 
-    public ChatMessagesAdapter(List<Message> messages) {
+    public ChatMessagesAdapter(List<Message> messages, String currentUserId) {
         this.messages = messages;
+        this.currentUserId = currentUserId;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -29,7 +34,7 @@ public class ChatMessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        return messages.get(position).isUser() ? VIEW_TYPE_USER : VIEW_TYPE_PARTNER;
+        return messages.get(position).isUser(currentUserId) ? VIEW_TYPE_USER : VIEW_TYPE_PARTNER;
     }
 
     @NonNull
@@ -64,11 +69,13 @@ public class ChatMessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     static abstract class MessageViewHolder extends RecyclerView.ViewHolder {
         private final TextView messageTextView;
         private final TextView timeTextView;
+
         MessageViewHolder(@NonNull View itemView) {
             super(itemView);
             messageTextView = itemView.findViewById(R.id.text_message_body);
             timeTextView = itemView.findViewById(R.id.msgTime);
         }
+
         void bind(Message message) {
             messageTextView.setText(message.getMessage());
             timeTextView.setText(message.getFormattedTimestamp());

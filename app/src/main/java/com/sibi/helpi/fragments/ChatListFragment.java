@@ -55,7 +55,7 @@ public class ChatListFragment extends Fragment {
 
     private void observeViewModel() {
         chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
-        UserViewModel userViewModel = UserViewModel.getInstance();
+        UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         String currentUserId = userViewModel.getCurrentUserId();
         chatViewModel.getChatsList(currentUserId).observe(getViewLifecycleOwner(), this::updateChatList);
     }

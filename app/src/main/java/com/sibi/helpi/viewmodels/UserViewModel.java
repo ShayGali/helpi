@@ -27,19 +27,12 @@ public class UserViewModel extends ViewModel {
     private static UserViewModel instance;
     private final MutableLiveData<Boolean> hasUnreadMessages = new MutableLiveData<>(false);
 
-    private UserViewModel() {
+    public UserViewModel() {
         userRepository = new UserRepository();
         imagesRepository = ImagesRepository.getInstance();
         userState = new MutableLiveData<>();
         userState.postValue(UserState.idle());
         isInitialized = false;
-    }
-
-    public static synchronized UserViewModel getInstance() {
-        if (instance == null) {
-            instance = new UserViewModel();
-        }
-        return instance;
     }
 
     public LiveData<UserState> getUserState() {
@@ -136,26 +129,6 @@ public class UserViewModel extends ViewModel {
         return userRepository.getUserByIdLiveData(userId);
     }
 
-    public LiveData<Boolean> addAdmin(String email, AppConstants.UserType userType) {
-        MutableLiveData<Boolean> successLiveData = new MutableLiveData<>();
-
-        userRepository.addAdmin(email, userType)
-                .addOnSuccessListener(isSuccessfullyAdded -> {
-                    if (isSuccessfullyAdded) {
-                        successLiveData.postValue(true);
-                        userState.setValue(UserState.success(null));
-                    } else {
-                        successLiveData.postValue(false);
-                        userState.setValue(UserState.error("Failed to add admin"));
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    successLiveData.postValue(false);
-                    userState.setValue(UserState.error("Error: " + e.getMessage()));
-                });
-
-        return successLiveData;
-    }
 
     public LiveData<Boolean> updateProfile(String firstName, String lastName, String phoneNumber, String email, byte[] profileImg) {
         MutableLiveData<Boolean> successLiveData = new MutableLiveData<>();

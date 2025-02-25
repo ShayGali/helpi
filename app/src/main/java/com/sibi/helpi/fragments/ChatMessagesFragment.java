@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatMessagesFragment extends Fragment {
+    private UserViewModel userViewModel;
     private ChatViewModel chatViewModel;
     private RecyclerView recyclerView;
     private ChatMessagesAdapter chatMessagesAdapter;
@@ -40,6 +41,7 @@ public class ChatMessagesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
         chatId = getArguments() != null ? getArguments().getString("chatId") : null;
         if (chatId == null) {
@@ -54,7 +56,6 @@ public class ChatMessagesFragment extends Fragment {
         setupClickListeners();
         observeViewModel();
 
-        UserViewModel userViewModel = UserViewModel.getInstance();
         String currentUserId = userViewModel.getCurrentUserId();
         chatViewModel.markMessagesAsRead(chatId, currentUserId);
     }
@@ -72,7 +73,7 @@ public class ChatMessagesFragment extends Fragment {
         chatViewModel.getChatById(chatId).observe(getViewLifecycleOwner(), chat -> {
             if (chat != null) {
                 // First try to use chatPartnerName
-                String partnerName = chat.getChatPartnerName();
+                String partnerName = chat.getChatPartnerName(userViewModel.getCurrentUserId());
                 if (partnerName != null && !partnerName.isEmpty()) {
                     partnerNameText.setText(partnerName);
                     return;
@@ -82,14 +83,13 @@ public class ChatMessagesFragment extends Fragment {
                 List<String> participants = chat.getParticipants();
                 if (participants != null && !participants.isEmpty()) {
                     try {
-                        String currentUserId = UserViewModel.getInstance().getCurrentUserId();
+                        String currentUserId = userViewModel.getCurrentUserId();
                         String partnerId = participants.stream()
                                 .filter(id -> id != null && !id.equals(currentUserId))
                                 .findFirst()
                                 .orElse(null);
 
                         if (partnerId != null) {
-                            UserViewModel userViewModel = UserViewModel.getInstance();
                             userViewModel.getUserByIdLiveData(partnerId)
                                     .observe(getViewLifecycleOwner(), user -> {
                                         if (user != null) {
@@ -114,7 +114,7 @@ public class ChatMessagesFragment extends Fragment {
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        chatMessagesAdapter = new ChatMessagesAdapter(new ArrayList<>());
+        chatMessagesAdapter = new ChatMessagesAdapter(new ArrayList<>(0), userViewModel.getCurrentUserId());
         recyclerView.setAdapter(chatMessagesAdapter);
     }
 
@@ -122,7 +122,6 @@ public class ChatMessagesFragment extends Fragment {
         sendButton.setOnClickListener(v -> {
             String messageText = messageInput.getText().toString().trim();
             if (!messageText.isEmpty()) {
-                UserViewModel userViewModel = UserViewModel.getInstance();
                 String currentUserId = userViewModel.getCurrentUserId();
                 chatViewModel.sendMessage(currentUserId, chatId, messageText);
                 messageInput.setText("");
