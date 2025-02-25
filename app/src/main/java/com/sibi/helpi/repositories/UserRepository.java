@@ -30,6 +30,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserRepository {
+
+    private static final UserRepository instance = new UserRepository();
+
     private static final String TAG = "UserRepository";
     public static final String COLLECTION_NAME = "users";
     private final FirebaseAuth mAuth;
@@ -43,6 +46,11 @@ public class UserRepository {
         imagesRepository = ImagesRepository.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         userCollection = db.collection(COLLECTION_NAME);
+    }
+
+
+    public static UserRepository getInstance() {
+        return instance;
     }
 
     public Task<DocumentReference> registerUser(User user, String password, byte[] profileImg) {
