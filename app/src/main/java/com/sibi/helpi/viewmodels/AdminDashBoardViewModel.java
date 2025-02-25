@@ -1,6 +1,7 @@
 package com.sibi.helpi.viewmodels;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.sibi.helpi.models.Postable;
@@ -8,6 +9,8 @@ import com.sibi.helpi.models.Report;
 import com.sibi.helpi.repositories.ImagesRepository;
 import com.sibi.helpi.repositories.PostRepository;
 import com.sibi.helpi.repositories.ReportsRepository;
+import com.sibi.helpi.repositories.UserRepository;
+import com.sibi.helpi.stats.UserState;
 import com.sibi.helpi.utils.AppConstants;
 import com.sibi.helpi.utils.AppConstants.ReportStatus;
 
@@ -19,13 +22,13 @@ public class AdminDashBoardViewModel extends ViewModel {
     private final PostRepository postRepository;
     private final ImagesRepository imagesRepository;
 
-    private final UserViewModel userViewModel;
+    private final UserRepository userRepository;
 
     public AdminDashBoardViewModel() {
         reportsRepository = ReportsRepository.getInstance();
         postRepository = PostRepository.getInstance();
         imagesRepository = ImagesRepository.getInstance();
-        userViewModel = UserViewModel.getInstance();
+        userRepository = UserRepository.getInstance();
     }
 
     public LiveData<List<Report>> getReports() {
@@ -47,7 +50,7 @@ public class AdminDashBoardViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> updateReport(String reportId, ReportStatus newStatus, String handlerNotes) {
-        String handlerId = userViewModel.getCurrentUserId();
+        String handlerId = userRepository.getUUID();
         return reportsRepository.updateReport(reportId, handlerId, handlerNotes, newStatus);
     }
 
@@ -60,8 +63,22 @@ public class AdminDashBoardViewModel extends ViewModel {
         return postRepository.getPosts(postIds);
     }
 
-    public LiveData<Boolean> addAdmin(String email, AppConstants.UserType adminType) {
-       return userViewModel.addAdmin(email, adminType);
+    public LiveData<Boolean> addAdmin(String email, AppConstants.UserType userType) {
+        MutableLiveData<Boolean> successLiveData = new MutableLiveData<>();
+
+        userRepository.addAdmin(email, userType)
+                .addOnSuccessListener(isSuccessfullyAdded -> {
+                    if (isSuccessfullyAdded) {
+                        successLiveData.postValue(true);
+                    } else {
+                        successLiveData.postValue(false);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    successLiveData.postValue(false);
+                });
+
+        return successLiveData;
     }
 
 
